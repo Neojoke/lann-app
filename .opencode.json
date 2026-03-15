@@ -1,0 +1,15 @@
+{
+  "extensions": [
+    "oh-my-opencode"
+  ],
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"]
+    },
+    "cloudflare": {
+      "command": "npx",
+      "args": ["-y", "@cloudflare/mcp-server"]
+    }
+  }
+}

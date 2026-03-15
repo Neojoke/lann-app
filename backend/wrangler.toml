@@ -1,0 +1,49 @@
+# Cloudflare Wrangler 配置
+# Lann 后端服务 - 泰国借款 App
+
+name = "lann-backend"
+main = "workers/index.ts"
+compatibility_date = "2026-03-15"
+
+# 账户配置（自动从环境变量读取）
+# account_id = "${CLOUDFLARE_ACCOUNT_ID}"
+
+# 开发环境配置
+[vars]
+ENVIRONMENT = "development"
+APP_NAME = "Lann"
+SUPPORTED_LANGUAGES = "th,en"
+
+# 数据库 (D1)
+[[d1_databases]]
+binding = "DB"
+database_name = "lann-db"
+database_id = ""  # 创建后自动填充
+
+# 对象存储 (R2)
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "lann-documents"
+
+# 任务队列
+[[queues.producers]]
+queue = "lann-tasks"
+binding = "TASK_QUEUE"
+
+[[queues.consumers]]
+queue = "lann-tasks"
+max_batch_size = 10
+max_batch_timeout = 30
+
+# 路由配置
+[[routes]]
+pattern = "lann-api.workers.dev/*"
+zone_name = ""
+
+# 环境配置
+[env.production]
+name = "lann-backend-prod"
+route = { pattern = "api.lann.app/*", zone_name = "lann.app" }
+
+[env.production.vars]
+ENVIRONMENT = "production"
