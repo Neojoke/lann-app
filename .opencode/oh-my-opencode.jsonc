@@ -1,0 +1,87 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/oh-my-opencode.schema.json",
+  
+  "categories": {
+    "visual-engineering": {
+      "model": "bailian/qwen3.5-plus",
+      "description": "前端、UI/UX、设计"
+    },
+    "ultrabrain": {
+      "model": "bailian/qwen3.5-plus",
+      "description": "深度逻辑推理、架构"
+    },
+    "deep": {
+      "model": "bailian/qwen3.5-plus",
+      "description": "自主问题解决、研究"
+    },
+    "quick": {
+      "model": "bailian/qwen3.5-plus",
+      "description": "简单任务、快速修复"
+    },
+    "writing": {
+      "model": "bailian/qwen3.5-plus",
+      "description": "文档、技术写作"
+    }
+  },
+
+  "agents": {
+    "explore": {
+      "model": "bailian/qwen3.5-plus",
+      "temperature": 0.7
+    },
+    "oracle": {
+      "model": "bailian/qwen3.5-plus",
+      "thinking": {
+        "type": "enabled",
+        "budgetTokens": 10000
+      }
+    },
+    "librarian": {
+      "model": "bailian/qwen3.5-plus"
+    }
+  },
+
+  "features": {
+    "sisyphus": {
+      "enabled": true
+    },
+    "ralph_loop": {
+      "enabled": true
+    },
+    "todo_enforcer": {
+      "enabled": true
+    },
+    "think_mode": {
+      "enabled": true
+    }
+  },
+
+  "skills": {
+    "enabled": [
+      "project-management-skills",
+      "adaptive-suite",
+      "ui-ux-pro-max",
+      "acp-router"
+    ]
+  },
+
+  "mcp": {
+    "context7": {
+      "enabled": true
+    },
+    "grep_app": {
+      "enabled": true
+    },
+    "websearch": {
+      "enabled": true
+    }
+  },
+
+  "lsp": {
+    "enabled": true
+  },
+
+  "git_master": {
+    "enabled": true
+  }
+}

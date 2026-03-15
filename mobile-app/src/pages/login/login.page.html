@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'auth.login' | translate }}</ion-title>
+    <ion-title>Login</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -11,13 +11,13 @@
   <div class="login-container">
     <div class="logo-section">
       <h1>Lann</h1>
-      <p>{{ 'app.tagline' | translate }}</p>
+      <p>Your trusted loan partner</p>
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <ion-item class="input-item">
         <ion-icon name="call-outline" slot="start"></ion-icon>
-        <ion-label position="floating">{{ 'auth.phone' | translate }}</ion-label>
+        <ion-label position="floating">Phone Number</ion-label>
         <ion-input 
           formControlName="phone" 
           type="tel" 
@@ -28,7 +28,7 @@
 
       <ion-item class="input-item">
         <ion-icon name="keypad-outline" slot="start"></ion-icon>
-        <ion-label position="floating">{{ 'auth.otp' | translate }}</ion-label>
+        <ion-label position="floating">OTP Code</ion-label>
         <ion-input 
           formControlName="otp" 
           type="text" 
@@ -42,7 +42,7 @@
           fill="clear" 
           (click)="sendOtp()" 
           [disabled]="sendingOtp">
-          {{ sendingOtp ? ('common.loading' | translate) : ('auth.sendOtp' | translate) }}
+          {{ sendingOtp ? 'Sending...' : 'Send OTP' }}
         </ion-button>
         <ion-text color="medium" class="countdown" *ngIf="countdown > 0">
           {{ countdown }}s
@@ -54,14 +54,14 @@
         type="submit" 
         class="submit-btn"
         [disabled]="!loginForm.valid || loading">
-        {{ loading ? ('common.loading' | translate) : ('auth.login' | translate) }}
+        {{ loading ? 'Logging in...' : 'Login' }}
       </ion-button>
     </form>
 
     <div class="register-link">
       <p>
-        {{ 'Don\'t have an account?' }} 
-        <a routerLink="/register">{{ 'auth.register' | translate }}</a>
+        Don't have an account? 
+        <a routerLink="/register">Register</a>
       </p>
     </div>
   </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { AlertController, ToastController } from '@ionic/angular';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-borrow',
@@ -15,7 +16,7 @@ export class BorrowPage implements OnInit {
   durationOptions = [7, 14, 21, 30];
   selectedDays = 14;
   
-  interestRate = 1.0; // 日利率 1%
+  interestRate = 1.0;
   interest = 0;
   totalRepayment = 0;
   
@@ -24,7 +25,9 @@ export class BorrowPage implements OnInit {
 
   constructor(
     private router: Router,
-    private translate: TranslateService
+    private apiService: ApiService,
+    private alertController: AlertController,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
@@ -42,25 +45,40 @@ export class BorrowPage implements OnInit {
   }
 
   async submitLoan() {
-    if (!this.agreedToTerms) return;
+    if (!this.agreedToTerms) {
+      const alert = await this.alertController.create({
+        header: 'Terms Required',
+        message: 'Please agree to the loan terms to continue',
+        buttons: ['OK'],
+      });
+      await alert.present();
+      return;
+    }
 
     this.loading = true;
 
     try {
-      // TODO: 调用借款 API
-      console.log('Submit loan:', {
-        amount: this.amount,
-        days: this.selectedDays,
-        interest: this.interest,
-        totalRepayment: this.totalRepayment,
+      const response = await this.apiService.createLoan(this.amount, this.selectedDays).toPromise();
+      
+      if (response.success) {
+        const toast = await this.toastController.create({
+          message: 'Loan approved! Fund will be transferred soon.',
+          duration: 3000,
+          position: 'top',
+          color: 'success',
+        });
+        toast.present();
+        
+        await toast.onDidDismiss();
+        this.router.navigate(['/home']);
+      }
+    } catch (error: any) {
+      const alert = await this.alertController.create({
+        header: 'Loan Failed',
+        message: error.error?.message || 'Failed to process loan',
+        buttons: ['OK'],
       });
-
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      // 跳转到成功页面
-      this.router.navigate(['/home']);
-    } catch (error) {
-      console.error('Loan error:', error);
+      await alert.present();
     } finally {
       this.loading = false;
     }

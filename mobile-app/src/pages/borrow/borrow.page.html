@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'home.borrowNow' | translate }}</ion-title>
+    <ion-title>Borrow Now</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -11,7 +11,7 @@
   <div class="borrow-container">
     <!-- 借款金额 -->
     <section class="amount-section">
-      <h2>{{ 'borrow.amount' | translate }}</h2>
+      <h2>Loan Amount</h2>
       <div class="amount-display">
         <span class="currency">฿</span>
         <span class="amount">{{ amount | number:'1,0-0' }}</span>
@@ -32,14 +32,14 @@
 
     <!-- 借款期限 -->
     <section class="duration-section">
-      <h2>{{ 'borrow.days' | translate }}</h2>
+      <h2>Duration (Days)</h2>
       <div class="duration-options">
         <ion-card 
           *ngFor="let day of durationOptions" 
           [class.selected]="selectedDays === day"
           (click)="selectDuration(day)">
           <ion-card-content>
-            {{ day }} {{ 'borrow.days' | translate }}
+            {{ day }} Days
           </ion-card-content>
         </ion-card>
       </div>
@@ -49,20 +49,20 @@
     <section class="repayment-section">
       <ion-card class="repayment-card">
         <ion-card-header>
-          <ion-card-title>{{ 'borrow.totalRepayment' | translate }}</ion-card-title>
+          <ion-card-title>Total Repayment</ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <div class="repayment-details">
             <div class="detail-row">
-              <span>{{ 'borrow.amount' | translate }}</span>
+              <span>Principal</span>
               <span>฿{{ amount | number:'1,0-0' }}</span>
             </div>
             <div class="detail-row">
-              <span>{{ 'borrow.interest' | translate }} ({{ interestRate }}%/day)</span>
+              <span>Interest ({{ interestRate }}%/day)</span>
               <span>฿{{ interest | number:'1.2-2' }}</span>
             </div>
             <div class="detail-row total">
-              <span>{{ 'borrow.totalRepayment' | translate }}</span>
+              <span>Total Due</span>
               <span>฿{{ totalRepayment | number:'1.2-2' }}</span>
             </div>
           </div>
@@ -76,7 +76,7 @@
         <ion-icon name="document-text-outline" slot="start"></ion-icon>
         <ion-label>
           <ion-checkbox [(ngModel)]="agreedToTerms"></ion-checkbox>
-          {{ 'I agree to the loan terms and conditions' }}
+          I agree to the loan terms and conditions
         </ion-label>
       </ion-item>
     </section>
@@ -88,7 +88,7 @@
         class="submit-btn"
         [disabled]="!agreedToTerms || loading"
         (click)="submitLoan()">
-        {{ loading ? ('common.loading' | translate) : ('borrow.confirm' | translate) }}
+        {{ loading ? 'Processing...' : 'Confirm Loan' }}
       </ion-button>
     </section>
   </div>

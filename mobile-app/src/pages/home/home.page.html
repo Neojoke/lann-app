@@ -1,11 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
-    <ion-title>
-      {{ 'app.name' | translate }}
-    </ion-title>
+    <ion-title>Lann</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="toggleLanguage()">
-        {{ currentLang === 'en' ? 'TH' : 'EN' }}
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
       </ion-button>
       <ion-button (click)="goToProfile()">
         <ion-icon slot="icon-only" name="person-circle-outline"></ion-icon>
@@ -16,22 +14,25 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="welcome-section">
-    <h2>{{ 'auth.welcome' | translate }}, {{ userName }}</h2>
-    <p>{{ 'app.tagline' | translate }}</p>
+    <h2>Welcome, {{ user?.name || 'User' }}</h2>
+    <p>{{ user?.phone || '' }}</p>
   </div>
 
   <!-- 可用额度卡片 -->
   <ion-card class="credit-card">
     <ion-card-header>
-      <ion-card-subtitle>{{ 'home.availableCredit' | translate }}</ion-card-subtitle>
+      <ion-card-subtitle>Available Credit</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
       <div class="credit-amount">
         <span class="currency">฿</span>
-        <span class="amount">20,000</span>
+        <span class="amount">{{ availableCredit | number:'1.0-0' }}</span>
+      </div>
+      <div class="credit-info" *ngIf="totalCredit > 0">
+        <small>Total: ฿{{ totalCredit | number:'1.0-0' }} | Used: ฿{{ usedCredit | number:'1.0-0' }}</small>
       </div>
       <ion-button expand="block" class="borrow-btn" (click)="goToBorrow()">
-        {{ 'home.borrowNow' | translate }}
+        Borrow Now
       </ion-button>
     </ion-card-content>
   </ion-card>
@@ -43,13 +44,13 @@
         <ion-col size="6">
           <ion-card class="action-card" (click)="goToMyLoans()">
             <ion-icon name="document-text-outline" class="action-icon"></ion-icon>
-            <span>{{ 'home.myLoans' | translate }}</span>
+            <span>My Loans</span>
           </ion-card>
         </ion-col>
         <ion-col size="6">
           <ion-card class="action-card" (click)="goToRepay()">
             <ion-icon name="card-outline" class="action-icon"></ion-icon>
-            <span>{{ 'home.repay' | translate }}</span>
+            <span>Repay</span>
           </ion-card>
         </ion-col>
       </ion-row>
@@ -57,40 +58,40 @@
         <ion-col size="6">
           <ion-card class="action-card" (click)="goToSettings()">
             <ion-icon name="settings-outline" class="action-icon"></ion-icon>
-            <span>{{ 'home.settings' | translate }}</span>
+            <span>Settings</span>
           </ion-card>
         </ion-col>
         <ion-col size="6">
           <ion-card class="action-card" (click)="goToSupport()">
             <ion-icon name="chatbubble-ellipses-outline" class="action-icon"></ion-icon>
-            <span>{{ 'home.support' | translate }}</span>
+            <span>Support</span>
           </ion-card>
         </ion-col>
       </ion-row>
     </ion-grid>
   </div>
 
-  <!-- 借款记录 -->
-  <div class="loan-history" *ngIf="hasActiveLoan">
-    <h3>{{ 'home.myLoans' | translate }}</h3>
-    <ion-card class="loan-card">
+  <!-- 待还款 -->
+  <div class="loan-history" *ngIf="pendingRepayments.length > 0">
+    <h3>Pending Repayment</h3>
+    <ion-card class="loan-card" *ngFor="let repayment of pendingRepayments">
       <ion-card-header>
         <ion-card-title>Active Loan</ion-card-title>
-        <ion-card-subtitle>Due: 14 days</ion-card-subtitle>
+        <ion-card-subtitle>Due in {{ repayment.daysRemaining }} days</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
         <div class="loan-details">
           <div class="loan-item">
             <span>Principal</span>
-            <span>฿ 5,000</span>
+            <span>฿ {{ repayment.amount | number:'1.0-0' }}</span>
           </div>
           <div class="loan-item">
             <span>Interest</span>
-            <span>฿ 500</span>
+            <span>฿ {{ (repayment.total - repayment.amount) | number:'1.0-0' }}</span>
           </div>
           <div class="loan-item total">
             <span>Total Due</span>
-            <span>฿ 5,500</span>
+            <span>฿ {{ repayment.total | number:'1.0-0' }}</span>
           </div>
         </div>
         <ion-button expand="block" color="secondary" (click)="goToRepay()">

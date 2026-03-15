@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { AlertController } from '@ionic/angular';
+import { ApiService, User } from '../../services/api.service';
 
 @Component({
   selector: 'app-home',
@@ -8,59 +9,111 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  userName = 'User';
-  currentLang = 'en';
+  user: User | null = null;
+  availableCredit = 0;
+  totalCredit = 0;
+  usedCredit = 0;
   hasActiveLoan = false;
-  availableCredit = 20000;
+  loans: any[] = [];
+  pendingRepayments: any[] = [];
 
   constructor(
     private router: Router,
-    private translate: TranslateService
-  ) {
-    // 默认使用英语
-    this.translate.setDefaultLang('en');
-    this.translate.use('en');
-  }
+    private apiService: ApiService,
+    private alertController: AlertController
+  ) {}
 
   ngOnInit() {
-    // 加载用户信息
     this.loadUserInfo();
+    this.loadCreditInfo();
+    this.loadLoans();
   }
 
-  loadUserInfo() {
-    // TODO: 从服务加载真实用户数据
-    const savedUser = localStorage.getItem('userName');
-    if (savedUser) {
-      this.userName = savedUser;
+  ionViewWillEnter() {
+    this.loadUserInfo();
+    this.loadCreditInfo();
+    this.loadLoans();
+  }
+
+  async loadUserInfo() {
+    try {
+      const response = await this.apiService.getUserProfile().toPromise();
+      if (response.success) {
+        this.user = response.user;
+      }
+    } catch (error) {
+      console.error('Failed to load user info', error);
     }
   }
 
-  toggleLanguage() {
-    this.currentLang = this.currentLang === 'en' ? 'th' : 'en';
-    this.translate.use(this.currentLang);
-    localStorage.setItem('preferredLang', this.currentLang);
+  async loadCreditInfo() {
+    try {
+      const response = await this.apiService.getCreditInfo().toPromise();
+      if (response.success) {
+        this.availableCredit = response.credit.available;
+        this.totalCredit = response.credit.total;
+        this.usedCredit = response.credit.used;
+      }
+    } catch (error) {
+      console.error('Failed to load credit info', error);
+    }
+  }
+
+  async loadLoans() {
+    try {
+      const response = await this.apiService.getLoans().toPromise();
+      if (response.success) {
+        this.loans = response.loans;
+        this.hasActiveLoan = this.loans.some(loan => loan.status === 'active');
+      }
+
+      const repaymentsResponse = await this.apiService.getPendingRepayments().toPromise();
+      if (repaymentsResponse.success) {
+        this.pendingRepayments = repaymentsResponse.pending;
+      }
+    } catch (error) {
+      console.error('Failed to load loans', error);
+    }
+  }
+
+  async logout() {
+    const alert = await this.alertController.create({
+      header: 'Logout',
+      message: 'Are you sure you want to logout?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'Logout',
+          handler: () => {
+            this.apiService.logout();
+            this.router.navigate(['/login']);
+          },
+        },
+      ],
+    });
+    await alert.present();
   }
 
   goToBorrow() {
     this.router.navigate(['/borrow']);
   }
 
-  goToMyLoans() {
-    // TODO: 导航到借款记录页面
-    console.log('Navigate to my loans');
-  }
-
   goToRepay() {
     this.router.navigate(['/repay']);
   }
 
+  goToMyLoans() {
+    console.log('Navigate to my loans');
+  }
+
   goToSettings() {
-    // TODO: 导航到设置页面
     console.log('Navigate to settings');
   }
 
   goToSupport() {
-    // TODO: 导航到客服页面
     console.log('Navigate to support');
   }
 

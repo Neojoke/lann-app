@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'home.repay' | translate }}</ion-title>
+    <ion-title>Repay</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -13,16 +13,19 @@
     <section class="amount-due-section">
       <ion-card class="amount-card">
         <ion-card-header>
-          <ion-card-subtitle>{{ 'repay.amountDue' | translate }}</ion-card-subtitle>
+          <ion-card-subtitle>Amount Due</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
           <div class="amount-display">
             <span class="currency">฿</span>
-            <span class="amount">5,500</span>
+            <span class="amount">{{ totalDue > 0 ? (totalDue | number:'1.0-0') : '0' }}</span>
           </div>
-          <div class="due-date">
+          <div class="due-date" *ngIf="dueDate">
             <ion-icon name="calendar-outline"></ion-icon>
-            <span>{{ 'repay.dueDate' | translate }}: 2026-03-29</span>
+            <span>Due Date: {{ dueDate | date:'yyyy-MM-dd' }}</span>
+          </div>
+          <div class="due-date" *ngIf="!dueDate">
+            <ion-text color="medium">No pending repayment</ion-text>
           </div>
         </ion-card-content>
       </ion-card>
@@ -30,7 +33,7 @@
 
     <!-- 还款方式 -->
     <section class="payment-methods-section">
-      <h2>{{ 'repay.paymentMethod' | translate }}</h2>
+      <h2>Payment Method</h2>
       
       <ion-card 
         class="payment-card"
@@ -41,8 +44,8 @@
           <div class="payment-row">
             <ion-icon [name]="method.icon" class="payment-icon"></ion-icon>
             <div class="payment-info">
-              <h3>{{ method.name | translate }}</h3>
-              <p>{{ method.description | translate }}</p>
+              <h3>{{ method.name }}</h3>
+              <p>{{ method.description }}</p>
             </div>
             <ion-icon 
               name="radio-button-on" 
@@ -97,7 +100,7 @@
         class="submit-btn"
         [disabled]="!selectedMethod || loading"
         (click)="submitRepayment()">
-        {{ loading ? ('common.loading' | translate) : ('repay.confirm' | translate) }}
+        {{ loading ? 'Processing...' : 'Confirm Repayment' }}
       </ion-button>
     </section>
   </div>

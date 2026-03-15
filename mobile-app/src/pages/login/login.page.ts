@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { AlertController, ToastController } from '@ionic/angular';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,9 @@ export class LoginPage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private translate: TranslateService
+    private apiService: ApiService,
+    private alertController: AlertController,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
@@ -44,13 +47,33 @@ export class LoginPage implements OnInit {
     if (!this.loginForm.get('phone')?.valid) return;
 
     this.sendingOtp = true;
+    const phone = this.loginForm.get('phone')?.value;
     
-    // TODO: 调用发送 OTP API
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    this.sendingOtp = false;
-    this.countdown = 60;
-    this.startCountdown();
+    try {
+      const result = await this.apiService.sendOtp(phone).toPromise();
+      
+      if (result.success) {
+        const toast = await this.toastController.create({
+          message: 'OTP sent! Check console for test code (123456)',
+          duration: 3000,
+          position: 'top',
+          color: 'success',
+        });
+        toast.present();
+        
+        this.sendingOtp = false;
+        this.countdown = result.expiresIn || 60;
+        this.startCountdown();
+      }
+    } catch (error: any) {
+      const alert = await this.alertController.create({
+        header: 'Error',
+        message: error.error?.message || 'Failed to send OTP',
+        buttons: ['OK'],
+      });
+      await alert.present();
+      this.sendingOtp = false;
+    }
   }
 
   startCountdown() {
@@ -68,16 +91,28 @@ export class LoginPage implements OnInit {
     this.loading = true;
 
     try {
-      // TODO: 调用登录 API
       const { phone, otp } = this.loginForm.value;
-      console.log('Login:', phone, otp);
+      const result = await this.apiService.verifyOtp(phone, otp).toPromise();
       
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // 登录成功，跳转到首页
-      this.router.navigate(['/home']);
-    } catch (error) {
-      console.error('Login error:', error);
+      if (result.success) {
+        const toast = await this.toastController.create({
+          message: 'Login successful!',
+          duration: 2000,
+          position: 'top',
+          color: 'success',
+        });
+        toast.present();
+        
+        await toast.onDidDismiss();
+        this.router.navigate(['/home']);
+      }
+    } catch (error: any) {
+      const alert = await this.alertController.create({
+        header: 'Login Failed',
+        message: error.error?.message || 'Invalid OTP',
+        buttons: ['OK'],
+      });
+      await alert.present();
     } finally {
       this.loading = false;
     }
