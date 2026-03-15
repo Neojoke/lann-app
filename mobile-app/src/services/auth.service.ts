@@ -1,39 +1,126 @@
-import { Injectable } from '@angular/core';
-import { User } from '../models';
+import { Injectable } from '@ionic/react';
 
-@Injectable({ providedIn: 'root' })
+export interface LoginRequest {
+  phone: string;
+  otp: string;
+}
+
+export interface SendOtpRequest {
+  phone: string;
+}
+
+export interface AuthResponse {
+  success: boolean;
+  user: {
+    id: string;
+    phone: string;
+    name: string;
+    kycStatus: string;
+    creditLimit: number;
+  };
+  token: string;
+}
+
+export interface SendOtpResponse {
+  success: boolean;
+  message: string;
+  expiresIn: number;
+  debug?: {
+    otp: string;
+    note: string;
+  };
+}
+
+const API_BASE_URL = 'http://localhost:8787';
+
+@Injectable({
+  providedIn: 'root',
+})
 export class AuthService {
-  private readonly TOKEN_KEY = 'auth_token';
-  private currentUserValue: User | null = null;
+  private token: string | null = null;
 
-  get currentUser(): User | null {
-    if (!this.currentUserValue) {
-      const stored = localStorage.getItem('current_user');
-      if (stored) this.currentUserValue = JSON.parse(stored);
+  constructor() {}
+
+  async sendOtp(phone: string): Promise<SendOtpResponse> {
+    const response = await fetch(`${API_BASE_URL}/api/auth/send-otp`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ phone }),
+    });
+
+    if (!response.ok) {
+      throw new Error('发送 OTP 失败');
     }
-    return this.currentUserValue;
+
+    return await response.json();
   }
 
-  get isAuthenticated(): boolean {
-    return !!this.getToken();
+  async verifyOtp(phone: string, otp: string): Promise<AuthResponse> {
+    const response = await fetch(`${API_BASE_URL}/api/auth/verify-otp`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ phone, otp }),
+    });
+
+    if (!response.ok) {
+      throw new Error('验证 OTP 失败');
+    }
+
+    const data = await response.json();
+    
+    if (data.token) {
+      this.token = data.token;
+      localStorage.setItem('auth_token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+    }
+
+    return data;
+  }
+
+  async logout(): Promise<void> {
+    this.token = null;
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user');
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+    return this.token || localStorage.getItem('auth_token');
   }
 
-  setToken(token: string): void {
-    localStorage.setItem(this.TOKEN_KEY, token);
+  isAuthenticated(): boolean {
+    return !!this.getToken();
   }
 
-  setCurrentUser(user: User): void {
-    this.currentUserValue = user;
-    localStorage.setItem('current_user', JSON.stringify(user));
-  }
+  async getCurrentUser(): Promise<any> {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      return JSON.parse(userStr);
+    }
 
-  logout(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem('current_user');
-    this.currentUserValue = null;
+    const token = this.getToken();
+    if (!token) {
+      return null;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        return null;
+      }
+
+      const data = await response.json();
+      return data.user;
+    } catch (error) {
+      return null;
+    }
   }
 }
