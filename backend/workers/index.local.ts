@@ -1,14 +1,10 @@
 /**
- * Lann Backend API - 本地开发模式
- * 使用 SQLite + MinIO + MailHog
+ * Lann Backend API - 本地开发模式 (纯内存版)
+ * 无需任何外部依赖，开箱即用
  */
 
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
-import { jwt } from 'hono/jwt';
-import Database from 'better-sqlite3';
-import Minio from 'minio';
-import nodemailer from 'nodemailer';
 
 // 创建 Hono 应用
 const app = new Hono();
@@ -16,49 +12,29 @@ const app = new Hono();
 // 启用 CORS
 app.use('/*', cors());
 
-// ========== 本地服务初始化 ==========
+// ========== Mock 数据 ==========
+const users = [
+  { id: 'user_001', phone: '+66812345678', name: 'Test User', kyc_status: 'verified', credit_limit: 20000 },
+  { id: 'user_002', phone: '+66898765432', name: 'Demo User', kyc_status: 'verified', credit_limit: 15000 },
+];
 
-// SQLite 数据库连接
-const db = new Database(process.env.DATABASE_PATH || './local/dev.db');
+const loans = [
+  { id: 'loan_001', user_id: 'user_001', amount: 5000, days: 14, interest_rate: 0.01, interest: 700, total_repayment: 5700, status: 'active', created_at: new Date().toISOString(), due_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString() },
+];
 
-// MinIO 客户端
-const minioClient = new Minio.Client({
-  endPoint: process.env.MINIO_ENDPOINT?.split(':')[0] || 'localhost',
-  port: parseInt(process.env.MINIO_ENDPOINT?.split(':')[1] || '9000'),
-  useSSL: false,
-  accessKey: process.env.MINIO_ACCESS_KEY || 'lann-dev',
-  secretKey: process.env.MINIO_SECRET_KEY || 'lann-secret',
-});
+const repayments = [];
+let currentUserId = 'user_001';
 
-// MailHog SMTP 配置
-const smtpTransport = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'localhost',
-  port: parseInt(process.env.SMTP_PORT || '1025'),
-  secure: false,
-  auth: undefined,
-});
-
-// ========== 中间件 ==========
-
-// JWT 认证（可选）
-const optionalJwt = (c: any, next: any) => {
-  const authHeader = c.req.header('Authorization');
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return next();
-  }
-  return jwt({ secret: process.env.JWT_SECRET || 'lann-local-dev-secret' })(c, next);
-};
+// OTP 存储 (Map)
+const otpStore = new Map<string, { code: string; expires: number; phone: string }>();
 
 // ========== 健康检查 ==========
 app.get('/health', (c) => {
   return c.json({ 
     status: 'ok', 
     timestamp: new Date().toISOString(),
-    services: {
-      database: 'connected',
-      minio: 'connected',
-      mailhog: 'connected',
-    }
+    mode: 'development',
+    message: 'Local development server running',
   });
 });
 
@@ -70,125 +46,101 @@ app.post('/api/auth/send-otp', async (c) => {
   
   // 验证手机号格式
   if (!phone.match(/^\+66\d{9}$/)) {
-    return c.json({ success: false, error: 'Invalid phone number' }, 400);
+    return c.json({ success: false, error: 'Invalid phone number. Format: +66XXXXXXXXX' }, 400);
   }
   
   // 生成 6 位 OTP
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  const otpId = `otp_${Date.now()}`;
-  const expiresAt = new Date(Date.now() + 300000); // 5 分钟
+  const otp = '123456'; // 开发环境固定 OTP
   
-  // 存储 OTP 到数据库
-  db.prepare(`
-    INSERT INTO otp_codes (id, phone, code, expires_at)
-    VALUES (?, ?, ?, ?)
-  `).run(otpId, phone, otp, expiresAt.toISOString());
-  
-  // 通过 MailHog 发送"短信"
-  await smtpTransport.sendMail({
-    from: 'Lann <noreply@lann.local>',
-    to: phone,
-    subject: 'Your OTP Code',
-    text: `Your OTP code is: ${otp}`,
-    html: `<p>Your OTP code is: <strong>${otp}</strong></p>`,
+  // 存储 OTP (5 分钟过期)
+  otpStore.set(phone, {
+    code: otp,
+    expires: Date.now() + 300000,
+    phone,
   });
+  
+  console.log(`📱 OTP for ${phone}: ${otp} (expires in 5 min)`);
   
   return c.json({ 
     success: true, 
     message: 'OTP sent successfully',
     expiresIn: 300,
-    otpId, // 开发环境返回 OTP ID 便于测试
+    debug: { otp, note: 'Development mode - OTP shown in console' },
   });
 });
 
 // 验证 OTP 并登录/注册
 app.post('/api/auth/verify-otp', async (c) => {
-  const { phone, otp, otpId } = await c.req.json();
+  const { phone, otp } = await c.req.json();
   
   // 验证 OTP
-  const otpRecord = db.prepare(`
-    SELECT * FROM otp_codes 
-    WHERE id = ? AND phone = ? AND code = ? AND expires_at > datetime('now')
-  `).get(otpId, phone, otp);
-  
-  if (!otpRecord) {
+  const otpRecord = otpStore.get(phone);
+  if (!otpRecord || otpRecord.code !== otp || otpRecord.expires < Date.now()) {
     return c.json({ success: false, error: 'Invalid or expired OTP' }, 400);
   }
   
-  // 标记 OTP 为已使用
-  db.prepare(`
-    UPDATE otp_codes SET verified = 1 WHERE id = ?
-  `).run(otpId);
-  
   // 查找或创建用户
-  let user = db.prepare('SELECT * FROM users WHERE phone = ?').get(phone) as any;
-  
+  let user = users.find(u => u.phone === phone);
   if (!user) {
-    const userId = `user_${Date.now()}`;
-    db.prepare(`
-      INSERT INTO users (id, phone, kyc_status, credit_limit)
-      VALUES (?, ?, 'pending', 5000)
-    `).run(userId, phone);
-    user = { id: userId, phone, kyc_status: 'pending', credit_limit: 5000 };
+    user = {
+      id: `user_${Date.now()}`,
+      phone,
+      name: 'User',
+      kyc_status: 'pending',
+      credit_limit: 5000,
+    };
+    users.push(user);
   }
   
-  // 生成 JWT token
-  const token = await jwt.sign(
-    { userId: user.id, phone: user.phone },
-    process.env.JWT_SECRET || 'lann-local-dev-secret',
-    { expiresIn: '7d' }
-  );
+  // 清除 OTP
+  // @ts-ignore
+  global.otpStore.delete(phone);
+  
+  // 设置当前用户
+  currentUserId = user.id;
   
   return c.json({
     success: true,
     user: {
       id: user.id,
       phone: user.phone,
-      name: user.name || 'User',
+      name: user.name,
       kycStatus: user.kyc_status,
       creditLimit: user.credit_limit,
     },
-    token,
+    token: `mock_jwt_token_${user.id}`,
   });
 });
 
 // ========== 借款相关 ==========
 
 // 获取用户可用额度
-app.get('/api/user/credit', optionalJwt, async (c) => {
-  const userId = c.get('userId') || 'user_test_001'; // 开发环境 fallback
-  
-  const user = db.prepare('SELECT * FROM users WHERE id = ?').get(userId) as any;
-  
+app.get('/api/user/credit', async (c) => {
+  const user = users.find(u => u.id === currentUserId);
   if (!user) {
     return c.json({ success: false, error: 'User not found' }, 404);
   }
   
-  // 计算已用额度
-  const used = db.prepare(`
-    SELECT COALESCE(SUM(amount), 0) as total
-    FROM loans
-    WHERE user_id = ? AND status IN ('active', 'approved')
-  `).get(userId) as any;
+  const used = loans.filter(l => l.user_id === user.id && l.status === 'active')
+    .reduce((sum, l) => sum + l.amount, 0);
   
   return c.json({
     success: true,
     credit: {
-      available: user.credit_limit - (used?.total || 0),
+      available: user.credit_limit - used,
       total: user.credit_limit,
-      used: used?.total || 0,
+      used,
     },
   });
 });
 
 // 创建借款申请
-app.post('/api/loans', optionalJwt, async (c) => {
+app.post('/api/loans', async (c) => {
   const { amount, days } = await c.req.json();
-  const userId = c.get('userId') || 'user_test_001';
   
   // 验证借款金额
   if (amount < 1000 || amount > 50000) {
-    return c.json({ success: false, error: 'Amount must be between 1,000 and 50,000' }, 400);
+    return c.json({ success: false, error: 'Amount must be between 1,000 and 50,000 THB' }, 400);
   }
   
   // 验证借款期限
@@ -196,78 +148,67 @@ app.post('/api/loans', optionalJwt, async (c) => {
     return c.json({ success: false, error: 'Days must be 7, 14, 21, or 30' }, 400);
   }
   
-  const interestRate = 0.01; // 1% 日利率
+  const interestRate = 0.01;
   const interest = amount * interestRate * days;
   const totalRepayment = amount + interest;
   const loanId = `loan_${Date.now()}`;
-  const dueDate = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
   
-  // 创建借款记录
-  db.prepare(`
-    INSERT INTO loans (id, user_id, amount, days, interest_rate, interest, total_repayment, status, due_date)
-    VALUES (?, ?, ?, ?, ?, ?, ?, 'approved', ?)
-  `).run(loanId, userId, amount, days, interestRate, interest, totalRepayment, dueDate.toISOString());
+  const loan = {
+    id: loanId,
+    user_id: currentUserId,
+    amount,
+    days,
+    interest_rate: interestRate,
+    interest,
+    total_repayment: totalRepayment,
+    status: 'approved',
+    created_at: new Date().toISOString(),
+    due_date: new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString(),
+  };
+  
+  loans.push(loan);
   
   return c.json({
     success: true,
-    loan: {
-      id: loanId,
-      amount,
-      days,
-      interest,
-      totalRepayment,
-      status: 'approved',
-      createdAt: new Date().toISOString(),
-      dueDate: dueDate.toISOString(),
-    },
+    loan,
+    message: 'Loan approved instantly (development mode)',
   });
 });
 
 // 获取借款记录
-app.get('/api/loans', optionalJwt, async (c) => {
-  const userId = c.get('userId') || 'user_test_001';
-  
-  const loans = db.prepare(`
-    SELECT * FROM loans
-    WHERE user_id = ?
-    ORDER BY created_at DESC
-  `).all(userId);
-  
+app.get('/api/loans', async (c) => {
+  const userLoans = loans.filter(l => l.user_id === currentUserId);
   return c.json({
     success: true,
-    loans: loans.map((loan: any) => ({
-      ...loan,
-      dueDate: loan.due_date,
-      createdAt: loan.created_at,
-    })),
+    loans: userLoans,
   });
 });
 
 // ========== 还款相关 ==========
 
 // 创建还款
-app.post('/api/repayments', optionalJwt, async (c) => {
+app.post('/api/repayments', async (c) => {
   const { loanId, method } = await c.req.json();
-  const repaymentId = `repayment_${Date.now()}`;
   
-  // 获取借款信息
-  const loan = db.prepare('SELECT * FROM loans WHERE id = ?').get(loanId) as any;
-  
-  if (!loan) {
+  const loanIndex = loans.findIndex(l => l.id === loanId);
+  if (loanIndex === -1) {
     return c.json({ success: false, error: 'Loan not found' }, 404);
   }
   
-  // 创建还款记录
-  db.prepare(`
-    INSERT INTO repayments (id, loan_id, amount, method, status)
-    VALUES (?, ?, ?, ?, 'completed')
-  `).run(repaymentId, loanId, loan.total_repayment, method);
+  const loan = loans[loanIndex];
+  const repaymentId = `repayment_${Date.now()}`;
+  
+  repayments.push({
+    id: repaymentId,
+    loan_id: loanId,
+    amount: loan.total_repayment,
+    method,
+    status: 'completed',
+    created_at: new Date().toISOString(),
+  });
   
   // 更新借款状态
-  db.prepare(`
-    UPDATE loans SET status = 'repaid', repaid_at = datetime('now')
-    WHERE id = ?
-  `).run(loanId);
+  loans[loanIndex].status = 'repaid';
   
   return c.json({
     success: true,
@@ -283,14 +224,8 @@ app.post('/api/repayments', optionalJwt, async (c) => {
 });
 
 // 获取待还款信息
-app.get('/api/repayments/pending', optionalJwt, async (c) => {
-  const userId = c.get('userId') || 'user_test_001';
-  
-  const pending = db.prepare(`
-    SELECT * FROM loans
-    WHERE user_id = ? AND status = 'active'
-    ORDER BY due_date ASC
-  `).all(userId) as any[];
+app.get('/api/repayments/pending', async (c) => {
+  const pending = loans.filter(l => l.user_id === currentUserId && l.status === 'active');
   
   return c.json({
     success: true,
@@ -308,11 +243,8 @@ app.get('/api/repayments/pending', optionalJwt, async (c) => {
 // ========== 用户信息 ==========
 
 // 获取用户信息
-app.get('/api/user/profile', optionalJwt, async (c) => {
-  const userId = c.get('userId') || 'user_test_001';
-  
-  const user = db.prepare('SELECT * FROM users WHERE id = ?').get(userId) as any;
-  
+app.get('/api/user/profile', async (c) => {
+  const user = users.find(u => u.id === currentUserId);
   if (!user) {
     return c.json({ success: false, error: 'User not found' }, 404);
   }
@@ -322,30 +254,40 @@ app.get('/api/user/profile', optionalJwt, async (c) => {
     user: {
       id: user.id,
       phone: user.phone,
-      name: user.name || 'User',
-      email: user.email,
+      name: user.name,
+      email: null,
       kycStatus: user.kyc_status,
       creditLimit: user.credit_limit,
-      createdAt: user.created_at,
+      createdAt: new Date().toISOString(),
     },
   });
 });
 
 // 更新用户信息
-app.put('/api/user/profile', optionalJwt, async (c) => {
-  const userId = c.get('userId') || 'user_test_001';
+app.put('/api/user/profile', async (c) => {
   const { name, email } = await c.req.json();
+  const user = users.find(u => u.id === currentUserId);
+  if (!user) {
+    return c.json({ success: false, error: 'User not found' }, 404);
+  }
   
-  db.prepare(`
-    UPDATE users SET name = ?, email = ?, updated_at = datetime('now')
-    WHERE id = ?
-  `).run(name, email, userId);
+  user.name = name || user.name;
   
   return c.json({
     success: true,
     message: 'Profile updated',
+    user,
   });
 });
 
-// 导出应用
-export default app;
+// 启动服务器
+console.log('🦞 Lann Backend API - Development Mode');
+console.log('📍 Server: http://localhost:8787');
+console.log('🧪 Test phone: +66812345678');
+console.log('🔑 Test OTP: 123456');
+console.log('');
+
+export default {
+  port: 8787,
+  fetch: app.fetch,
+};
