@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # MinIO - S3 兼容对象存储 (替代 Cloudflare R2)
+  minio:
+    image: minio/minio:latest
+    container_name: lann-minio
+    ports:
+      - "9000:9000"  # API
+      - "9001:9001"  # Console
+    environment:
+      MINIO_ROOT_USER: lann-dev
+      MINIO_ROOT_PASSWORD: lann-secret
+    volumes:
+      - ./backend/local/minio:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      - lann-network
+
+  # MailHog - 本地邮件/短信模拟服务
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: lann-mailhog
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    networks:
+      - lann-network
+
+  # SQLite Browser (可选，用于查看数据库)
+  sqlitebrowser:
+    image: ghcr.io/linuxserver/sqlitebrowser:latest
+    container_name: lann-sqlitebrowser
+    ports:
+      - "3000:3000"  # Web UI
+    volumes:
+      - ./backend/local:/data
+    environment:
+      - PUID=1000
+      - PGID=1000
+    depends_on:
+      - minio
+    networks:
+      - lann-network
+    profiles:
+      - tools
+
+networks:
+  lann-network:
+    driver: bridge
+
+volumes:
+  minio-data:

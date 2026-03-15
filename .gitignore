@@ -28,6 +28,12 @@ Thumbs.db
 .env
 .env.local
 .env.production
+.env.local.example
+
+# Local development
+backend/local/
+*.db
+*.db-journal
 
 # Logs
 *.log

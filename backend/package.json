@@ -2,18 +2,33 @@
   "name": "lann-backend",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "wrangler dev",
+    "dev:local": "tsx watch workers/index.local.ts",
+    "start:local": "tsx workers/index.local.ts",
     "deploy": "wrangler deploy",
     "db:create": "wrangler d1 create lann-db",
     "db:execute": "wrangler d1 execute lann-db --file=sql/schema.sql",
-    "r2:create": "wrangler r2 bucket create lann-documents"
+    "db:local:init": "mkdir -p local && sqlite3 local/dev.db < sql/schema.sql",
+    "db:local:reset": "rm -f local/dev.db && sqlite3 local/dev.db < sql/schema.sql",
+    "r2:create": "wrangler r2 bucket create lann-documents",
+    "minio:create-bucket": "mc alias set local http://localhost:9000 lann-dev lann-secret && mc mb local/lann-documents"
   },
   "dependencies": {
-    "hono": "^4.0.0"
+    "hono": "^4.0.0",
+    "better-sqlite3": "^9.0.0",
+    "minio": "^7.0.0",
+    "nodemailer": "^6.9.0",
+    "@hono/node-server": "^1.0.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.0.0",
-    "wrangler": "^3.0.0"
+    "@types/better-sqlite3": "^7.6.0",
+    "@types/node": "^20.0.0",
+    "@types/nodemailer": "^6.4.0",
+    "wrangler": "^3.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
   }
 }
