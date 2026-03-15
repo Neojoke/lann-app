@@ -1,0 +1,9 @@
+{
+  "name": "Lann",
+  "short_name": "Lann",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f7fa",
+  "theme_color": "#006064",
+  "icons": []
+}
