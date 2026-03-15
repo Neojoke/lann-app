@@ -1,0 +1,46 @@
+appId: com.lann.app
+name: 用户登录测试
+tags:
+  - login
+  - auth
+  - smoke
+
+---
+- launchApp
+  clearState: true
+
+# 验证启动页
+- assertVisible: "Lann"
+- assertVisible: "ง่าย รวดเร็ว ปลอดภัย"
+
+# 点击登录按钮
+- tapOn:
+    text: "Login"
+    timeout: 5000
+
+# 验证登录页
+- assertVisible: "Phone Number"
+- assertVisible: "Password"
+
+# 输入手机号
+- tapOn:
+    id: "phoneInput"
+- inputText: "+66812345678"
+
+# 输入密码
+- tapOn:
+    id: "passwordInput"
+- inputText: "Test1234!"
+
+# 点击登录
+- tapOn:
+    text: "Login"
+    timeout: 3000
+
+# 验证登录成功，跳转到首页
+- assertVisible: "Available Credit"
+- assertVisible: "Borrow Now"
+- assertVisible: "Hello"
+
+# 验证用户信息显示
+- assertVisible: "+66812345678"

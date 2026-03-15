@@ -1,0 +1,67 @@
+appId: com.lann.app
+name: 用户注册测试
+tags:
+  - register
+  - auth
+  - smoke
+
+---
+- launchApp
+  clearState: true
+
+# 验证启动页
+- assertVisible: "Lann"
+
+# 点击注册按钮
+- tapOn:
+    text: "Register"
+    timeout: 5000
+
+# 验证注册页
+- assertVisible: "Phone Number"
+- assertVisible: "OTP Code"
+
+# 输入手机号
+- tapOn:
+    id: "phoneInput"
+- inputText: "+66898765432"
+
+# 点击发送 OTP
+- tapOn:
+    text: "Send OTP"
+    timeout: 2000
+
+# 等待 OTP 输入框
+- assertVisible: "Enter OTP"
+
+# 输入 OTP (测试环境固定码：123456)
+- inputText: "123456"
+
+# 点击验证 OTP
+- tapOn:
+    text: "Verify OTP"
+    timeout: 2000
+
+# 验证进入设置密码页面
+- assertVisible: "Set Password"
+- assertVisible: "Confirm Password"
+
+# 设置密码
+- tapOn:
+    id: "passwordInput"
+- inputText: "Test1234!"
+
+# 确认密码
+- tapOn:
+    id: "confirmPasswordInput"
+- inputText: "Test1234!"
+
+# 点击注册
+- tapOn:
+    text: "Register"
+    timeout: 3000
+
+# 验证注册成功，跳转到首页
+- assertVisible: "Registration Successful"
+- assertVisible: "Available Credit"
+- assertVisible: "Borrow Now"

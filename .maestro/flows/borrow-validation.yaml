@@ -1,0 +1,89 @@
+appId: com.lann.app
+name: 借款金额验证测试
+tags:
+  - borrow
+  - validation
+  - edge-case
+
+---
+- launchApp
+
+# 确保已登录
+- runFlow:
+    when:
+      visible:
+        text: "Login"
+    file: flows/login.yaml
+
+# 进入借款页面
+- tapOn:
+    text: "Borrow Now"
+
+# ========== 测试最小金额 ==========
+- assertVisible: "Amount"
+
+# 滑动到最小金额 1,000 泰铢
+- swipe:
+    start: 80%
+    end: 10%
+    direction: LEFT
+
+# 验证最小金额
+- assertVisible: "฿ 1,000"
+
+# 验证最小金额可以借款
+- assertVisible: "Confirm Borrow"
+
+# ========== 测试最大金额 ==========
+# 滑动到最大金额 50,000 泰铢
+- swipe:
+    start: 10%
+    end: 90%
+    direction: RIGHT
+
+# 验证最大金额
+- assertVisible: "฿ 50,000"
+
+# 验证最大金额需要更多验证
+- assertVisible: "Additional verification required"
+
+# ========== 测试期限选择 ==========
+# 验证可选期限
+- assertVisible: "7 Days"
+- assertVisible: "14 Days"
+- assertVisible: "21 Days"
+- assertVisible: "30 Days"
+
+# 选择 7 天（最短）
+- tapOn:
+    text: "7 Days"
+
+# 验证利息计算
+- assertVisible: "Interest"
+- assertVisible: "Total Repayment"
+
+# 选择 30 天（最长）
+- tapOn:
+    text: "30 Days"
+
+# 验证利息更新
+- assertVisible: "Interest"
+
+# ========== 测试条款同意 ==========
+# 尝试不勾选条款直接提交
+- tapOn:
+    text: "Confirm Borrow"
+
+# 验证显示错误提示
+- assertVisible: "Please agree to the terms"
+
+# 勾选条款
+- tapOn:
+    id: "termsCheckbox"
+
+# 再次提交，应该成功
+- tapOn:
+    text: "Confirm Borrow"
+
+# 验证进入合同页面
+- assertVisible: "Loan Contract"

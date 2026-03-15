@@ -1,0 +1,81 @@
+appId: com.lann.app
+name: 语言切换测试
+tags:
+  - i18n
+  - settings
+  - localization
+
+---
+- launchApp
+  clearState: true
+
+# ========== 验证初始语言 (默认为英语) ==========
+- assertVisible: "Lann"
+- assertVisible: "Easy • Fast • Secure"
+
+# ========== 进入设置页面 ==========
+- tapOn:
+    id: "profileIcon"
+    timeout: 5000
+
+- assertVisible: "Settings"
+- tapOn:
+    text: "Settings"
+
+# ========== 切换到泰语 ==========
+- tapOn:
+    text: "Language"
+
+- assertVisible: "Select Language"
+- tapOn:
+    text: "ไทย"
+
+# 等待语言切换
+- waitForAnimationToEnd: 2000
+
+# ========== 验证泰语显示 ==========
+- assertVisible: "ล้าน"  # Lann 的泰语
+- assertVisible: "ง่าย รวดเร็ว ปลอดภัย"  # 标语泰语
+
+# 验证导航栏泰语
+- assertVisible: "หน้าหลัก"  # 首页
+- assertVisible: "กู้เงิน"   # 借款
+- assertVisible: "ชำระคืน"   # 还款
+- assertVisible: "โปรไฟล์"  # 个人中心
+
+# ========== 切换回英语 ==========
+- tapOn:
+    text: "การตั้งค่า"  # 设置的泰语
+
+- tapOn:
+    text: "ภาษา"  # 语言的泰语
+
+- tapOn:
+    text: "English"
+
+# 等待语言切换
+- waitForAnimationToEnd: 2000
+
+# ========== 验证英语显示 ==========
+- assertVisible: "Lann"
+- assertVisible: "Easy • Fast • Secure"
+
+# 验证导航栏英语
+- assertVisible: "Home"
+- assertVisible: "Borrow"
+- assertVisible: "Repay"
+- assertVisible: "Profile"
+
+# ========== 再次切换到泰语验证 ==========
+- tapOn:
+    text: "Settings"
+- tapOn:
+    text: "Language"
+- tapOn:
+    text: "ไทย"
+
+- waitForAnimationToEnd: 2000
+
+# 最终验证泰语
+- assertVisible: "หน้าหลัก"
+- assertVisible: "กู้เงิน"

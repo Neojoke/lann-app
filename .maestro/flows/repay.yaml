@@ -1,0 +1,82 @@
+appId: com.lann.app
+name: 还款流程测试
+tags:
+  - repay
+  - loan
+  - core
+
+---
+- launchApp
+
+# 确保已登录
+- runFlow:
+    when:
+      visible:
+        text: "Login"
+    file: flows/login.yaml
+
+# 从首页点击还款
+- tapOn:
+    text: "Repay"
+    timeout: 5000
+
+# 验证还款页面
+- assertVisible: "Amount Due"
+- assertVisible: "Due Date"
+- assertVisible: "Payment Method"
+
+# 验证应还金额
+- assertVisible: "฿ X,XXX.XX"
+
+# 验证还款日期
+- assertVisible: "Due: DD/MM/YYYY"
+
+# 选择还款方式 - 银行转账
+- tapOn:
+    text: "Bank Transfer"
+
+# 验证显示银行信息
+- assertVisible: "Bank Name"
+- assertVisible: "Account Number"
+
+# 选择其他还款方式 - 便利店
+- tapOn:
+    text: "Convenience Store"
+
+# 验证显示便利店信息
+- assertVisible: "7-11"
+- assertVisible: "Payment Code"
+
+# 选择 PromptPay
+- tapOn:
+    text: "PromptPay"
+
+# 验证显示 PromptPay 二维码
+- assertVisible: "Scan to Pay"
+
+# 选择 TrueMoney
+- tapOn:
+    text: "TrueMoney"
+
+# 验证显示 TrueMoney 信息
+- assertVisible: "TrueMoney Wallet"
+
+# 确认还款
+- tapOn:
+    text: "Confirm Repayment"
+    timeout: 2000
+
+# 验证还款成功
+- assertVisible: "Repayment Successful"
+- assertVisible: "Thank you"
+
+# 验证显示还款凭证
+- assertVisible: "Receipt"
+- assertVisible: "Download Receipt"
+
+# 返回首页
+- tapOn:
+    text: "Done"
+
+# 验证首页更新
+- assertVisible: "No Outstanding Loans"

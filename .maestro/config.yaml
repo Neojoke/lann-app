@@ -1,0 +1,398 @@
+# Maestro E2E 测试配置
+
+**测试框架:** Maestro  
+**适用平台:** Android (优先) + iOS  
+**创建日期:** 2026-03-15
+
+---
+
+## 📦 安装配置
+
+### 1. 安装 Maestro
+
+```bash
+# macOS
+curl -Ls "https://get.maestro.mobile.dev" | bash
+
+# Linux
+wget -q "https://get.maestro.mobile.dev" -O - | bash
+
+# 验证安装
+maestro --version
+```
+
+### 2. 项目配置
+
+在项目根目录创建 `.maestro/` 文件夹：
+
+```
+lann-thailand-loan-app/
+├── .maestro/
+│   ├── config.yaml
+│   ├── flows/
+│   │   ├── login.yaml
+│   │   ├── register.yaml
+│   │   ├── borrow.yaml
+│   │   └── repay.yaml
+│   └── tests/
+│       └── ...
+```
+
+---
+
+## 🎯 测试用例规划
+
+### 核心流程测试
+
+#### 1. 用户注册流程 (`register.yaml`)
+- [ ] 打开 App
+- [ ] 点击注册按钮
+- [ ] 输入手机号 (+66)
+- [ ] 获取 OTP
+- [ ] 输入 OTP 验证码
+- [ ] 设置登录密码
+- [ ] 注册成功，跳转到首页
+
+#### 2. 用户登录流程 (`login.yaml`)
+- [ ] 打开 App
+- [ ] 输入手机号
+- [ ] 输入密码
+- [ ] 登录成功
+- [ ] 显示首页和个人信息
+
+#### 3. 借款申请流程 (`borrow.yaml`)
+- [ ] 从首页点击"借款"
+- [ ] 选择借款金额 (滑动条)
+- [ ] 选择借款期限 (7/14/21/30 天)
+- [ ] 查看利息和还款金额
+- [ ] 确认借款
+- [ ] 提交成功
+
+#### 4. 还款流程 (`repay.yaml`)
+- [ ] 从首页点击"还款"
+- [ ] 查看应还金额
+- [ ] 选择还款方式
+- [ ] 确认还款
+- [ ] 还款成功
+
+#### 5. 语言切换流程 (`language-switch.yaml`)
+- [ ] 打开设置
+- [ ] 点击语言选择
+- [ ] 切换到泰语
+- [ ] 验证界面文字变为泰语
+- [ ] 切换到英语
+- [ ] 验证界面文字变为英语
+
+---
+
+## 📝 Maestro Flow 示例
+
+### 登录测试 (`login.yaml`)
+
+```yaml
+appId: com.lann.app
+name: 用户登录测试
+tags:
+  - login
+  - auth
+
+---
+- launchApp
+- assertVisible: "สวัสดี" # 泰语"欢迎"
+- assertVisible: "Hello"   # 英语"欢迎"
+
+- tapOn:
+    text: "Login"
+- assertVisible: "Phone Number"
+
+- inputText: "+66812345678"
+- tapOn:
+    text: "Next"
+
+- inputText: "123456" # OTP
+- tapOn:
+    text: "Verify"
+
+- assertVisible: "Available Credit"
+- assertVisible: "Borrow Now"
+```
+
+### 注册测试 (`register.yaml`)
+
+```yaml
+appId: com.lann.app
+name: 用户注册测试
+tags:
+  - register
+  - auth
+
+---
+- launchApp
+- tapOn:
+    text: "Register"
+
+- assertVisible: "Phone Number"
+- inputText: "+66898765432"
+
+- tapOn:
+    text: "Send OTP"
+- assertVisible: "Enter OTP"
+
+- inputText: "123456"
+- tapOn:
+    text: "Verify OTP"
+
+- inputText: "TestUser"
+- inputText: "password123"
+- inputText: "password123" # 确认密码
+
+- tapOn:
+    text: "Register"
+
+- assertVisible: "Registration Successful"
+- assertVisible: "Available Credit"
+```
+
+### 借款申请测试 (`borrow.yaml`)
+
+```yaml
+appId: com.lann.app
+name: 借款申请测试
+tags:
+  - borrow
+  - loan
+
+---
+- launchApp
+
+# 跳过登录（假设已登录）
+- tapOn:
+    text: "Borrow Now"
+
+- assertVisible: "Amount"
+- assertVisible: "Days"
+
+# 选择借款金额
+- swipe:
+    start: 20%
+    end: 80%
+    direction: RIGHT
+
+- assertVisible: "฿ 10,000" # 验证金额
+
+# 选择借款期限
+- tapOn:
+    text: "14 Days"
+
+# 验证利息计算
+- assertVisible: "Interest"
+- assertVisible: "Total Repayment"
+
+# 确认借款
+- tapOn:
+    text: "Confirm Borrow"
+
+- assertVisible: "Loan Approved"
+- assertVisible: "Success"
+```
+
+### 语言切换测试 (`language-switch.yaml`)
+
+```yaml
+appId: com.lann.app
+name: 语言切换测试
+tags:
+  - i18n
+  - settings
+
+---
+- launchApp
+
+# 验证初始语言 (英语)
+- assertVisible: "Hello"
+- assertVisible: "Borrow Now"
+
+# 进入设置
+- tapOn:
+    text: "Settings"
+- tapOn:
+    text: "Language"
+
+# 切换到泰语
+- tapOn:
+    text: "ไทย"
+
+# 验证泰语显示
+- assertVisible: "สวัสดี"
+- assertVisible: "กู้เงินทันที"
+
+# 切换回英语
+- tapOn:
+    text: "การตั้งค่า" # 设置的泰语
+- tapOn:
+    text: "ภาษา" # 语言的泰语
+- tapOn:
+    text: "English"
+
+# 验证英语显示
+- assertVisible: "Hello"
+- assertVisible: "Borrow Now"
+```
+
+---
+
+## 🚀 运行测试
+
+### 本地运行
+
+```bash
+# 运行所有测试
+maestro test .maestro/flows/
+
+# 运行单个测试
+maestro test .maestro/flows/login.yaml
+
+# 运行带标签的测试
+maestro test .maestro/flows/ --tags login
+```
+
+### CI/CD 集成
+
+```yaml
+# GitHub Actions (.github/workflows/e2e-test.yml)
+name: E2E Tests
+
+on: [push, pull_request]
+
+jobs:
+  maestro-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Maestro
+        uses: mobile-dev-inc/action-maestro-cloud@v1.0.0
+      
+      - name: Run E2E Tests
+        run: |
+          maestro test .maestro/flows/
+```
+
+---
+
+## 📊 测试覆盖率目标
+
+| 模块 | 测试用例数 | 覆盖率目标 |
+|------|-----------|-----------|
+| 用户认证 | 5 | 90% |
+| 借款流程 | 4 | 85% |
+| 还款流程 | 3 | 85% |
+| 个人中心 | 3 | 80% |
+| 多语言 | 2 | 95% |
+| **总计** | **17** | **87%** |
+
+---
+
+## 🔧 Maestro 配置选项
+
+### `.maestro/config.yaml`
+
+```yaml
+flows:
+  - "flows/**/*.yaml"
+
+exclude:
+  - "flows/**/draft-*.yaml"
+
+tags:
+  include:
+    - login
+    - register
+    - borrow
+    - repay
+    - i18n
+
+report:
+  format: junit
+  output: reports/maestro-results.xml
+
+timeout: 30000 # 30 秒超时
+retryCount: 2  # 失败重试 2 次
+```
+
+---
+
+## 📱 Android 模拟器配置
+
+### 创建测试专用模拟器
+
+```bash
+# 创建 Pixel 6 API 33 模拟器
+avdmanager create avd -n lann-test -k "system-images;android-33;google_apis;x86_64"
+
+# 启动模拟器
+emulator -avd lann-test -no-snapshot -no-boot-anim
+```
+
+### 安装 App
+
+```bash
+# 构建 Debug 版本
+cd mobile-app
+ionic capacitor build android
+
+# 安装到模拟器
+adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+---
+
+## 📈 测试报告
+
+### 生成 HTML 报告
+
+```bash
+# 运行测试并生成报告
+maestro test .maestro/flows/ --reporter html
+
+# 查看报告
+open reports/maestro-results.html
+```
+
+### 集成到 CI
+
+```yaml
+- name: Upload Test Results
+  uses: actions/upload-artifact@v3
+  with:
+    name: maestro-results
+    path: reports/
+```
+
+---
+
+## 🎯 最佳实践
+
+1. **测试命名规范**
+   - 使用描述性名称：`login-success.yaml`, `borrow-amount-validation.yaml`
+   - 添加标签便于筛选
+
+2. **数据隔离**
+   - 使用测试专用账号
+   - 每次测试后清理数据
+
+3. **等待策略**
+   - 使用 `assertVisible` 代替固定等待
+   - 设置合理超时时间
+
+4. **错误处理**
+   - 添加重试机制
+   - 记录详细错误信息
+
+5. **持续维护**
+   - 随功能更新同步更新测试
+   - 定期审查和优化测试用例
+
+---
+
+**下一步:** 创建实际的测试文件并集成到 CI/CD 流程

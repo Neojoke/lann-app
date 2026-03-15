@@ -1,0 +1,87 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  maestro-test:
+    name: Run Maestro E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: mobile-app/package-lock.json
+
+      - name: Install Dependencies
+        run: |
+          cd mobile-app
+          npm ci
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Create AVD and Generate Snapshot for Faster CI
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          script: echo "AVD setup complete"
+
+      - name: Setup Maestro
+        uses: mobile-dev-inc/action-maestro-cloud@v1.3.0
+        with:
+          maestro-version: 1.30.0
+
+      - name: Build Android Debug APK
+        run: |
+          cd mobile-app
+          npx cap sync android
+          cd android
+          ./gradlew assembleDebug
+
+      - name: Run Maestro Tests
+        uses: mobile-dev-inc/action-maestro-cloud@v1.3.0
+        with:
+          api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
+          app-file: mobile-app/android/app/build/outputs/apk/debug/app-debug.apk
+          test-file: .maestro/flows/*.yaml
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-test-results
+          path: |
+            .maestro/report-*
+            mobile-app/android/build/reports/
+
+      - name: Upload Test Video
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-failure-video
+          path: |
+            .maestro/video-*
+            .maestro/screenshot-*

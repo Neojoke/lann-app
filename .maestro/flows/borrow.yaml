@@ -1,0 +1,76 @@
+appId: com.lann.app
+name: 借款申请测试
+tags:
+  - borrow
+  - loan
+  - core
+
+---
+- launchApp
+
+# 跳过登录（假设已登录状态）
+# 如果未登录，先执行登录流程
+- runFlow:
+    when:
+      visible:
+        text: "Login"
+    file: flows/login.yaml
+
+# 从首页点击借款
+- tapOn:
+    text: "Borrow Now"
+    timeout: 5000
+
+# 验证借款页面
+- assertVisible: "Amount"
+- assertVisible: "Days"
+- assertVisible: "Interest"
+
+# 选择借款金额 - 验证默认值
+- assertVisible: "฿ 5,000"
+
+# 滑动选择金额到 10,000 泰铢
+- swipe:
+    start: 30%
+    end: 70%
+    direction: RIGHT
+
+# 验证金额更新
+- assertVisible: "฿ 10,000"
+
+# 选择借款期限 - 14 天
+- tapOn:
+    text: "14 Days"
+
+# 验证利息计算
+- assertVisible: "Interest"
+- assertVisible: "Total Repayment"
+
+# 验证总还款金额 (本金 + 利息)
+- assertVisible: "฿ 10,XXX"
+
+# 阅读并同意条款
+- tapOn:
+    id: "termsCheckbox"
+
+# 点击确认借款
+- tapOn:
+    text: "Confirm Borrow"
+    timeout: 2000
+
+# 验证提交成功
+- assertVisible: "Loan Approved"
+- assertVisible: "Success"
+- assertVisible: "Your loan is being processed"
+
+# 验证显示借款合同
+- assertVisible: "Loan Contract"
+- assertVisible: "View Contract"
+
+# 返回首页
+- tapOn:
+    text: "Done"
+    timeout: 2000
+
+# 验证首页显示新借款记录
+- assertVisible: "My Loans"
