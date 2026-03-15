@@ -1,0 +1,102 @@
+{
+  "th": {
+    "app": {
+      "name": "Lann",
+      "tagline": "ง่าย รวดเร็ว ปลอดภัย"
+    },
+    "common": {
+      "confirm": "ยืนยัน",
+      "cancel": "ยกเลิก",
+      "back": "กลับ",
+      "next": "ถัดไป",
+      "done": "เสร็จสิ้น",
+      "loading": "กำลังโหลด...",
+      "error": "เกิดข้อผิดพลาด",
+      "success": "สำเร็จ"
+    },
+    "auth": {
+      "login": "เข้าสู่ระบบ",
+      "register": "ลงทะเบียน",
+      "logout": "ออกจากระบบ",
+      "phone": "เบอร์โทรศัพท์",
+      "otp": "รหัส OTP",
+      "sendOtp": "ส่งรหัส OTP",
+      "verifyOtp": "ยืนยันรหัส OTP",
+      "welcome": "สวัสดี"
+    },
+    "home": {
+      "availableCredit": "วงเงินที่สามารถกู้ได้",
+      "borrowNow": "กู้เงินทันที",
+      "myLoans": "การกู้ยืมของฉัน",
+      "repay": "ชำระคืน",
+      "settings": "การตั้งค่า",
+      "support": "ฝ่ายสนับสนุน"
+    },
+    "borrow": {
+      "amount": "จำนวนเงิน",
+      "days": "วัน",
+      "interest": "ดอกเบี้ย",
+      "totalRepayment": "ยอดชำระรวม",
+      "confirm": "ยืนยันการกู้"
+    },
+    "repay": {
+      "amountDue": "ยอดเงินที่ต้องชำระ",
+      "dueDate": "ครบกำหนดชำระ",
+      "paymentMethod": "ช่องทางการชำระเงิน",
+      "bankTransfer": "โอนเงินผ่านธนาคาร",
+      "convenienceStore": "ร้านสะดวกซื้อ",
+      "promptPay": "พร้อมเพย์",
+      "trueMoney": "ทรูมันนี่"
+    }
+  },
+  "en": {
+    "app": {
+      "name": "Lann",
+      "tagline": "Easy • Fast • Secure"
+    },
+    "common": {
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "back": "Back",
+      "next": "Next",
+      "done": "Done",
+      "loading": "Loading...",
+      "error": "Error",
+      "success": "Success"
+    },
+    "auth": {
+      "login": "Login",
+      "register": "Register",
+      "logout": "Logout",
+      "phone": "Phone Number",
+      "otp": "OTP Code",
+      "sendOtp": "Send OTP",
+      "verifyOtp": "Verify OTP",
+      "welcome": "Hello"
+    },
+    "home": {
+      "availableCredit": "Available Credit",
+      "borrowNow": "Borrow Now",
+      "myLoans": "My Loans",
+      "repay": "Repay",
+      "settings": "Settings",
+      "support": "Support"
+    },
+    "borrow": {
+      "amount": "Amount",
+      "days": "Days",
+      "interest": "Interest",
+      "totalRepayment": "Total Repayment",
+      "confirm": "Confirm Borrow"
+    },
+    "repay": {
+      "amountDue": "Amount Due",
+      "dueDate": "Due Date",
+      "paymentMethod": "Payment Method",
+      "bankTransfer": "Bank Transfer",
+      "convenienceStore": "Convenience Store",
+      "promptPay": "PromptPay",
+      "trueMoney": "TrueMoney"
+    }
+  }
+}
