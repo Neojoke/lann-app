@@ -1,0 +1,68 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'auth.login' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="login-content">
+  <div class="login-container">
+    <div class="logo-section">
+      <h1>Lann</h1>
+      <p>{{ 'app.tagline' | translate }}</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <ion-item class="input-item">
+        <ion-icon name="call-outline" slot="start"></ion-icon>
+        <ion-label position="floating">{{ 'auth.phone' | translate }}</ion-label>
+        <ion-input 
+          formControlName="phone" 
+          type="tel" 
+          placeholder="+66"
+          inputmode="tel">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="input-item">
+        <ion-icon name="keypad-outline" slot="start"></ion-icon>
+        <ion-label position="floating">{{ 'auth.otp' | translate }}</ion-label>
+        <ion-input 
+          formControlName="otp" 
+          type="text" 
+          maxlength="6"
+          inputmode="numeric">
+        </ion-input>
+      </ion-item>
+
+      <div class="otp-actions" *ngIf="showSendOtp">
+        <ion-button 
+          fill="clear" 
+          (click)="sendOtp()" 
+          [disabled]="sendingOtp">
+          {{ sendingOtp ? ('common.loading' | translate) : ('auth.sendOtp' | translate) }}
+        </ion-button>
+        <ion-text color="medium" class="countdown" *ngIf="countdown > 0">
+          {{ countdown }}s
+        </ion-text>
+      </div>
+
+      <ion-button 
+        expand="block" 
+        type="submit" 
+        class="submit-btn"
+        [disabled]="!loginForm.valid || loading">
+        {{ loading ? ('common.loading' | translate) : ('auth.login' | translate) }}
+      </ion-button>
+    </form>
+
+    <div class="register-link">
+      <p>
+        {{ 'Don\'t have an account?' }} 
+        <a routerLink="/register">{{ 'auth.register' | translate }}</a>
+      </p>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,19 @@
+{
+  "name": "lann-backend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:create": "wrangler d1 create lann-db",
+    "db:execute": "wrangler d1 execute lann-db --file=sql/schema.sql",
+    "r2:create": "wrangler r2 bucket create lann-documents"
+  },
+  "dependencies": {
+    "hono": "^4.0.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.0.0",
+    "wrangler": "^3.0.0"
+  }
+}

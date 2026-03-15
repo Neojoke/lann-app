@@ -1,0 +1,104 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'home.repay' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="repay-content">
+  <div class="repay-container">
+    <!-- 应还金额 -->
+    <section class="amount-due-section">
+      <ion-card class="amount-card">
+        <ion-card-header>
+          <ion-card-subtitle>{{ 'repay.amountDue' | translate }}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="amount-display">
+            <span class="currency">฿</span>
+            <span class="amount">5,500</span>
+          </div>
+          <div class="due-date">
+            <ion-icon name="calendar-outline"></ion-icon>
+            <span>{{ 'repay.dueDate' | translate }}: 2026-03-29</span>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </section>
+
+    <!-- 还款方式 -->
+    <section class="payment-methods-section">
+      <h2>{{ 'repay.paymentMethod' | translate }}</h2>
+      
+      <ion-card 
+        class="payment-card"
+        *ngFor="let method of paymentMethods"
+        [class.selected]="selectedMethod === method.id"
+        (click)="selectMethod(method.id)">
+        <ion-card-content>
+          <div class="payment-row">
+            <ion-icon [name]="method.icon" class="payment-icon"></ion-icon>
+            <div class="payment-info">
+              <h3>{{ method.name | translate }}</h3>
+              <p>{{ method.description | translate }}</p>
+            </div>
+            <ion-icon 
+              name="radio-button-on" 
+              class="radio-icon"
+              *ngIf="selectedMethod === method.id">
+            </ion-icon>
+            <ion-icon 
+              name="radio-button-off" 
+              class="radio-icon"
+              *ngIf="selectedMethod !== method.id">
+            </ion-icon>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </section>
+
+    <!-- 支付详情 -->
+    <section class="payment-details-section" *ngIf="selectedMethod">
+      <ion-card class="details-card">
+        <ion-card-header>
+          <ion-card-title>Payment Details</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="detail-item" *ngIf="selectedMethod === 'bank'">
+            <p><strong>Bank:</strong> Kasikorn Bank</p>
+            <p><strong>Account:</strong> 123-4-56789-0</p>
+            <p><strong>Name:</strong> Lann Co., Ltd.</p>
+          </div>
+          <div class="detail-item" *ngIf="selectedMethod === 'convenience'">
+            <p><strong>Store:</strong> 7-11, FamilyMart</p>
+            <p><strong>Payment Code:</strong> 1234567890</p>
+          </div>
+          <div class="detail-item" *ngIf="selectedMethod === 'promptpay'">
+            <div class="qr-placeholder">
+              <ion-icon name="qr-code-outline"></ion-icon>
+              <p>Scan to Pay</p>
+            </div>
+            <p><strong>PromptPay:</strong> 081-234-5678</p>
+          </div>
+          <div class="detail-item" *ngIf="selectedMethod === 'truemoney'">
+            <p><strong>Wallet:</strong> TrueMoney Wallet</p>
+            <p><strong>Number:</strong> 081-234-5678</p>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </section>
+
+    <!-- 提交按钮 -->
+    <section class="action-section">
+      <ion-button 
+        expand="block" 
+        class="submit-btn"
+        [disabled]="!selectedMethod || loading"
+        (click)="submitRepayment()">
+        {{ loading ? ('common.loading' | translate) : ('repay.confirm' | translate) }}
+      </ion-button>
+    </section>
+  </div>
+</ion-content>
