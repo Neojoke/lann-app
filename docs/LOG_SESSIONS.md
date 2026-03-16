@@ -7,6 +7,45 @@
 
 ## 📝 会话记录
 
+### 2026-03-16 10:27 - 正式治理启动 + Subagent Spawn
+
+**会话 ID:** `session-lann-governance-001`  
+**执行 Agent:** 小满 (Orchestrator)  
+**模型:** bailian/qwen3.5-plus  
+**时长:** ~5 分钟
+
+#### 目标
+启动 project-management-skills 正式治理流程，为 Lann 项目创建正式 Project 记录并 spawn Subagent 执行核心功能开发。
+
+#### 执行内容
+1. 验证模型 slug (`bailian/qwen3.5-plus` ✅)
+2. 创建 LOG_CHARTERS.md (Charter Lite v1.0)
+3. 创建 LOG_CACHES.md (上下文指针 + 摘要)
+4. 更新 LOG_PROJECTS.md (添加 Subagent 会话记录)
+5. Spawn Subagent 执行核心功能开发
+
+#### 产出
+- ✅ LOG_CHARTERS.md - Charter Lite v1.0
+- ✅ LOG_CACHES.md - 上下文缓存
+- ✅ LOG_PROJECTS.md - 更新进度 + Subagent 记录
+- ✅ Subagent 会话 `session-lann-core-dev-001`
+
+#### Git 提交
+```
+待提交
+```
+
+#### 模型验证
+- bailian/qwen3.5-plus ✅ (default, configured)
+
+#### 危险操作
+无
+
+#### 备注
+正式治理流程启动，后续所有开发任务通过 Subagent 执行。
+
+---
+
 ### 2026-03-16 01:52 - project-management-skills 集成
 
 **会话 ID:** `session-20260316-0152`  
