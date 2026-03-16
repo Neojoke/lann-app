@@ -1,64 +1,196 @@
 :root {
-  --ion-color-primary: #0066CC;
-  --ion-color-primary-rgb: 0, 102, 204;
+  /* 主色调 - Lann品牌蓝色 */
+  --ion-color-primary: #3498db;
+  --ion-color-primary-rgb: 52, 152, 219;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #0059b3;
-  --ion-color-primary-tint: #1a75cc;
+  --ion-color-primary-shade: #2980b9;
+  --ion-color-primary-tint: #4aa3df;
 
-  --ion-color-secondary: #00D4AA;
-  --ion-color-secondary-rgb: 0, 212, 170;
+  /* 辅助色 - 绿色（成功/积极）*/
+  --ion-color-secondary: #2ecc71;
+  --ion-color-secondary-rgb: 46, 204, 113;
   --ion-color-secondary-contrast: #ffffff;
   --ion-color-secondary-contrast-rgb: 255, 255, 255;
-  --ion-color-secondary-shade: #00bb96;
-  --ion-color-secondary-tint: #1ad8b3;
+  --ion-color-secondary-shade: #27ae60;
+  --ion-color-secondary-tint: #40d47e;
 
-  --ion-color-tertiary: #FF9F1C;
-  --ion-color-tertiary-rgb: 255, 159, 28;
+  /* 强调色 - 橙色 */
+  --ion-color-tertiary: #f39c12;
+  --ion-color-tertiary-rgb: 243, 156, 18;
   --ion-color-tertiary-contrast: #ffffff;
   --ion-color-tertiary-contrast-rgb: 255, 255, 255;
-  --ion-color-tertiary-shade: #e08c18;
-  --ion-color-tertiary-tint: #ffa933;
+  --ion-color-tertiary-shade: #e67e22;
+  --ion-color-tertiary-tint: #f5b041;
 
-  --ion-color-success: #2dd56e;
-  --ion-color-success-rgb: 45, 213, 110;
+  /* 成功色 */
+  --ion-color-success: #2ecc71;
+  --ion-color-success-rgb: 46, 204, 113;
   --ion-color-success-contrast: #ffffff;
   --ion-color-success-contrast-rgb: 255, 255, 255;
-  --ion-color-success-shade: #28bb60;
-  --ion-color-success-tint: #42d97c;
+  --ion-color-success-shade: #27ae60;
+  --ion-color-success-tint: #40d47e;
 
-  --ion-color-warning: #ffc409;
-  --ion-color-warning-rgb: 255, 196, 9;
-  --ion-color-warning-contrast: #000000;
-  --ion-color-warning-contrast-rgb: 0, 0, 0;
-  --ion-color-warning-shade: #e0ac08;
-  --ion-color-warning-tint: #ffca22;
+  /* 警告色 */
+  --ion-color-warning: #f39c12;
+  --ion-color-warning-rgb: 243, 156, 18;
+  --ion-color-warning-contrast: #ffffff;
+  --ion-color-warning-contrast-rgb: 255, 255, 255;
+  --ion-color-warning-shade: #e67e22;
+  --ion-color-warning-tint: #f5b041;
 
-  --ion-color-danger: #eb445a;
-  --ion-color-danger-rgb: 235, 68, 90;
+  /* 危险色 */
+  --ion-color-danger: #e74c3c;
+  --ion-color-danger-rgb: 231, 76, 60;
   --ion-color-danger-contrast: #ffffff;
   --ion-color-danger-contrast-rgb: 255, 255, 255;
-  --ion-color-danger-shade: #cf3c4f;
-  --ion-color-danger-tint: #ed576b;
+  --ion-color-danger-shade: #c0392b;
+  --ion-color-danger-tint: #ec7063;
 
-  --ion-color-dark: #222428;
-  --ion-color-dark-rgb: 34, 36, 40;
+  /* 深色 */
+  --ion-color-dark: #2c3e50;
+  --ion-color-dark-rgb: 44, 62, 80;
   --ion-color-dark-contrast: #ffffff;
   --ion-color-dark-contrast-rgb: 255, 255, 255;
-  --ion-color-dark-shade: #1e2023;
-  --ion-color-dark-tint: #383a3e;
+  --ion-color-dark-shade: #1a2530;
+  --ion-color-dark-tint: #415265;
 
-  --ion-color-medium: #92949c;
-  --ion-color-medium-rgb: 146, 148, 156;
-  --ion-color-medium-contrast: #ffffff;
-  --ion-color-medium-contrast-rgb: 255, 255, 255;
-  --ion-color-medium-shade: #808289;
-  --ion-color-medium-tint: #9d9fa6;
+  /* 中性色 */
+  --ion-color-medium: #95a5a6;
+  --ion-color-medium-rgb: 149, 165, 166;
+  --ion-color-medium-contrast: #000000;
+  --ion-color-medium-contrast-rgb: 0, 0, 0;
+  --ion-color-medium-shade: #839192;
+  --ion-color-medium-tint: #a3b0b1;
 
-  --ion-color-light: #f4f5f8;
-  --ion-color-light-rgb: 244, 245, 248;
+  /* 浅色 */
+  --ion-color-light: #ecf0f1;
+  --ion-color-light-rgb: 236, 240, 241;
   --ion-color-light-contrast: #000000;
   --ion-color-light-contrast-rgb: 0, 0, 0;
-  --ion-color-light-shade: #d7d8da;
-  --ion-color-light-tint: #f5f6f9;
+  --ion-color-light-shade: #d5dbdb;
+  --ion-color-light-tint: #f0f3f4;
+}
+
+/* 暗色模式主题 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* 暗色模式下的背景和文字颜色 */
+    --ion-background-color: #121212;
+    --ion-background-color-rgb: 18, 18, 18;
+    
+    --ion-text-color: #ffffff;
+    --ion-text-color-rgb: 255, 255, 255;
+    
+    --ion-border-color: #222222;
+    
+    --ion-card-background: #1e1e1e;
+    
+    --ion-toolbar-background: #1a1a1a;
+    --ion-toolbar-color: #ffffff;
+    
+    --ion-tab-bar-background: #1a1a1a;
+    --ion-tab-bar-color: #aaaaaa;
+    --ion-tab-bar-color-selected: #3498db;
+  }
+}
+
+/* 响应式断点 */
+:root {
+  /* 小屏幕 (手机) */
+  --screen-xs-min: 0;
+  --screen-xs-max: 575.98px;
+  
+  /* 中等屏幕 (平板) */
+  --screen-sm-min: 576px;
+  --screen-sm-max: 767.98px;
+  
+  /* 大屏幕 (桌面) */
+  --screen-md-min: 768px;
+  --screen-md-max: 991.98px;
+  
+  /* 超大屏幕 */
+  --screen-lg-min: 992px;
+  --screen-lg-max: 1199.98px;
+  
+  --screen-xl-min: 1200px;
+  --screen-xl-max: 1599.98px;
+  
+  --screen-xxl-min: 1600px;
+}
+
+/* 布局间距 */
+:root {
+  --spacing-xs: 0.25rem;  /* 4px */
+  --spacing-sm: 0.5rem;   /* 8px */
+  --spacing-md: 1rem;     /* 16px */
+  --spacing-lg: 1.5rem;   /* 24px */
+  --spacing-xl: 2rem;     /* 32px */
+  --spacing-xxl: 3rem;    /* 48px */
+  
+  /* 圆角 */
+  --border-radius-sm: 0.25rem;
+  --border-radius-md: 0.5rem;
+  --border-radius-lg: 0.75rem;
+  --border-radius-xl: 1rem;
+  --border-radius-full: 50%;
+  
+  /* 阴影 */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  
+  /* 动画过渡 */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-slow: 0.35s ease;
+  --transition-ease-in-out: 0.2s ease-in-out;
+  --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* 字体大小 */
+:root {
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 1.875rem;  /* 30px */
+  --font-size-4xl: 2.25rem;   /* 36px */
+  --font-size-5xl: 3rem;      /* 48px */
+  
+  /* 字重 */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* 行高 */
+  --line-height-none: 1;
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+}
+
+/* 动画效果 */
+:root {
+  --animation-duration-short: 150ms;
+  --animation-duration-normal: 250ms;
+  --animation-duration-long: 350ms;
+  
+  /* 按钮悬停效果 */
+  --button-hover-transform: scale(1.02);
+  --button-active-transform: scale(0.98);
+}
+
+/* 暗色模式动画过渡 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ion-transition-duration: var(--transition-normal);
+  }
 }

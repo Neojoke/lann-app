@@ -1,6 +1,7 @@
 {
-  "short_name": "Ionic App",
-  "name": "My Ionic App",
+  "short_name": "Lann Loan",
+  "name": "Lann Thailand Loan Application",
+  "description": "Mobile application for Lann Thailand loan services",
   "icons": [
     {
       "src": "assets/icon/favicon.png",
@@ -10,12 +11,63 @@
     {
       "src": "assets/icon/icon.png",
       "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "maskable"
+    },
+    {
+      "src": "assets/icon/icon.png",
+      "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff"
+  "orientation": "portrait",
+  "theme_color": "#3498db",
+  "background_color": "#ffffff",
+  "lang": "th",
+  "dir": "ltr",
+  "categories": ["finance", "business"],
+  "shortcuts": [
+    {
+      "name": "Apply for Loan",
+      "short_name": "Apply",
+      "description": "Start a new loan application",
+      "url": "/apply",
+      "icons": [
+        {
+          "src": "assets/icon/icon.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Check Status",
+      "short_name": "Status",
+      "description": "Check your loan application status",
+      "url": "/status",
+      "icons": [
+        {
+          "src": "assets/icon/icon.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/screenshots/screen1.png",
+      "type": "image/png",
+      "sizes": "1080x1920",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "assets/screenshots/screen2.png",
+      "type": "image/png",
+      "sizes": "1080x1920",
+      "form_factor": "narrow"
+    }
+  ]
 }

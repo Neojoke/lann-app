@@ -1,21 +1,16 @@
-/// <reference types="vitest" />
-
-import legacy from '@vitejs/plugin-legacy'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
-import { defineConfig } from 'vite'
-import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
-    legacy(),
     VitePWA({
       strategies: 'generateSW',
       registerType: 'autoUpdate',
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,json,woff,ttf,eot}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -76,17 +71,13 @@ export default defineConfig({
       }
     })
   ],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-  },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: './src/setupTests.ts',
+  server: {
+    port: 3000,
+    open: true
   },
   build: {
+    outDir: 'dist',
+    sourcemap: true,
     rollupOptions: {
       output: {
         manualChunks: {
@@ -98,4 +89,4 @@ export default defineConfig({
       }
     }
   }
-})
+});
