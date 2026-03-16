@@ -1,0 +1,112 @@
+.repay-schedule-content {
+  --background: #f5f5f5;
+  padding: 16px;
+
+  .loan-overview-card {
+    margin-bottom: 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .overdue-alert-card {
+    margin-bottom: 16px;
+    border-radius: 12px;
+    border-left: 4px solid var(--ion-color-danger);
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.05) 0%, rgba(244, 67, 54, 0.02) 100%);
+  }
+
+  .next-due-card {
+    margin-bottom: 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .early-repayment-card {
+    margin-bottom: 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .schedule-list-card {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+    .schedule-item {
+      padding: 16px;
+      margin-bottom: 16px;
+      border-radius: 8px;
+      background: white;
+      border: 1px solid #e0e0e0;
+      transition: all 0.3s ease;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &.overdue {
+        border-color: var(--ion-color-danger);
+        background: linear-gradient(135deg, rgba(244, 67, 54, 0.05) 0%, rgba(244, 67, 54, 0.02) 100%);
+      }
+
+      &.paid {
+        border-color: var(--ion-color-success);
+        background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(76, 175, 80, 0.02) 100%);
+      }
+
+      .schedule-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+
+        .schedule-number {
+          font-weight: 600;
+          font-size: 15px;
+          color: var(--ion-color-dark);
+        }
+      }
+
+      .schedule-details {
+        margin-bottom: 12px;
+
+        .schedule-detail-row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 4px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          ion-icon {
+            font-size: 14px;
+          }
+        }
+      }
+
+      .schedule-amount {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        padding: 12px;
+        background: #f8f9fa;
+        border-radius: 8px;
+
+        .amount-label {
+          font-size: 14px;
+        }
+
+        .amount-value {
+          font-size: 18px;
+        }
+      }
+
+      .paid-info {
+        padding-top: 8px;
+        border-top: 1px dashed #e0e0e0;
+      }
+    }
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://lann.app/schema/models/credit.jsonc",
+  "title": "Credit Model",
+  "description": "信用服务模型定义 - AI 可读、可验证、无歧义",
+  "version": "1.0.0",
+  
+  "$ref": "#/definitions/CreditProfile",
+  
+  "definitions": {
+    "CreditScore": {
+      "type": "integer",
+      "minimum": 300,
+      "maximum": 1000,
+      "description": "信用评分 (300-1000 分)",
+      "x-business-rule": {
+        "calculation": "weighted_sum",
+        "weights": {
+          "basic": 0.20,
+          "employment": 0.25,
+          "contact": 0.15,
+          "social": 0.15,
+          "behavior": 0.25
+        },
+        "formula": "score = basic*0.20 + employment*0.25 + contact*0.15 + social*0.15 + behavior*0.25"
+      }
+    },
+    
+    "CreditGrade": {
+      "type": "string",
+      "enum": ["A+", "A", "B", "C", "D", "F"],
+      "description": "信用等级",
+      "x-business-rule": {
+        "mapping": [
+          {"grade": "A+", "min": 750, "max": 1000, "limit_min": 30000, "limit_max": 50000, "rate": 0.008, "description": "优秀 - 优先审批"},
+          {"grade": "A", "min": 650, "max": 749, "limit_min": 20000, "limit_max": 30000, "rate": 0.01, "description": "良好 - 标准审批"},
+          {"grade": "B", "min": 550, "max": 649, "limit_min": 10000, "limit_max": 20000, "rate": 0.012, "description": "一般 - 谨慎审批"},
+          {"grade": "C", "min": 450, "max": 549, "limit_min": 5000, "limit_max": 10000, "rate": 0.015, "description": "较差 - 严格审批"},
+          {"grade": "D", "min": 300, "max": 449, "limit_min": 1000, "limit_max": 5000, "rate": null, "description": "差 - 拒绝或观察"},
+          {"grade": "F", "min": 0, "max": 299, "limit_min": null, "limit_max": null, "rate": null, "description": "不合格 - 拒绝"}
+        ]
+      }
+    },
+    
+    "CreditLimit": {
+      "type": "object",
+      "properties": {
+        "userId": {"type": "string", "format": "uuid"},
+        "totalLimit": {"type": "number", "minimum": 0},
+        "availableLimit": {"type": "number", "minimum": 0},
+        "usedLimit": {"type": "number", "minimum": 0},
+        "frozenLimit": {"type": "number", "minimum": 0, "default": 0},
+        "status": {
+          "type": "string",
+          "enum": ["active", "expired", "suspended", "revoked"]
+        },
+        "grantedAt": {"type": "string", "format": "date-time"},
+        "expiresAt": {"type": "string", "format": "date-time"},
+        "validityDays": {"type": "integer", "default": 365, "minimum": 1, "maximum": 730}
+      },
+      "required": ["userId", "totalLimit", "availableLimit", "usedLimit", "status", "grantedAt", "expiresAt"],
+      "additionalProperties": false,
+      "x-business-rule": {
+        "invariants": [
+          "totalLimit = availableLimit + usedLimit + frozenLimit",
+          "availableLimit >= 0",
+          "expiresAt > grantedAt"
+        ],
+        "lifecycle": {
+          "normal_expiry": "额度到期自动触发复审",
+          "early_review": "按时还款 3 次 + 自动提升 20-50%",
+          "long_term_unused": "90 天无借款降为 50% 或冻结",
+          "overdue": "出现逾期则冻结或降低额度"
+        }
+      }
+    },
+    
+    "ScoreDetails": {
+      "type": "object",
+      "properties": {
+        "basic": {"type": "number", "minimum": 0, "maximum": 200, "description": "基本信息评分 (年龄、国籍、居住稳定性)"},
+        "employment": {"type": "number", "minimum": 0, "maximum": 250, "description": "工作信息评分 (稳定性、收入、行业)"},
+        "contact": {"type": "number", "minimum": 0, "maximum": 150, "description": "联系方式评分 (手机号时长、邮箱验证)"},
+        "social": {"type": "number", "minimum": 0, "maximum": 150, "description": "社交关系评分 (紧急联系人可信度)"},
+        "behavior": {"type": "number", "minimum": 0, "maximum": 250, "description": "行为数据评分 (设备指纹、申请行为)"}
+      },
+      "required": ["basic", "employment", "contact", "social", "behavior"],
+      "additionalProperties": false
+    },
+    
+    "CreditProfile": {
+      "type": "object",
+      "properties": {
+        "userId": {"type": "string", "format": "uuid"},
+        "creditScore": {"$ref": "#/definitions/CreditScore"},
+        "creditGrade": {"$ref": "#/definitions/CreditGrade"},
+        "creditLimit": {"$ref": "#/definitions/CreditLimit"},
+        "scoreDetails": {"$ref": "#/definitions/ScoreDetails"},
+        "reviewAt": {"type": "string", "format": "date-time", "description": "下次复审时间"}
+      },
+      "required": ["userId", "creditScore", "creditGrade", "creditLimit"],
+      "additionalProperties": false
+    },
+    
+    "CreditApplication": {
+      "type": "object",
+      "properties": {
+        "applicationId": {"type": "string", "format": "uuid"},
+        "userId": {"type": "string", "format": "uuid"},
+        "status": {
+          "type": "string",
+          "enum": ["pending", "approved", "rejected", "cancelled"]
+        },
+        "appliedAt": {"type": "string", "format": "date-time"},
+        "reviewedAt": {"type": "string", "format": "date-time"},
+        "creditScore": {"$ref": "#/definitions/CreditScore"},
+        "approvedLimit": {"type": "number", "minimum": 0},
+        "interestRate": {"type": "number", "minimum": 0, "maximum": 1},
+        "rejectReason": {"type": "string"}
+      },
+      "required": ["applicationId", "userId", "status", "appliedAt"],
+      "additionalProperties": false
+    }
+  }
+}

@@ -33,11 +33,14 @@ import {
   locationOutline,
 } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { UserService, UserProfile } from '../../services/user.service';
+import LanguageSwitcher from '../../components/LanguageSwitcher';
 import './Profile.scss';
 
 const Profile: React.FC = () => {
   const history = useHistory();
+  const { t, i18n } = useTranslation();
   const [presentToast] = useIonToast();
   const userService = new UserService();
 
@@ -47,15 +50,30 @@ const Profile: React.FC = () => {
   const [formData, setFormData] = useState<Partial<UserProfile>>({});
 
   const steps = [
-    { title: '基本信息', icon: personOutline },
-    { title: '联系信息', icon: locationOutline },
-    { title: '工作信息', icon: businessOutline },
-    { title: '信用评估', icon: walletOutline },
+    { title: t('profile.step1'), icon: personOutline },
+    { title: t('profile.step2'), icon: locationOutline },
+    { title: t('profile.step3'), icon: businessOutline },
+    { title: t('profile.step4'), icon: walletOutline },
   ];
 
   useEffect(() => {
     loadUserProfile();
   }, []);
+
+  // 当语言改变时，更新步骤标题
+  useEffect(() => {
+    const handleLanguageChange = () => {
+      // 强制重新渲染
+      setCurrentStep(prev => prev);
+    };
+    
+    // 监听语言变化
+    const unsubscribe = () => {
+      // 清理函数
+    };
+    
+    return unsubscribe;
+  }, [i18n.language]);
 
   const loadUserProfile = async () => {
     try {
@@ -86,7 +104,7 @@ const Profile: React.FC = () => {
       case 0: // 基本信息
         if (!formData.name || !formData.email || !formData.phone) {
           presentToast({
-            message: '请填写完整基本信息',
+            message: t('profile.fillBasicInfo'),
             duration: 2000,
             position: 'top',
             color: 'warning',
@@ -97,7 +115,7 @@ const Profile: React.FC = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(formData.email || '')) {
           presentToast({
-            message: '请输入有效的邮箱地址',
+            message: t('profile.validEmail'),
             duration: 2000,
             position: 'top',
             color: 'warning',
@@ -108,7 +126,7 @@ const Profile: React.FC = () => {
         const phoneRegex = /^0[0-9]{9}$/;
         if (!phoneRegex.test(formData.phone || '')) {
           presentToast({
-            message: '请输入有效的电话号码（10 位数字）',
+            message: t('profile.validPhone'),
             duration: 2000,
             position: 'top',
             color: 'warning',
@@ -119,7 +137,7 @@ const Profile: React.FC = () => {
       case 1: // 联系信息
         if (!formData.address || !formData.city || !formData.zip_code) {
           presentToast({
-            message: '请填写完整联系信息',
+            message: t('profile.fillContactInfo'),
             duration: 2000,
             position: 'top',
             color: 'warning',
@@ -130,7 +148,7 @@ const Profile: React.FC = () => {
       case 2: // 工作信息
         if (!formData.employment_status || !formData.monthly_income || !formData.employer_name) {
           presentToast({
-            message: '请填写完整工作信息',
+            message: t('profile.fillWorkInfo'),
             duration: 2000,
             position: 'top',
             color: 'warning',
@@ -175,7 +193,7 @@ const Profile: React.FC = () => {
       if (response.success) {
         setUser(response.user);
         presentToast({
-          message: '信息更新成功',
+          message: t('profile.updateSuccess'),
           duration: 2000,
           position: 'top',
           color: 'success',
@@ -190,7 +208,7 @@ const Profile: React.FC = () => {
       }
     } catch (error: any) {
       presentToast({
-        message: error.message || '更新失败',
+        message: error.message || t('profile.updateFailed'),
         duration: 2000,
         position: 'top',
         color: 'danger',
@@ -225,31 +243,31 @@ const Profile: React.FC = () => {
       <IonCardContent>
         <IonItem>
           <IonIcon slot="start" icon={personOutline} color="primary" />
-          <IonLabel position="stacked">姓名</IonLabel>
+          <IonLabel position="stacked">{t('profile.name')}</IonLabel>
           <IonInput
             value={formData.name || ''}
             onIonChange={(e) => updateFormData('name', e.detail.value)}
-            placeholder="请输入姓名"
+            placeholder={t('profile.namePlaceholder')}
           />
         </IonItem>
         <IonItem>
           <IonIcon slot="start" icon={mailOutline} color="primary" />
-          <IonLabel position="stacked">邮箱</IonLabel>
+          <IonLabel position="stacked">{t('profile.email')}</IonLabel>
           <IonInput
             type="email"
             value={formData.email || ''}
             onIonChange={(e) => updateFormData('email', e.detail.value)}
-            placeholder="example@email.com"
+            placeholder={t('profile.emailPlaceholder')}
           />
         </IonItem>
         <IonItem>
           <IonIcon slot="start" icon={phonePortraitOutline} color="primary" />
-          <IonLabel position="stacked">电话</IonLabel>
+          <IonLabel position="stacked">{t('profile.phone')}</IonLabel>
           <IonInput
             type="tel"
             value={formData.phone || ''}
             onIonChange={(e) => updateFormData('phone', e.detail.value)}
-            placeholder="0123456789"
+            placeholder={t('profile.phonePlaceholder')}
           />
         </IonItem>
       </IonCardContent>
@@ -261,44 +279,44 @@ const Profile: React.FC = () => {
       <IonCardContent>
         <IonItem>
           <IonIcon slot="start" icon={documentTextOutline} color="primary" />
-          <IonLabel position="stacked">身份证号</IonLabel>
+          <IonLabel position="stacked">{t('profile.idCard')}</IonLabel>
           <IonInput
             value={formData.id_card || ''}
             onIonChange={(e) => updateFormData('id_card', e.detail.value)}
-            placeholder="13 位身份证号码"
+            placeholder={t('profile.idCardPlaceholder')}
             maxlength={13}
           />
         </IonItem>
         <IonItem>
           <IonIcon slot="start" icon={locationOutline} color="primary" />
-          <IonLabel position="stacked">详细地址</IonLabel>
+          <IonLabel position="stacked">{t('profile.address')}</IonLabel>
           <IonInput
             value={formData.address || ''}
             onIonChange={(e) => updateFormData('address', e.detail.value)}
-            placeholder="街道地址"
+            placeholder={t('profile.addressPlaceholder')}
           />
         </IonItem>
         <IonItem>
-          <IonLabel position="stacked">城市</IonLabel>
+          <IonLabel position="stacked">{t('profile.city')}</IonLabel>
           <IonSelect
             value={formData.city || ''}
             onIonChange={(e) => updateFormData('city', e.detail.value)}
-            placeholder="选择城市"
+            placeholder={t('profile.cityPlaceholder')}
           >
-            <IonSelectOption value="bangkok">曼谷 (Bangkok)</IonSelectOption>
-            <IonSelectOption value="chiangmai">清迈 (Chiang Mai)</IonSelectOption>
-            <IonSelectOption value="phuket">普吉 (Phuket)</IonSelectOption>
-            <IonSelectOption value="pattaya">芭堤雅 (Pattaya)</IonSelectOption>
-            <IonSelectOption value="khonkaen">孔敬 (Khon Kaen)</IonSelectOption>
+            <IonSelectOption value="bangkok">{t('profile.cities.bangkok')}</IonSelectOption>
+            <IonSelectOption value="chiangmai">{t('profile.cities.chiangmai')}</IonSelectOption>
+            <IonSelectOption value="phuket">{t('profile.cities.phuket')}</IonSelectOption>
+            <IonSelectOption value="pattaya">{t('profile.cities.pattaya')}</IonSelectOption>
+            <IonSelectOption value="khonkaen">{t('profile.cities.khonkaen')}</IonSelectOption>
           </IonSelect>
         </IonItem>
         <IonItem>
-          <IonLabel position="stacked">邮政编码</IonLabel>
+          <IonLabel position="stacked">{t('profile.zipCode')}</IonLabel>
           <IonInput
             type="text"
             value={formData.zip_code || ''}
             onIonChange={(e) => updateFormData('zip_code', e.detail.value)}
-            placeholder="邮政编码"
+            placeholder={t('profile.zipCodePlaceholder')}
             maxlength={5}
           />
         </IonItem>
@@ -310,46 +328,46 @@ const Profile: React.FC = () => {
     <IonCard className="profile-form-card">
       <IonCardContent>
         <IonItem>
-          <IonLabel position="stacked">就业状态</IonLabel>
+          <IonLabel position="stacked">{t('profile.employmentStatus')}</IonLabel>
           <IonSelect
             value={formData.employment_status || ''}
             onIonChange={(e) => updateFormData('employment_status', e.detail.value)}
-            placeholder="选择就业状态"
+            placeholder={t('profile.employmentStatusPlaceholder')}
           >
-            <IonSelectOption value="employed_fulltime">全职员工</IonSelectOption>
-            <IonSelectOption value="employed_parttime">兼职员工</IonSelectOption>
-            <IonSelectOption value="self_employed">自雇人士</IonSelectOption>
-            <IonSelectOption value="business_owner">企业主</IonSelectOption>
-            <IonSelectOption value="freelance">自由职业</IonSelectOption>
+            <IonSelectOption value="employed_fulltime">{t('profile.employmentStatuses.employed_fulltime')}</IonSelectOption>
+            <IonSelectOption value="employed_parttime">{t('profile.employmentStatuses.employed_parttime')}</IonSelectOption>
+            <IonSelectOption value="self_employed">{t('profile.employmentStatuses.self_employed')}</IonSelectOption>
+            <IonSelectOption value="business_owner">{t('profile.employmentStatuses.business_owner')}</IonSelectOption>
+            <IonSelectOption value="freelance">{t('profile.employmentStatuses.freelance')}</IonSelectOption>
           </IonSelect>
         </IonItem>
         <IonItem>
           <IonIcon slot="start" icon={walletOutline} color="primary" />
-          <IonLabel position="stacked">月收入 (฿)</IonLabel>
+          <IonLabel position="stacked">{t('profile.monthlyIncome')}</IonLabel>
           <IonInput
             type="number"
             value={formData.monthly_income || ''}
             onIonChange={(e) => updateFormData('monthly_income', Number(e.detail.value))}
-            placeholder="月收入"
+            placeholder={t('profile.monthlyIncomePlaceholder')}
           />
         </IonItem>
         <IonItem>
           <IonIcon slot="start" icon={businessOutline} color="primary" />
-          <IonLabel position="stacked">公司名称</IonLabel>
+          <IonLabel position="stacked">{t('profile.employerName')}</IonLabel>
           <IonInput
             value={formData.employer_name || ''}
             onIonChange={(e) => updateFormData('employer_name', e.detail.value)}
-            placeholder="公司名称"
+            placeholder={t('profile.employerNamePlaceholder')}
           />
         </IonItem>
         <IonItem>
           <IonIcon slot="start" icon={phonePortraitOutline} color="primary" />
-          <IonLabel position="stacked">公司电话</IonLabel>
+          <IonLabel position="stacked">{t('profile.employerPhone')}</IonLabel>
           <IonInput
             type="tel"
             value={formData.employer_phone || ''}
             onIonChange={(e) => updateFormData('employer_phone', e.detail.value)}
-            placeholder="公司电话"
+            placeholder={t('profile.employerPhonePlaceholder')}
           />
         </IonItem>
       </IonCardContent>
@@ -362,25 +380,24 @@ const Profile: React.FC = () => {
         <IonCard className="profile-form-card">
           <IonCardContent>
             <IonText color="medium">
-              <p>请先填写工作信息以进行信用评估</p>
+              <p>{t('profile.fillWorkInfoFirst')}</p>
             </IonText>
           </IonCardContent>
         </IonCard>
       );
     }
 
-    // 这里可以显示预估的信用评分
     return (
       <IonCard className="profile-form-card">
         <IonCardContent>
-          <h3>信用评估预览</h3>
-          <p>根据您的信息，系统将自动评估您的信用等级和额度</p>
+          <h3>{t('profile.creditPreview')}</h3>
+          <p>{t('profile.creditPreviewDesc')}</p>
           <IonItem>
-            <IonLabel>月收入</IonLabel>
+            <IonLabel>{t('profile.monthlyIncome')}</IonLabel>
             <IonText color="primary">฿{formData.monthly_income?.toLocaleString()}</IonText>
           </IonItem>
           <IonItem>
-            <IonLabel>就业状态</IonLabel>
+            <IonLabel>{t('profile.employmentStatus')}</IonLabel>
             <IonText>{formData.employment_status}</IonText>
           </IonItem>
         </IonCardContent>
@@ -393,7 +410,7 @@ const Profile: React.FC = () => {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>个人资料</IonTitle>
+            <IonTitle>{t('profile.title')}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent className="ion-padding ion-text-center">
@@ -408,6 +425,11 @@ const Profile: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>{steps[currentStep].title}</IonTitle>
+          {currentStep === 0 && (
+            <IonButtons slot="end">
+              <LanguageSwitcher />
+            </IonButtons>
+          )}
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
@@ -424,7 +446,7 @@ const Profile: React.FC = () => {
           <div className="profile-actions">
             <IonButton expand="block" fill="outline" onClick={handleBack} className="back-btn">
               <IonIcon slot="start" icon={chevronBack} />
-              {currentStep === 0 ? '取消' : '上一步'}
+              {currentStep === 0 ? t('profile.cancel') : t('profile.back')}
             </IonButton>
             <IonButton 
               expand="block" 
@@ -434,11 +456,11 @@ const Profile: React.FC = () => {
             >
               {currentStep === steps.length - 1 ? (
                 <>
-                  {loading ? <IonSpinner name="crescent" /> : '提交'}
+                  {loading ? <IonSpinner name="crescent" /> : t('profile.submit')}
                 </>
               ) : (
                 <>
-                  下一步
+                  {t('profile.next')}
                   <IonIcon slot="end" icon={chevronForward} />
                 </>
               )}

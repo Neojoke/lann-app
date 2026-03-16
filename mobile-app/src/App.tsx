@@ -9,6 +9,7 @@ import CreditApply from './pages/CreditApply/CreditApply';
 import CreditStatus from './pages/CreditStatus/CreditStatus';
 import Borrow from './pages/Borrow/Borrow';
 import Repay from './pages/Repay/Repay';
+import RepaySchedule from './pages/RepaySchedule/RepaySchedule';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -69,6 +70,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/repay">
           <Repay />
+        </Route>
+        <Route exact path="/repay-schedule">
+          <RepaySchedule />
         </Route>
         <Route exact path="/">
           <Redirect to="/home" />

@@ -54,10 +54,16 @@ const API_BASE_URL = 'http://localhost:8787';
 export class UserService {
   constructor() {}
 
+  private getLanguage(): string {
+    const saved = localStorage.getItem('preferred_language');
+    return saved || 'th';
+  }
+
   async getProfile(token: string): Promise<{ success: boolean; user: UserProfile }> {
     const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
       headers: {
         'Authorization': `Bearer ${token}`,
+        'Accept-Language': this.getLanguage(),
       },
     });
 
@@ -74,6 +80,7 @@ export class UserService {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
+        'Accept-Language': this.getLanguage(),
       },
       body: JSON.stringify(profile),
     });
@@ -89,6 +96,7 @@ export class UserService {
     const response = await fetch(`${API_BASE_URL}/api/user/credit`, {
       headers: {
         'Authorization': `Bearer ${token}`,
+        'Accept-Language': this.getLanguage(),
       },
     });
 
@@ -105,6 +113,7 @@ export class UserService {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
+        'Accept-Language': this.getLanguage(),
       },
       body: JSON.stringify(data),
     });

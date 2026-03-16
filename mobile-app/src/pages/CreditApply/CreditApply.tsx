@@ -27,12 +27,14 @@ import {
   businessOutline,
 } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { UserService, CreditApplyRequest } from '../../services/user.service';
 import { CreditService, CreditScoreData, CreditScoreResult } from '../../services/credit.service';
 import './CreditApply.scss';
 
 const CreditApply: React.FC = () => {
   const history = useHistory();
+  const { t } = useTranslation();
   const [presentToast] = useIonToast();
   const userService = new UserService();
   const creditService = new CreditService();
@@ -78,7 +80,7 @@ const CreditApply: React.FC = () => {
   const handleSubmit = async () => {
     if (!creditResult || creditResult.grade === 'E') {
       presentToast({
-        message: '信用评估未通过，无法提交申请',
+        message: t('creditApply.assessmentNotPassed'),
         duration: 2000,
         position: 'top',
         color: 'danger',
@@ -98,7 +100,7 @@ const CreditApply: React.FC = () => {
       
       if (response.success) {
         presentToast({
-          message: '信用申请成功',
+          message: t('creditApply.submitSuccess'),
           duration: 2000,
           position: 'top',
           color: 'success',
@@ -107,7 +109,7 @@ const CreditApply: React.FC = () => {
       }
     } catch (error: any) {
       presentToast({
-        message: error.message || '申请失败',
+        message: error.message || t('creditApply.submitFailed'),
         duration: 2000,
         position: 'top',
         color: 'danger',
@@ -118,19 +120,19 @@ const CreditApply: React.FC = () => {
   };
 
   const employmentStatusMap: Record<string, string> = {
-    employed_fulltime: '全职员工',
-    employed_parttime: '兼职员工',
-    self_employed: '自雇人士',
-    business_owner: '企业主',
-    freelance: '自由职业',
+    employed_fulltime: t('profile.employmentStatuses.employed_fulltime'),
+    employed_parttime: t('profile.employmentStatuses.employed_parttime'),
+    self_employed: t('profile.employmentStatuses.self_employed'),
+    business_owner: t('profile.employmentStatuses.business_owner'),
+    freelance: t('profile.employmentStatuses.freelance'),
   };
 
   const cityMap: Record<string, string> = {
-    bangkok: '曼谷',
-    chiangmai: '清迈',
-    phuket: '普吉',
-    pattaya: '芭堤雅',
-    khonkaen: '孔敬',
+    bangkok: t('profile.cities.bangkok'),
+    chiangmai: t('profile.cities.chiangmai'),
+    phuket: t('profile.cities.phuket'),
+    pattaya: t('profile.cities.pattaya'),
+    khonkaen: t('profile.cities.khonkaen'),
   };
 
   if (calculating) {
@@ -141,14 +143,14 @@ const CreditApply: React.FC = () => {
             <IonButtons slot="start">
               <IonBackButton defaultHref="/profile" />
             </IonButtons>
-            <IonTitle>信用评估</IonTitle>
+            <IonTitle>{t('creditApply.title')}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen className="ion-padding ion-text-center credit-calculate">
           <IonSpinner name="crescent" size="large" />
-          <h2>正在评估您的信用...</h2>
+          <h2>{t('creditApply.assessing')}</h2>
           <IonText color="medium">
-            <p>请稍候，我们正在分析您的信息</p>
+            <p>{t('creditApply.assessingDesc')}</p>
           </IonText>
           <IonProgressBar indeterminate color="primary" />
         </IonContent>
@@ -166,7 +168,7 @@ const CreditApply: React.FC = () => {
             <IonButtons slot="start">
               <IonBackButton defaultHref="/profile" />
             </IonButtons>
-            <IonTitle>评估结果</IonTitle>
+            <IonTitle>{t('creditApply.resultTitle')}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen className="credit-result">
@@ -184,7 +186,7 @@ const CreditApply: React.FC = () => {
 
           <IonCard className="score-card">
             <IonCardHeader>
-              <IonCardSubtitle>信用评分</IonCardSubtitle>
+              <IonCardSubtitle>{t('creditStatus.creditScore')}</IonCardSubtitle>
             </IonCardHeader>
             <IonCardContent>
               <div className="score-display">
@@ -200,7 +202,7 @@ const CreditApply: React.FC = () => {
               <div className="limit-info">
                 <IonIcon icon={walletOutline} size="large" color="primary" />
                 <div className="limit-details">
-                  <IonText color="medium">可用额度</IonText>
+                  <IonText color="medium">{t('creditStatus.available')}</IonText>
                   <h3>฿{creditResult.credit_limit.toLocaleString()}</h3>
                 </div>
               </div>
@@ -209,27 +211,27 @@ const CreditApply: React.FC = () => {
 
           <IonCard className="breakdown-card">
             <IonCardHeader>
-              <IonCardSubtitle>评分详情</IonCardSubtitle>
+              <IonCardSubtitle>{t('creditStatus.tipsTitle')}</IonCardSubtitle>
             </IonCardHeader>
             <IonCardContent>
               <div className="breakdown-item">
-                <span>基础分</span>
+                <span>{t('creditApply.calculating')}</span>
                 <span>+{creditResult.breakdown.base_score}</span>
               </div>
               <div className="breakdown-item">
-                <span>收入评分</span>
+                <span>{t('profile.monthlyIncome')}</span>
                 <span>+{creditResult.breakdown.income_score}</span>
               </div>
               <div className="breakdown-item">
-                <span>就业评分</span>
+                <span>{t('profile.employmentStatus')}</span>
                 <span>+{creditResult.breakdown.employment_score}</span>
               </div>
               <div className="breakdown-item">
-                <span>信息完整度</span>
+                <span>{t('creditApply.identityInfo')}</span>
                 <span>+{creditResult.breakdown.completeness_score}</span>
               </div>
               <div className="breakdown-item">
-                <span>其他因素</span>
+                <span>{t('common.info')}</span>
                 <span>+{creditResult.breakdown.other_score}</span>
               </div>
             </IonCardContent>
@@ -243,7 +245,7 @@ const CreditApply: React.FC = () => {
                 disabled={loading}
                 className="submit-credit-btn"
               >
-                {loading ? <IonSpinner name="crescent" /> : '确认申请额度'}
+                {loading ? <IonSpinner name="crescent" /> : t('creditApply.confirmApply')}
               </IonButton>
             ) : (
               <IonButton
@@ -252,7 +254,7 @@ const CreditApply: React.FC = () => {
                 onClick={() => history.push('/profile')}
                 color="medium"
               >
-                完善信息后重试
+                {t('creditApply.retryAfterImprove')}
               </IonButton>
             )}
           </div>
@@ -268,15 +270,15 @@ const CreditApply: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/profile" />
           </IonButtons>
-          <IonTitle>信用评估申请</IonTitle>
+          <IonTitle>{t('creditApply.title')}</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen className="credit-apply">
         <div className="apply-header">
           <IonIcon icon={shieldCheckmarkOutline} size="large" color="primary" />
-          <h2>申请信用额度</h2>
+          <h2>{t('creditApply.applyCredit')}</h2>
           <IonText color="medium">
-            <p>填写以下信息以获取您的信用评估</p>
+            <p>{t('creditApply.fillInfoForAssessment')}</p>
           </IonText>
         </div>
 
@@ -284,13 +286,13 @@ const CreditApply: React.FC = () => {
           <IonCardHeader>
             <IonCardSubtitle>
               <IonIcon icon={documentTextOutline} slot="start" />
-              身份信息
+              {t('creditApply.identityInfo')}
             </IonCardSubtitle>
           </IonCardHeader>
           <IonCardContent>
             <div className="form-item">
-              <IonText color="medium">身份证号码</IonText>
-              <div className="form-value">{formData.id_card || '未填写'}</div>
+              <IonText color="medium">{t('creditApply.idCard')}</IonText>
+              <div className="form-value">{formData.id_card || t('creditApply.notFilled')}</div>
             </div>
           </IonCardContent>
         </IonCard>
@@ -299,21 +301,21 @@ const CreditApply: React.FC = () => {
           <IonCardHeader>
             <IonCardSubtitle>
               <IonIcon icon={personOutline} slot="start" />
-              联系信息
+              {t('creditApply.contactInfo')}
             </IonCardSubtitle>
           </IonCardHeader>
           <IonCardContent>
             <div className="form-item">
-              <IonText color="medium">地址</IonText>
-              <div className="form-value">{formData.address || '未填写'}</div>
+              <IonText color="medium">{t('creditApply.address')}</IonText>
+              <div className="form-value">{formData.address || t('creditApply.notFilled')}</div>
             </div>
             <div className="form-item">
-              <IonText color="medium">城市</IonText>
-              <div className="form-value">{cityMap[formData.city] || '未填写'}</div>
+              <IonText color="medium">{t('creditApply.city')}</IonText>
+              <div className="form-value">{cityMap[formData.city] || t('creditApply.notFilled')}</div>
             </div>
             <div className="form-item">
-              <IonText color="medium">邮政编码</IonText>
-              <div className="form-value">{formData.zip_code || '未填写'}</div>
+              <IonText color="medium">{t('creditApply.zipCode')}</IonText>
+              <div className="form-value">{formData.zip_code || t('creditApply.notFilled')}</div>
             </div>
           </IonCardContent>
         </IonCard>
@@ -322,34 +324,34 @@ const CreditApply: React.FC = () => {
           <IonCardHeader>
             <IonCardSubtitle>
               <IonIcon icon={businessOutline} slot="start" />
-              工作信息
+              {t('creditApply.workInfo')}
             </IonCardSubtitle>
           </IonCardHeader>
           <IonCardContent>
             <div className="form-item">
-              <IonText color="medium">就业状态</IonText>
+              <IonText color="medium">{t('profile.employmentStatus')}</IonText>
               <div className="form-value">
-                {employmentStatusMap[formData.employment_status] || '未填写'}
+                {employmentStatusMap[formData.employment_status] || t('creditApply.notFilled')}
               </div>
             </div>
             <div className="form-item">
-              <IonText color="medium">月收入</IonText>
+              <IonText color="medium">{t('profile.monthlyIncome')}</IonText>
               <div className="form-value">฿{formData.monthly_income?.toLocaleString() || 0}</div>
             </div>
             <div className="form-item">
-              <IonText color="medium">公司名称</IonText>
-              <div className="form-value">{formData.employer_name || '未填写'}</div>
+              <IonText color="medium">{t('profile.employerName')}</IonText>
+              <div className="form-value">{formData.employer_name || t('creditApply.notFilled')}</div>
             </div>
             <div className="form-item">
-              <IonText color="medium">公司电话</IonText>
-              <div className="form-value">{formData.employer_phone || '未填写'}</div>
+              <IonText color="medium">{t('profile.employerPhone')}</IonText>
+              <div className="form-value">{formData.employer_phone || t('creditApply.notFilled')}</div>
             </div>
           </IonCardContent>
         </IonCard>
 
         <div className="apply-actions">
           <IonButton expand="block" onClick={calculateCredit} className="calculate-btn">
-            开始信用评估
+            {t('creditApply.startAssessment')}
           </IonButton>
         </div>
       </IonContent>

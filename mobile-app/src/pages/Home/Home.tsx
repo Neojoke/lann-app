@@ -16,16 +16,18 @@ import {
 } from '@ionic/react';
 import { personCircleOutline, cashOutline, documentTextOutline, logInOutline } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import './Home.scss';
 
 const Home: React.FC = () => {
   const history = useHistory();
+  const { t } = useTranslation();
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>LANN Thailand Loan</IonTitle>
+          <IonTitle>{t('home.title')}</IonTitle>
           <IonButton fill="clear" slot="end" onClick={() => history.push('/login')}>
             <IonIcon slot="icon-only" icon={logInOutline} />
           </IonButton>
@@ -33,8 +35,8 @@ const Home: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen className="ion-padding">
         <div className="welcome-section">
-          <h1>Welcome to LANN</h1>
-          <p>Thailand Digital Loan Platform</p>
+          <h1>{t('home.welcome')}</h1>
+          <p>{t('home.tagline')}</p>
         </div>
 
         <IonGrid>
@@ -43,10 +45,10 @@ const Home: React.FC = () => {
               <IonCard className="action-card" onClick={() => history.push('/register')}>
                 <IonCardHeader>
                   <IonIcon icon={personCircleOutline} size="large" />
-                  <IonCardTitle>Register</IonCardTitle>
+                  <IonCardTitle>{t('home.register')}</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
-                  Create your account to get started
+                  {t('home.registerDesc')}
                 </IonCardContent>
               </IonCard>
             </IonCol>
@@ -56,10 +58,10 @@ const Home: React.FC = () => {
               <IonCard className="action-card">
                 <IonCardHeader>
                   <IonIcon icon={cashOutline} />
-                  <IonCardTitle>Loans</IonCardTitle>
+                  <IonCardTitle>{t('home.loans')}</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
-                  Manage your loans
+                  {t('home.loansDesc')}
                 </IonCardContent>
               </IonCard>
             </IonCol>
@@ -67,10 +69,10 @@ const Home: React.FC = () => {
               <IonCard className="action-card">
                 <IonCardHeader>
                   <IonIcon icon={documentTextOutline} />
-                  <IonCardTitle>Documents</IonCardTitle>
+                  <IonCardTitle>{t('home.documents')}</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
-                  Upload documents
+                  {t('home.documentsDesc')}
                 </IonCardContent>
               </IonCard>
             </IonCol>
@@ -79,7 +81,7 @@ const Home: React.FC = () => {
 
         <div className="bottom-actions">
           <IonButton expand="block" onClick={() => history.push('/register')}>
-            Get Started Now
+            {t('home.getStarted')}
           </IonButton>
         </div>
       </IonContent>

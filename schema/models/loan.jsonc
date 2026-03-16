@@ -1,0 +1,223 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://lann.app/schema/models/loan.jsonc",
+  "title": "Loan Model",
+  "description": "借款服务模型定义 - AI 可读、可验证、无歧义",
+  "version": "1.0.0",
+  
+  "$ref": "#/definitions/LoanProduct",
+  
+  "definitions": {
+    "LoanProductType": {
+      "type": "string",
+      "enum": ["payday", "installment", "revolving"],
+      "description": "借款产品类型",
+      "x-business-rule": {
+        "payday": {
+          "description": "工资日贷款 - 短期小额",
+          "term_range": "7-30 天",
+          "amount_range": "1,000-50,000 THB",
+          "repayment": "到期一次性还本付息"
+        },
+        "installment": {
+          "description": "分期贷款 - 中期中等额度",
+          "term_range": "1-12 个月",
+          "amount_range": "5,000-100,000 THB",
+          "repayment": "等额本息/等额本金"
+        },
+        "revolving": {
+          "description": "循环额度 - 随借随还",
+          "term_range": "30 天 (可续期)",
+          "amount_range": "1,000-100,000 THB",
+          "repayment": "按日计息，还款后额度恢复"
+        }
+      }
+    },
+    
+    "LoanProduct": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string", "format": "uuid"},
+        "name": {
+          "type": "object",
+          "properties": {
+            "en": {"type": "string", "minLength": 1},
+            "th": {"type": "string", "minLength": 1}
+          },
+          "required": ["en", "th"],
+          "additionalProperties": false
+        },
+        "type": {"$ref": "#/definitions/LoanProductType"},
+        "minAmount": {"type": "number", "minimum": 1000},
+        "maxAmount": {"type": "number", "maximum": 100000},
+        "terms": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/LoanTerm"},
+          "minItems": 1
+        },
+        "interestRate": {"$ref": "#/definitions/InterestRate"},
+        "fees": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/Fee"}
+        },
+        "repaymentMethods": {
+          "type": "array",
+          "items": {"type": "string"},
+          "minItems": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "inactive", "deprecated"]
+        },
+        "targetSegment": {
+          "type": "string",
+          "enum": ["new", "regular", "premium"]
+        }
+      },
+      "required": ["id", "name", "type", "minAmount", "maxAmount", "terms", "interestRate", "status"],
+      "additionalProperties": false
+    },
+    
+    "LoanTerm": {
+      "type": "object",
+      "properties": {
+        "days": {"type": "integer", "minimum": 1, "maximum": 365},
+        "label": {
+          "type": "object",
+          "properties": {
+            "en": {"type": "string"},
+            "th": {"type": "string"}
+          },
+          "required": ["en", "th"]
+        },
+        "minAmount": {"type": "number", "minimum": 0},
+        "maxAmount": {"type": "number", "maximum": 100000},
+        "repaymentType": {
+          "type": "string",
+          "enum": ["bullet", "installment"],
+          "description": "bullet=到期一次性，installment=分期"
+        }
+      },
+      "required": ["days", "label", "repaymentType"],
+      "additionalProperties": false
+    },
+    
+    "InterestRate": {
+      "type": "object",
+      "properties": {
+        "type": {"type": "string", "enum": ["daily", "monthly", "annual"]},
+        "rate": {"type": "number", "minimum": 0, "maximum": 1, "multipleOf": 0.0001},
+        "calculationMethod": {"type": "string", "enum": ["flat", "reducing"]}
+      },
+      "required": ["type", "rate", "calculationMethod"],
+      "additionalProperties": false,
+      "x-business-rule": {
+        "formulas": {
+          "flat": "interest = principal * rate * period",
+          "reducing": "interest = remaining_principal * rate * period"
+        },
+        "examples": {
+          "payday_flat": "10,000 THB * 0.01/day * 15 days = 1,500 THB",
+          "installment_reducing": "等额本息，每月利息递减"
+        }
+      }
+    },
+    
+    "Fee": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["processing", "late", "prepayment", "service"]
+        },
+        "amount": {"type": "number", "minimum": 0},
+        "percentage": {"type": "number", "minimum": 0, "maximum": 1},
+        "minAmount": {"type": "number", "minimum": 0},
+        "maxAmount": {"type": "number", "minimum": 0}
+      },
+      "required": ["type"],
+      "additionalProperties": false,
+      "oneOf": [
+        {"required": ["amount"]},
+        {"required": ["percentage"]}
+      ]
+    },
+    
+    "Loan": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string", "format": "uuid"},
+        "userId": {"type": "string", "format": "uuid"},
+        "productId": {"type": "string", "format": "uuid"},
+        "principal": {"type": "number", "minimum": 1000, "maximum": 50000},
+        "interestRate": {"$ref": "#/definitions/InterestRate"},
+        "termDays": {"type": "integer", "minimum": 1, "maximum": 365},
+        "totalInterest": {"type": "number", "minimum": 0},
+        "totalRepayment": {"type": "number", "minimum": 0},
+        "paidAmount": {"type": "number", "minimum": 0, "default": 0},
+        "remainingAmount": {"type": "number", "minimum": 0},
+        "disbursedAt": {"type": "string", "format": "date-time"},
+        "dueDate": {"type": "string", "format": "date-time"},
+        "completedAt": {"type": "string", "format": "date-time"},
+        "status": {
+          "type": "string",
+          "enum": ["pending", "disbursed", "active", "overdue", "completed", "written_off"]
+        },
+        "isOverdue": {"type": "boolean", "default": false},
+        "overdueDays": {"type": "integer", "minimum": 0, "default": 0},
+        "penaltyAmount": {"type": "number", "minimum": 0, "default": 0}
+      },
+      "required": ["id", "userId", "productId", "principal", "termDays", "totalRepayment", "dueDate", "status"],
+      "additionalProperties": false,
+      "x-business-rule": {
+        "invariants": [
+          "totalRepayment = principal + totalInterest",
+          "remainingAmount = totalRepayment - paidAmount",
+          "if status == 'completed' then remainingAmount == 0",
+          "if isOverdue == true then overdueDays > 0",
+          "if status == 'written_off' then loan is uncollectible"
+        ],
+        "calculations": {
+          "totalInterest_flat": "principal * interestRate.rate * termDays",
+          "totalInterest_reducing": "complex formula for reducing balance",
+          "penaltyAmount": "principal * penaltyRate * overdueDays"
+        },
+        "lifecycle": {
+          "states": ["pending", "disbursed", "active", "overdue", "completed", "written_off"],
+          "transitions": {
+            "pending -> disbursed": "after contract signed and approved",
+            "disbursed -> active": "immediately after disbursement",
+            "active -> overdue": "after due date passed without full payment",
+            "active -> completed": "after full repayment",
+            "overdue -> completed": "after full repayment including penalty",
+            "overdue -> written_off": "after 90+ days overdue and collection failed"
+          }
+        }
+      }
+    },
+    
+    "LoanApplication": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string", "format": "uuid"},
+        "userId": {"type": "string", "format": "uuid"},
+        "productId": {"type": "string", "format": "uuid"},
+        "amount": {"type": "number", "minimum": 1000},
+        "termDays": {"type": "integer", "minimum": 1},
+        "purpose": {"type": "string"},
+        "status": {
+          "type": "string",
+          "enum": ["pending", "approved", "rejected", "cancelled"]
+        },
+        "approvedAmount": {"type": "number"},
+        "approvedTermDays": {"type": "integer"},
+        "interestRate": {"type": "number"},
+        "rejectionReason": {"type": "string"},
+        "reviewedBy": {"type": "string"},
+        "reviewedAt": {"type": "string", "format": "date-time"}
+      },
+      "required": ["id", "userId", "productId", "amount", "termDays", "status"],
+      "additionalProperties": false
+    }
+  }
+}

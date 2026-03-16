@@ -17,18 +17,20 @@ import {
 } from '@ionic/react';
 import { callOutline, keypadOutline } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 // Temporarily commented out for build
 // import { AuthService } from '../services/auth.service';
 
 const LoginPage: React.FC = () => {
   const history = useHistory();
+  const { t } = useTranslation();
+  const [presentToast] = useIonToast();
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
   const [showSendOtp, setShowSendOtp] = useState(false);
   const [sendingOtp, setSendingOtp] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [presentToast] = useIonToast();
 
   // Temporarily commented out
   // const authService = new AuthService();
@@ -46,7 +48,7 @@ const LoginPage: React.FC = () => {
   const sendOtp = async () => {
     if (!isValidPhone(phone)) {
       presentToast({
-        message: 'เบอร์โทรศัพท์ไม่ถูกต้อง (格式：+66XXXXXXXXX)',
+        message: t('login.invalidPhone'),
         duration: 2000,
         position: 'top',
         color: 'danger',
@@ -57,7 +59,7 @@ const LoginPage: React.FC = () => {
     setSendingOtp(true);
     // Mock OTP for development
     presentToast({
-      message: `ส่ง OTP เรียบร้อยแล้ว (测试 OTP: 123456)`,
+      message: t('login.otpSent'),
       duration: 3000,
       position: 'top',
       color: 'success',
@@ -80,7 +82,7 @@ const LoginPage: React.FC = () => {
   const handleLogin = async () => {
     if (!isValidPhone(phone)) {
       presentToast({
-        message: 'เบอร์โทรศัพท์ไม่ถูกต้อง',
+        message: t('login.invalidPhone'),
         duration: 2000,
         position: 'top',
         color: 'danger',
@@ -90,7 +92,7 @@ const LoginPage: React.FC = () => {
 
     if (otp.length !== 6) {
       presentToast({
-        message: 'กรุณากรอก OTP 6 หลัก',
+        message: t('login.enterOtp'),
         duration: 2000,
         position: 'top',
         color: 'danger',
@@ -104,7 +106,7 @@ const LoginPage: React.FC = () => {
     localStorage.setItem('user', JSON.stringify({ id: 'user_mock', phone, name: 'User' }));
     
     presentToast({
-      message: 'เข้าสู่ระบบสำเร็จ',
+      message: t('login.loginSuccess'),
       duration: 2000,
       position: 'top',
       color: 'success',
@@ -122,27 +124,27 @@ const LoginPage: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/" />
           </IonButtons>
-          <IonTitle>เข้าสู่ระบบ</IonTitle>
+          <IonTitle>{t('login.title')}</IonTitle>
         </IonToolbar>
       </IonHeader>
 
       <IonContent fullscreen className="login-content">
         <IonHeader collapse="condense">
           <IonToolbar color="primary">
-            <IonTitle size="large">เข้าสู่ระบบ</IonTitle>
+            <IonTitle size="large">{t('login.title')}</IonTitle>
           </IonToolbar>
         </IonHeader>
 
         <div className="login-container">
           <div className="logo-section">
             <h1>Lann</h1>
-            <p>ง่าย รวดเร็ว ปลอดภัย</p>
+            <p>{t('login.subtitle')}</p>
           </div>
 
           <div className="form-section">
             <IonItem className="input-item">
               <IonIcon icon={callOutline} slot="start" />
-              <IonLabel position="floating">เบอร์โทรศัพท์</IonLabel>
+              <IonLabel position="floating">{t('login.phoneLabel')}</IonLabel>
               <IonInput
                 type="tel"
                 placeholder="+66"
@@ -160,17 +162,17 @@ const LoginPage: React.FC = () => {
                   disabled={sendingOtp || countdown > 0}
                 >
                   {sendingOtp
-                    ? 'กำลังส่ง...'
+                    ? t('login.sendingOtp')
                     : countdown > 0
-                    ? `ส่งใหม่ (${countdown}s)`
-                    : 'ส่ง OTP'}
+                    ? t('login.resendOtp', { count: countdown })
+                    : t('login.sendOtp')}
                 </IonButton>
               </div>
             )}
 
             <IonItem className="input-item">
               <IonIcon icon={keypadOutline} slot="start" />
-              <IonLabel position="floating">รหัส OTP</IonLabel>
+              <IonLabel position="floating">{t('login.otpLabel')}</IonLabel>
               <IonInput
                 type="text"
                 maxlength={6}
@@ -186,14 +188,14 @@ const LoginPage: React.FC = () => {
               onClick={handleLogin}
               disabled={!isValidPhone(phone) || otp.length !== 6 || loading}
             >
-              {loading ? 'กำลังดำเนินการ...' : 'เข้าสู่ระบบ'}
+              {loading ? t('login.loggingIn') : t('login.login')}
             </IonButton>
 
             <div className="register-link">
               <p>
-                ยังไม่มีบัญชี?{' '}
+                {t('login.noAccount')}{' '}
                 <a href="/register" onClick={(e) => { e.preventDefault(); history.push('/register'); }}>
-                  ลงทะเบียน
+                  {t('login.register')}
                 </a>
               </p>
             </div>

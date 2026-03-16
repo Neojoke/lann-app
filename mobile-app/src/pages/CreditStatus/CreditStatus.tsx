@@ -29,12 +29,14 @@ import {
   refreshOutline,
 } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { UserService, CreditStatusResponse } from '../../services/user.service';
 import { CreditService } from '../../services/credit.service';
 import './CreditStatus.scss';
 
 const CreditStatus: React.FC = () => {
   const history = useHistory();
+  const { t } = useTranslation();
   const [presentToast] = useIonToast();
   const userService = new UserService();
   const creditService = new CreditService();
@@ -69,7 +71,7 @@ const CreditStatus: React.FC = () => {
       }
     } catch (error: any) {
       presentToast({
-        message: error.message || '获取信用状态失败',
+        message: error.message || t('creditStatus.loadFailed'),
         duration: 2000,
         position: 'top',
         color: 'danger',
@@ -87,7 +89,7 @@ const CreditStatus: React.FC = () => {
   const handleBorrow = () => {
     if (!creditStatus || creditStatus.status !== 'approved') {
       presentToast({
-        message: '请先通过信用评估',
+        message: t('creditStatus.assessFirst'),
         duration: 2000,
         position: 'top',
         color: 'warning',
@@ -105,12 +107,12 @@ const CreditStatus: React.FC = () => {
             <IonButtons slot="start">
               <IonBackButton defaultHref="/home" />
             </IonButtons>
-            <IonTitle>信用状态</IonTitle>
+            <IonTitle>{t('creditStatus.title')}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen className="ion-padding ion-text-center">
           <IonSpinner name="crescent" size="large" />
-          <p>加载信用状态中...</p>
+          <p>{t('creditStatus.loading')}</p>
         </IonContent>
       </IonPage>
     );
@@ -124,17 +126,17 @@ const CreditStatus: React.FC = () => {
             <IonButtons slot="start">
               <IonBackButton defaultHref="/home" />
             </IonButtons>
-            <IonTitle>信用状态</IonTitle>
+            <IonTitle>{t('creditStatus.title')}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen className="ion-padding credit-no-data">
           <IonIcon icon={alertCircleOutline} size="large" color="medium" />
-          <h2>暂无信用记录</h2>
+          <h2>{t('creditStatus.noCreditRecord')}</h2>
           <IonText color="medium">
-            <p>请先完成个人信息填写和信用评估</p>
+            <p>{t('creditStatus.noCreditRecordDesc')}</p>
           </IonText>
           <IonButton expand="block" onClick={() => history.push('/profile')}>
-            前往完善信息
+            {t('creditStatus.goToProfile')}
           </IonButton>
         </IonContent>
       </IonPage>
@@ -153,7 +155,7 @@ const CreditStatus: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/home" />
           </IonButtons>
-          <IonTitle>信用状态</IonTitle>
+          <IonTitle>{t('creditStatus.title')}</IonTitle>
           <IonButtons slot="end">
             <IonButton fill="clear" onClick={handleRefresh}>
               <IonIcon icon={refreshOutline} slot="icon-only" />
@@ -174,17 +176,17 @@ const CreditStatus: React.FC = () => {
             {creditStatus.status === 'approved' ? (
               <>
                 <IonIcon icon={checkmarkCircleOutline} />
-                <span>已通过</span>
+                <span>{t('creditStatus.approved')}</span>
               </>
             ) : creditStatus.status === 'pending' ? (
               <>
                 <IonIcon icon={timeOutline} />
-                <span>审核中</span>
+                <span>{t('creditStatus.pending')}</span>
               </>
             ) : (
               <>
                 <IonIcon icon={alertCircleOutline} />
-                <span>未通过</span>
+                <span>{t('creditStatus.rejected')}</span>
               </>
             )}
           </div>
@@ -195,7 +197,7 @@ const CreditStatus: React.FC = () => {
           <IonCardContent>
             <div className="score-header">
               <IonIcon icon={shieldCheckmarkOutline} color="primary" />
-              <IonText color="medium">信用评分</IonText>
+              <IonText color="medium">{t('creditStatus.creditScore')}</IonText>
             </div>
             <div className="score-display">
               <span className="score-number">{creditStatus.credit_score}</span>
@@ -215,30 +217,30 @@ const CreditStatus: React.FC = () => {
           <IonCardHeader>
             <IonCardSubtitle>
               <IonIcon icon={walletOutline} slot="start" />
-              额度信息
+              {t('creditStatus.limitInfo')}
             </IonCardSubtitle>
           </IonCardHeader>
           <IonCardContent>
             <div className="limit-grid">
               <div className="limit-item">
-                <IonText color="medium">总额度</IonText>
+                <IonText color="medium">{t('creditStatus.totalLimit')}</IonText>
                 <h3>฿{creditStatus.credit_limit.toLocaleString()}</h3>
               </div>
               <div className="limit-item">
-                <IonText color="medium">已使用</IonText>
+                <IonText color="medium">{t('creditStatus.used')}</IonText>
                 <h3 className={creditStatus.credit_used > 0 ? 'used' : ''}>
                   ฿{creditStatus.credit_used.toLocaleString()}
                 </h3>
               </div>
               <div className="limit-item">
-                <IonText color="medium">可用额度</IonText>
+                <IonText color="medium">{t('creditStatus.available')}</IonText>
                 <h3 className="available">฿{creditStatus.credit_available.toLocaleString()}</h3>
               </div>
             </div>
             
             <div className="utilization-section">
               <div className="utilization-header">
-                <IonText color="medium">额度使用率</IonText>
+                <IonText color="medium">{t('creditStatus.utilizationRate')}</IonText>
                 <IonText color={utilizationRate > 70 ? 'danger' : 'success'}>
                   {utilizationRate.toFixed(1)}%
                 </IonText>
@@ -249,7 +251,7 @@ const CreditStatus: React.FC = () => {
               />
               {utilizationRate > 70 && (
                 <IonText color="danger">
-                  <small>⚠️ 使用率较高，建议降低负债</small>
+                  <small>{t('creditStatus.highUtilization')}</small>
                 </IonText>
               )}
             </div>
@@ -261,25 +263,25 @@ const CreditStatus: React.FC = () => {
           <IonCardHeader>
             <IonCardSubtitle>
               <IonIcon icon={trendingUpOutline} slot="start" />
-              提升信用建议
+              {t('creditStatus.tipsTitle')}
             </IonCardSubtitle>
           </IonCardHeader>
           <IonCardContent>
             <div className="tip-item">
               <IonIcon icon={checkmarkCircleOutline} color="success" />
-              <IonText>按时还款，避免逾期</IonText>
+              <IonText>{t('creditStatus.tip1')}</IonText>
             </div>
             <div className="tip-item">
               <IonIcon icon={checkmarkCircleOutline} color="success" />
-              <IonText>保持稳定的收入来源</IonText>
+              <IonText>{t('creditStatus.tip2')}</IonText>
             </div>
             <div className="tip-item">
               <IonIcon icon={checkmarkCircleOutline} color="success" />
-              <IonText>完善个人信息，提高可信度</IonText>
+              <IonText>{t('creditStatus.tip3')}</IonText>
             </div>
             <div className="tip-item">
               <IonIcon icon={checkmarkCircleOutline} color="success" />
-              <IonText>合理使用额度，控制负债率</IonText>
+              <IonText>{t('creditStatus.tip4')}</IonText>
             </div>
           </IonCardContent>
         </IonCard>
@@ -293,7 +295,7 @@ const CreditStatus: React.FC = () => {
             className="borrow-btn"
           >
             <IonIcon slot="start" icon={walletOutline} />
-            立即借款
+            {t('creditStatus.borrowNow')}
           </IonButton>
           
           {creditStatus.status !== 'approved' && (
@@ -303,7 +305,7 @@ const CreditStatus: React.FC = () => {
               onClick={() => history.push('/credit-apply')}
               color="primary"
             >
-              重新评估
+              {t('creditStatus.reassess')}
             </IonButton>
           )}
         </div>

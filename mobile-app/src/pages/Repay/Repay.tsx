@@ -26,10 +26,12 @@ import {
   calendarOutline,
 } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { RepayService } from '../../services/repay.service';
 
 const RepayPage: React.FC = () => {
   const history = useHistory();
+  const { t } = useTranslation();
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [pendingRepayments, setPendingRepayments] = useState<any[]>([]);
@@ -60,7 +62,7 @@ const RepayPage: React.FC = () => {
   const handleSubmit = async () => {
     if (!selectedMethod) {
       presentToast({
-        message: 'กรุณาเลือกช่องทางการชำระเงิน',
+        message: t('repay.selectMethodFirst'),
         duration: 2000,
         position: 'top',
         color: 'warning',
@@ -73,7 +75,7 @@ const RepayPage: React.FC = () => {
       const token = localStorage.getItem('auth_token');
       if (!token || pendingRepayments.length === 0) {
         presentToast({
-          message: 'ไม่มีข้อมูลการชำระเงิน',
+          message: t('repay.noPaymentData'),
           duration: 2000,
           position: 'top',
           color: 'danger',
@@ -89,7 +91,7 @@ const RepayPage: React.FC = () => {
 
       if (response.success) {
         presentToast({
-          message: 'ชำระสำเร็จ',
+          message: t('repay.repaySuccess'),
           duration: 2000,
           position: 'top',
           color: 'success',
@@ -98,7 +100,7 @@ const RepayPage: React.FC = () => {
       }
     } catch (error) {
       presentToast({
-        message: 'ชำระล้มเหลว',
+        message: t('repay.repayFailed'),
         duration: 2000,
         position: 'top',
         color: 'danger',
@@ -125,14 +127,14 @@ const RepayPage: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/home" />
           </IonButtons>
-          <IonTitle>ชำระคืน</IonTitle>
+          <IonTitle>{t('repay.title')}</IonTitle>
         </IonToolbar>
       </IonHeader>
 
       <IonContent fullscreen className="repay-content">
         <IonHeader collapse="condense">
           <IonToolbar color="primary">
-            <IonTitle size="large">ชำระคืน</IonTitle>
+            <IonTitle size="large">{t('repay.title')}</IonTitle>
           </IonToolbar>
         </IonHeader>
 
@@ -142,7 +144,7 @@ const RepayPage: React.FC = () => {
             <section className="amount-due-section">
               <IonCard className="amount-card">
                 <IonCardHeader>
-                  <IonCardSubtitle>ยอดเงินที่ต้องชำระ</IonCardSubtitle>
+                  <IonCardSubtitle>{t('repay.amountDue')}</IonCardSubtitle>
                 </IonCardHeader>
                 <IonCardContent>
                   <div className="amount-display">
@@ -154,7 +156,7 @@ const RepayPage: React.FC = () => {
                   <div className="due-date">
                     <IonIcon icon={calendarOutline} />
                     <span>
-                      ครบกำหนด: {new Date(pendingRepayments[0].dueDate).toLocaleDateString('th-TH')}
+                      {t('repay.dueDate')}: {new Date(pendingRepayments[0].dueDate).toLocaleDateString('th-TH')}
                     </span>
                   </div>
                 </IonCardContent>
@@ -164,7 +166,7 @@ const RepayPage: React.FC = () => {
 
           {/* 还款方式 */}
           <section className="payment-methods-section">
-            <h2>ช่องทางการชำระเงิน</h2>
+            <h2>{t('repay.paymentMethods')}</h2>
 
             {paymentMethods.map((method) => (
               <IonCard
@@ -197,35 +199,31 @@ const RepayPage: React.FC = () => {
             <section className="payment-details-section">
               <IonCard className="details-card">
                 <IonCardHeader>
-                  <IonCardTitle>รายละเอียดการชำระเงิน</IonCardTitle>
+                  <IonCardTitle>{t('repay.paymentDetails')}</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
                   {selectedMethod === 'bank' && (
                     <div className="detail-item">
-                      <p><strong>ธนาคาร:</strong> Kasikorn Bank</p>
-                      <p><strong>บัญชี:</strong> 123-4-56789-0</p>
-                      <p><strong>ชื่อบัญชี:</strong> Lann Co., Ltd.</p>
+                      <p><strong>{t('repay.bank_detail')}</strong></p>
                     </div>
                   )}
                   {selectedMethod === 'convenience' && (
                     <div className="detail-item">
-                      <p><strong>ร้านค้า:</strong> 7-11, FamilyMart</p>
-                      <p><strong>รหัสชำระเงิน:</strong> 1234567890</p>
+                      <p><strong>{t('repay.convenience_detail')}</strong></p>
                     </div>
                   )}
                   {selectedMethod === 'promptpay' && (
                     <div className="detail-item">
                       <div className="qr-placeholder">
                         <IonIcon icon={qrCodeOutline} />
-                        <p>สแกนเพื่อชำระ</p>
+                        <p>{t('repay.scanToPay')}</p>
                       </div>
-                      <p><strong>พร้อมเพย์:</strong> 081-234-5678</p>
+                      <p><strong>{t('repay.promptpay_detail')}</strong></p>
                     </div>
                   )}
                   {selectedMethod === 'truemoney' && (
                     <div className="detail-item">
-                      <p><strong>Wallet:</strong> TrueMoney Wallet</p>
-                      <p><strong>เบอร์:</strong> 081-234-5678</p>
+                      <p><strong>{t('repay.truemoney_detail')}</strong></p>
                     </div>
                   )}
                 </IonCardContent>
@@ -241,7 +239,7 @@ const RepayPage: React.FC = () => {
               onClick={handleSubmit}
               disabled={!selectedMethod || loading}
             >
-              {loading ? 'กำลังดำเนินการ...' : 'ยืนยันการชำระ'}
+              {loading ? t('repay.processing') : t('repay.confirmRepay')}
             </IonButton>
           </section>
         </div>

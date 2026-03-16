@@ -16,10 +16,12 @@ import {
 import { arrowBackOutline, mailOutline, lockClosedOutline, personOutline } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import './Register.scss';
 
 const Register: React.FC = () => {
   const history = useHistory();
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -45,20 +47,20 @@ const Register: React.FC = () => {
           <IonButton fill="clear" slot="start" onClick={() => history.goBack()}>
             <IonIcon slot="icon-only" icon={arrowBackOutline} />
           </IonButton>
-          <IonTitle>Register</IonTitle>
+          <IonTitle>{t('register.title')}</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen className="ion-padding">
         <div className="register-header">
-          <h1>Create Account</h1>
-          <p>Join LANN Thailand Loan today</p>
+          <h1>{t('register.createAccount')}</h1>
+          <p>{t('register.subtitle')}</p>
         </div>
 
         <IonCard className="register-card">
           <IonCardContent>
             <IonItem>
               <IonIcon slot="start" icon={personOutline} color="primary" />
-              <IonLabel position="floating">Full Name</IonLabel>
+              <IonLabel position="floating">{t('register.fullName')}</IonLabel>
               <IonInput
                 name="name"
                 type="text"
@@ -70,7 +72,7 @@ const Register: React.FC = () => {
 
             <IonItem>
               <IonIcon slot="start" icon={mailOutline} color="primary" />
-              <IonLabel position="floating">Email</IonLabel>
+              <IonLabel position="floating">{t('register.email')}</IonLabel>
               <IonInput
                 name="email"
                 type="email"
@@ -81,7 +83,7 @@ const Register: React.FC = () => {
             </IonItem>
 
             <IonItem>
-              <IonLabel position="floating">Phone Number</IonLabel>
+              <IonLabel position="floating">{t('register.phone')}</IonLabel>
               <IonInput
                 name="phone"
                 type="tel"
@@ -93,7 +95,7 @@ const Register: React.FC = () => {
 
             <IonItem>
               <IonIcon slot="start" icon={lockClosedOutline} color="primary" />
-              <IonLabel position="floating">Password</IonLabel>
+              <IonLabel position="floating">{t('register.password')}</IonLabel>
               <IonInput
                 name="password"
                 type="password"
@@ -105,7 +107,7 @@ const Register: React.FC = () => {
 
             <IonItem>
               <IonIcon slot="start" icon={lockClosedOutline} color="primary" />
-              <IonLabel position="floating">Confirm Password</IonLabel>
+              <IonLabel position="floating">{t('register.confirmPassword')}</IonLabel>
               <IonInput
                 name="confirmPassword"
                 type="password"
@@ -117,23 +119,19 @@ const Register: React.FC = () => {
 
             <div className="terms-section">
               <IonText color="medium">
-                <p>
-                  By registering, you agree to our{' '}
-                  <a href="#">Terms of Service</a> and{' '}
-                  <a href="#">Privacy Policy</a>
-                </p>
+                <p>{t('register.terms')}</p>
               </IonText>
             </div>
 
             <IonButton expand="block" onClick={handleSubmit} className="submit-btn">
-              Create Account
+              {t('register.createAccount')}
             </IonButton>
 
             <div className="login-section">
               <IonText color="medium">
-                Already have an account?{' '}
+                {t('register.hasAccount')}{' '}
                 <a href="#" onClick={() => history.push('/login')}>
-                  Sign In
+                  {t('register.signIn')}
                 </a>
               </IonText>
             </div>

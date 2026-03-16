@@ -22,11 +22,13 @@ import {
 } from '@ionic/react';
 import { documentTextOutline, walletOutline, alertCircleOutline } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { LoanService } from '../../services/loan.service';
 import { UserService, CreditStatusResponse } from '../../services/user.service';
 
 const BorrowPage: React.FC = () => {
   const history = useHistory();
+  const { t } = useTranslation();
   const [amount, setAmount] = useState(5000);
   const [selectedDays, setSelectedDays] = useState(14);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
@@ -65,7 +67,7 @@ const BorrowPage: React.FC = () => {
         // 检查是否有可用额度
         if (!response.credit_available || response.credit_available <= 0) {
           presentToast({
-            message: '暂无可用额度，请先完善个人信息',
+            message: t('borrow.noCreditLimit'),
             duration: 3000,
             position: 'top',
             color: 'warning',
@@ -82,7 +84,7 @@ const BorrowPage: React.FC = () => {
   const handleSubmit = async () => {
     if (!agreedToTerms) {
       presentToast({
-        message: 'กรุณายอมรับข้อตกลง',
+        message: t('borrow.acceptTermsFirst'),
         duration: 2000,
         position: 'top',
         color: 'warning',
@@ -93,7 +95,7 @@ const BorrowPage: React.FC = () => {
     // 检查借款金额是否超过可用额度
     if (creditStatus && amount > creditStatus.credit_available) {
       presentToast({
-        message: '借款金额超过可用额度',
+        message: t('borrow.exceedLimit'),
         duration: 2000,
         position: 'top',
         color: 'danger',
@@ -106,7 +108,7 @@ const BorrowPage: React.FC = () => {
       const token = localStorage.getItem('auth_token');
       if (!token) {
         presentToast({
-          message: 'กรุณาเข้าสู่ระบบ',
+          message: t('borrow.pleaseLogin'),
           duration: 2000,
           position: 'top',
           color: 'danger',
@@ -119,7 +121,7 @@ const BorrowPage: React.FC = () => {
       
       if (response.success) {
         presentToast({
-          message: 'กู้เงินสำเร็จ',
+          message: t('borrow.borrowSuccess'),
           duration: 2000,
           position: 'top',
           color: 'success',
@@ -128,7 +130,7 @@ const BorrowPage: React.FC = () => {
       }
     } catch (error) {
       presentToast({
-        message: 'กู้เงินล้มเหลว',
+        message: t('borrow.borrowFailed'),
         duration: 2000,
         position: 'top',
         color: 'danger',
@@ -143,12 +145,12 @@ const BorrowPage: React.FC = () => {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>กู้เงิน</IonTitle>
+            <IonTitle>{t('borrow.title')}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen className="ion-padding ion-text-center">
           <IonSpinner name="crescent" size="large" />
-          <p>检查信用额度中...</p>
+          <p>{t('borrow.checkingCredit')}</p>
         </IonContent>
       </IonPage>
     );
@@ -162,20 +164,20 @@ const BorrowPage: React.FC = () => {
             <IonButtons slot="start">
               <IonBackButton defaultHref="/home" />
             </IonButtons>
-            <IonTitle>กู้เงิน</IonTitle>
+            <IonTitle>{t('borrow.title')}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen className="ion-padding borrow-no-credit">
           <IonIcon icon={alertCircleOutline} size="large" color="warning" />
-          <h2>暂无可用额度</h2>
+          <h2>{t('borrow.noCreditLimit')}</h2>
           <IonText color="medium">
-            <p>请先完善个人信息并完成信用评估</p>
+            <p>{t('borrow.noCreditLimitDesc')}</p>
           </IonText>
           <IonButton expand="block" onClick={() => history.push('/credit-status')}>
-            查看信用状态
+            {t('borrow.viewCreditStatus')}
           </IonButton>
           <IonButton expand="block" fill="outline" onClick={() => history.push('/profile')}>
-            完善个人信息
+            {t('borrow.improveProfile')}
           </IonButton>
         </IonContent>
       </IonPage>
@@ -189,14 +191,14 @@ const BorrowPage: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/home" />
           </IonButtons>
-          <IonTitle>กู้เงิน</IonTitle>
+          <IonTitle>{t('borrow.title')}</IonTitle>
         </IonToolbar>
       </IonHeader>
 
       <IonContent fullscreen className="borrow-content">
         <IonHeader collapse="condense">
           <IonToolbar color="primary">
-            <IonTitle size="large">กู้เงิน</IonTitle>
+            <IonTitle size="large">{t('borrow.title')}</IonTitle>
           </IonToolbar>
         </IonHeader>
 
@@ -208,7 +210,7 @@ const BorrowPage: React.FC = () => {
                 <div className="limit-banner-content">
                   <IonIcon icon={walletOutline} size="large" color="primary" />
                   <div className="limit-banner-text">
-                    <IonText color="medium">可用额度</IonText>
+                    <IonText color="medium">{t('borrow.availableLimit')}</IonText>
                     <h3>฿{creditStatus.credit_available.toLocaleString()}</h3>
                   </div>
                 </div>
@@ -217,7 +219,7 @@ const BorrowPage: React.FC = () => {
           </section>
           {/* 借款金额 */}
           <section className="amount-section">
-            <h2>จำนวนเงิน</h2>
+            <h2>{t('borrow.amount')}</h2>
             <div className="amount-display">
               <span className="currency">฿</span>
               <span className="amount">{amount.toLocaleString()}</span>
@@ -237,7 +239,7 @@ const BorrowPage: React.FC = () => {
 
           {/* 借款期限 */}
           <section className="duration-section">
-            <h2>ระยะเวลา</h2>
+            <h2>{t('borrow.duration')}</h2>
             <div className="duration-options">
               {durationOptions.map((days) => (
                 <IonCard
@@ -248,7 +250,7 @@ const BorrowPage: React.FC = () => {
                   <IonCardContent>
                     <div className="duration-content">
                       <span className="duration-days">{days}</span>
-                      <span className="duration-label">วัน</span>
+                      <span className="duration-label">{t('borrow.days')}</span>
                     </div>
                   </IonCardContent>
                 </IonCard>
@@ -260,20 +262,20 @@ const BorrowPage: React.FC = () => {
           <section className="repayment-section">
             <IonCard className="repayment-card">
               <IonCardHeader>
-                <IonCardSubtitle>ยอดชำระรวม</IonCardSubtitle>
+                <IonCardSubtitle>{t('borrow.repaymentDetails')}</IonCardSubtitle>
               </IonCardHeader>
               <IonCardContent>
                 <div className="repayment-details">
                   <div className="detail-row">
-                    <span>เงินต้น</span>
+                    <span>{t('borrow.principal')}</span>
                     <span>฿{amount.toLocaleString()}</span>
                   </div>
                   <div className="detail-row">
-                    <span>ดอกเบี้ย (1%/วัน)</span>
+                    <span>{t('borrow.interest')}</span>
                     <span>฿{interest.toFixed(2)}</span>
                   </div>
                   <div className="detail-row total">
-                    <span>ยอดชำระรวม</span>
+                    <span>{t('borrow.totalRepayment')}</span>
                     <span>฿{totalRepayment.toFixed(2)}</span>
                   </div>
                 </div>
@@ -291,7 +293,7 @@ const BorrowPage: React.FC = () => {
                   checked={agreedToTerms}
                   onChange={(e) => setAgreedToTerms(e.target.checked)}
                 />
-                {' '}ยอมรับข้อตกลงและเงื่อนไข
+                {' '}{t('borrow.acceptTerms')}
               </IonLabel>
             </IonItem>
           </section>
@@ -304,7 +306,7 @@ const BorrowPage: React.FC = () => {
               onClick={handleSubmit}
               disabled={!agreedToTerms || loading}
             >
-              {loading ? 'กำลังดำเนินการ...' : 'ยืนยันการกู้'}
+              {loading ? t('borrow.processing') : t('borrow.confirmBorrow')}
             </IonButton>
           </section>
         </div>
