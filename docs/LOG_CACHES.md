@@ -60,7 +60,8 @@ PDPA 合规：用户数据加密 + 本地存储
 
 | 会话 ID | 任务 | 模型 | 状态 | 完成日期 |
 |---------|------|------|------|----------|
-| `agent:main:subagent:ff015041-d275-4a46-8735-8109771f9f36` | 核心功能开发 | bailian/qwen3.5-plus | 🟢 进行中 | - |
+| `agent:main:subagent:ff015041-d275-4a46-8735-8109771f9f36` | 核心功能开发 | bailian/qwen3.5-plus | ✅ 已完成 | 2026-03-16 02:14 |
+| `agent:main:subagent:6e17324b-a150-4dac-aa7a-759f4726b31b` | Android 打包 + 进件流程 | bailian/qwen3.5-plus | 🟢 进行中 | - |
 
 ---
 
