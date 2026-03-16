@@ -4,6 +4,8 @@
 **创建日期:** 2026-03-16  
 **状态:** ✅ 已完成
 
+> 📚 **相关文档:** [文档索引](../README.md) | [业务模型](../01-requirements/business-model.md) | [Schema 规范](../02-design/schema-spec.md) | [还款 API](./repayment-api.md)
+
 ---
 
 ## 📋 目录

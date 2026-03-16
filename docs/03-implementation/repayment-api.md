@@ -4,6 +4,8 @@
 **状态:** ✅ 已完成  
 **测试覆盖率:** 100% (24/24 测试通过)
 
+> 📚 **相关文档:** [文档索引](../README.md) | [业务模型](../01-requirements/business-model.md) | [Schema 规范](../02-design/schema-spec.md) | [借款 API](./loan-api.md)
+
 ---
 
 ## 📋 任务完成情况

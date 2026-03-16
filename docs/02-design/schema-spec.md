@@ -4,6 +4,8 @@
 **创建日期:** 2026-03-17  
 **目标:** AI 可读、可验证、无歧义的业务模型定义
 
+> 📚 **相关文档:** [文档索引](../README.md) | [业务模型](../01-requirements/business-model.md) | [信用 API](../03-implementation/credit-api.md) | [借款 API](../03-implementation/loan-api.md) | [还款 API](../03-implementation/repayment-api.md)
+
 ---
 
 ## 📋 规范说明

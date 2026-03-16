@@ -4,6 +4,8 @@
 **创建日期:** 2026-03-16  
 **状态:** 🟡 待开发
 
+> 📚 **相关文档:** [文档索引](../README.md) | [业务模型](./business-model.md) | [前端实现](../03-implementation/frontend.md) | [信用 API](../03-implementation/credit-api.md)
+
 ---
 
 ## 📋 业务流程

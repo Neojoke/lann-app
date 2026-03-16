@@ -1,5 +1,7 @@
 # 信用服务 API 开发完成报告
 
+> 📚 **相关文档:** [文档索引](../README.md) | [业务模型](../01-requirements/business-model.md) | [Schema 规范](../02-design/schema-spec.md) | [用户进件流程](../01-requirements/credit-flow.md)
+
 ## 📊 任务完成情况
 
 ### ✅ 已完成的工作
