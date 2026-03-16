@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   IonContent,
   IonHeader,
@@ -17,10 +17,13 @@ import {
   IonRange,
   IonButton,
   useIonToast,
+  IonSpinner,
+  IonText,
 } from '@ionic/react';
-import { documentTextOutline } from 'ionicons/icons';
+import { documentTextOutline, walletOutline, alertCircleOutline } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
 import { LoanService } from '../../services/loan.service';
+import { UserService, CreditStatusResponse } from '../../services/user.service';
 
 const BorrowPage: React.FC = () => {
   const history = useHistory();
@@ -28,15 +31,53 @@ const BorrowPage: React.FC = () => {
   const [selectedDays, setSelectedDays] = useState(14);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [checkingCredit, setCheckingCredit] = useState(true);
+  const [creditStatus, setCreditStatus] = useState<CreditStatusResponse | null>(null);
   const [presentToast] = useIonToast();
 
   const loanService = new LoanService();
+  const userService = new UserService();
 
   const durationOptions = [7, 14, 21, 30];
   const minAmount = 1000;
-  const maxAmount = 50000;
+  
+  // 根据信用额度动态设置最大借款金额
+  const maxAmount = creditStatus?.credit_available || 50000;
 
   const { interest, totalRepayment } = loanService.calculateInterest(amount, selectedDays);
+
+  useEffect(() => {
+    checkCreditStatus();
+  }, []);
+
+  const checkCreditStatus = async () => {
+    try {
+      const token = localStorage.getItem('auth_token');
+      if (!token) {
+        history.push('/login');
+        return;
+      }
+
+      const response = await userService.getCreditStatus(token);
+      if (response.success) {
+        setCreditStatus(response);
+        
+        // 检查是否有可用额度
+        if (!response.credit_available || response.credit_available <= 0) {
+          presentToast({
+            message: '暂无可用额度，请先完善个人信息',
+            duration: 3000,
+            position: 'top',
+            color: 'warning',
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Failed to check credit status:', error);
+    } finally {
+      setCheckingCredit(false);
+    }
+  };
 
   const handleSubmit = async () => {
     if (!agreedToTerms) {
@@ -45,6 +86,17 @@ const BorrowPage: React.FC = () => {
         duration: 2000,
         position: 'top',
         color: 'warning',
+      });
+      return;
+    }
+
+    // 检查借款金额是否超过可用额度
+    if (creditStatus && amount > creditStatus.credit_available) {
+      presentToast({
+        message: '借款金额超过可用额度',
+        duration: 2000,
+        position: 'top',
+        color: 'danger',
       });
       return;
     }
@@ -86,6 +138,50 @@ const BorrowPage: React.FC = () => {
     }
   };
 
+  if (checkingCredit) {
+    return (
+      <IonPage>
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>กู้เงิน</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent fullscreen className="ion-padding ion-text-center">
+          <IonSpinner name="crescent" size="large" />
+          <p>检查信用额度中...</p>
+        </IonContent>
+      </IonPage>
+    );
+  }
+
+  if (!creditStatus || creditStatus.status !== 'approved' || !creditStatus.credit_available || creditStatus.credit_available <= 0) {
+    return (
+      <IonPage>
+        <IonHeader>
+          <IonToolbar>
+            <IonButtons slot="start">
+              <IonBackButton defaultHref="/home" />
+            </IonButtons>
+            <IonTitle>กู้เงิน</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent fullscreen className="ion-padding borrow-no-credit">
+          <IonIcon icon={alertCircleOutline} size="large" color="warning" />
+          <h2>暂无可用额度</h2>
+          <IonText color="medium">
+            <p>请先完善个人信息并完成信用评估</p>
+          </IonText>
+          <IonButton expand="block" onClick={() => history.push('/credit-status')}>
+            查看信用状态
+          </IonButton>
+          <IonButton expand="block" fill="outline" onClick={() => history.push('/profile')}>
+            完善个人信息
+          </IonButton>
+        </IonContent>
+      </IonPage>
+    );
+  }
+
   return (
     <IonPage>
       <IonHeader translucent>
@@ -105,6 +201,20 @@ const BorrowPage: React.FC = () => {
         </IonHeader>
 
         <div className="borrow-container">
+          {/* 可用额度提示 */}
+          <section className="credit-limit-banner">
+            <IonCard className="limit-banner-card">
+              <IonCardContent>
+                <div className="limit-banner-content">
+                  <IonIcon icon={walletOutline} size="large" color="primary" />
+                  <div className="limit-banner-text">
+                    <IonText color="medium">可用额度</IonText>
+                    <h3>฿{creditStatus.credit_available.toLocaleString()}</h3>
+                  </div>
+                </div>
+              </IonCardContent>
+            </IonCard>
+          </section>
           {/* 借款金额 */}
           <section className="amount-section">
             <h2>จำนวนเงิน</h2>

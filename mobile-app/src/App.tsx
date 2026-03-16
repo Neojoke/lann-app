@@ -5,6 +5,10 @@ import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Profile from './pages/Profile/Profile';
+import CreditApply from './pages/CreditApply/CreditApply';
+import CreditStatus from './pages/CreditStatus/CreditStatus';
+import Borrow from './pages/Borrow/Borrow';
+import Repay from './pages/Repay/Repay';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -53,6 +57,18 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/profile">
           <Profile />
+        </Route>
+        <Route exact path="/credit-apply">
+          <CreditApply />
+        </Route>
+        <Route exact path="/credit-status">
+          <CreditStatus />
+        </Route>
+        <Route exact path="/borrow">
+          <Borrow />
+        </Route>
+        <Route exact path="/repay">
+          <Repay />
         </Route>
         <Route exact path="/">
           <Redirect to="/home" />

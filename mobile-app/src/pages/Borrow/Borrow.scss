@@ -1,0 +1,278 @@
+.borrow-content {
+  --background: var(--ion-background-color);
+
+  .borrow-container {
+    padding: 16px;
+
+    // 可用额度提示横幅
+    .credit-limit-banner {
+      margin-bottom: 16px;
+
+      .limit-banner-card {
+        background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-primary-shade) 100%);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.3);
+
+        ion-card-content {
+          padding: 16px;
+
+          .limit-banner-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+
+            ion-icon {
+              color: white !important;
+            }
+
+            .limit-banner-text {
+              flex: 1;
+
+              ion-text {
+                color: rgba(255, 255, 255, 0.9) !important;
+                font-size: 14px;
+                display: block;
+                margin-bottom: 4px;
+              }
+
+              h3 {
+                color: white;
+                font-size: 28px;
+                font-weight: 700;
+                margin: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // 借款金额
+    .amount-section {
+      margin-bottom: 24px;
+
+      h2 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: var(--ion-text-color);
+      }
+
+      .amount-display {
+        text-align: center;
+        padding: 20px;
+        background: var(--ion-card-background);
+        border-radius: 12px;
+        margin-bottom: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+        .currency {
+          font-size: 24px;
+          font-weight: 600;
+          color: var(--ion-color-primary);
+          margin-right: 4px;
+        }
+
+        .amount {
+          font-size: 42px;
+          font-weight: 700;
+          color: var(--ion-color-primary);
+        }
+      }
+
+      ion-range {
+        --bar-background-active: var(--ion-color-primary);
+        --knob-background: var(--ion-color-primary);
+        --knob-size: 24px;
+        --pin-background: var(--ion-color-primary);
+        --pin-color: white;
+      }
+    }
+
+    // 借款期限
+    .duration-section {
+      margin-bottom: 24px;
+
+      h2 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: var(--ion-text-color);
+      }
+
+      .duration-options {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+
+        .duration-card {
+          border-radius: 12px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+          cursor: pointer;
+          transition: all 0.3s ease;
+          margin: 0;
+          text-align: center;
+
+          &.selected {
+            background: var(--ion-color-primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.3);
+
+            .duration-content {
+              .duration-days,
+              .duration-label {
+                color: white;
+              }
+            }
+          }
+
+          ion-card-content {
+            padding: 12px 8px;
+
+            .duration-content {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+
+              .duration-days {
+                font-size: 20px;
+                font-weight: 700;
+                color: var(--ion-color-primary);
+              }
+
+              .duration-label {
+                font-size: 12px;
+                color: var(--ion-color-medium);
+                margin-top: 4px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // 还款详情
+    .repayment-section {
+      margin-bottom: 24px;
+
+      .repayment-card {
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+        ion-card-header {
+          padding-bottom: 8px;
+
+          ion-card-subtitle {
+            font-size: 14px;
+            font-weight: 500;
+          }
+        }
+
+        ion-card-content {
+          padding-top: 0;
+
+          .repayment-details {
+            .detail-row {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 12px 0;
+              border-bottom: 1px solid var(--ion-border-color);
+              font-size: 14px;
+
+              &:last-child {
+                border-bottom: none;
+              }
+
+              &.total {
+                font-weight: 700;
+                font-size: 16px;
+                color: var(--ion-color-primary);
+                padding-top: 16px;
+                border-bottom: none;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // 条款同意
+    .terms-section {
+      margin-bottom: 24px;
+
+      ion-item {
+        --background: transparent;
+        --inner-padding-end: 0;
+        --padding-start: 0;
+        --padding-end: 0;
+
+        ion-icon {
+          font-size: 20px;
+          margin-right: 12px;
+          color: var(--ion-color-primary);
+        }
+
+        ion-label {
+          display: flex;
+          align-items: center;
+          font-size: 14px;
+          color: var(--ion-text-color);
+
+          input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+
+    // 提交按钮
+    .action-section {
+      padding-bottom: 16px;
+
+      .submit-btn {
+        --border-radius: 12px;
+        --padding-top: 16px;
+        --padding-bottom: 16px;
+        font-size: 16px;
+        font-weight: 600;
+        --box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.3);
+      }
+    }
+  }
+}
+
+.borrow-no-credit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+
+  ion-icon {
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    margin: 16px 0 8px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  ion-text {
+    p {
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+  }
+
+  ion-button {
+    margin-top: 12px;
+    --border-radius: 8px;
+  }
+}
