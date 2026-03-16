@@ -78,6 +78,11 @@ Phase 5: 上线准备 (2 周)       ░░░░░░░░░░ 0% ⏳
 | - 用户认证模块 | P0 | oh-my-opencode (visual-engineering) | 2026-03-16 | - |
 | - 借款流程开发 | P0 | oh-my-opencode (visual-engineering) | 2026-03-16 | - |
 | - 还款流程开发 | P0 | oh-my-opencode (visual-engineering) | 2026-03-16 | - |
+| **Android App 打包** | 2026-03-16 13:28 | **Subagent (待 spawn)** | 2026-03-17 | `session-lann-android-001` |
+| **用户进件流程** | 2026-03-16 13:28 | **Subagent (待 spawn)** | 2026-03-17 | `session-lann-credit-001` |
+| - 资料填写页面 | P0 | oh-my-opencode (visual-engineering) | 2026-03-17 | - |
+| - 信用评估逻辑 | P0 | oh-my-opencode (deep) | 2026-03-17 | - |
+| - 额度管理 API | P0 | oh-my-opencode (deep) | 2026-03-17 | - |
 | E2E 测试配置 | P0 | oh-my-opencode (tester) | 2026-03-17 | - |
 | 第三方服务集成 | P0 | oh-my-opencode (deep) | 待确认合作伙伴 | - |
 
