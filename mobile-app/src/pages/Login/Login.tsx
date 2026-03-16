@@ -117,6 +117,20 @@ const LoginPage: React.FC = () => {
     setLoading(false);
   };
 
+  const handleQuickVerify = () => {
+    // 快速跳转到 OTP 验证页面（用于测试）
+    if (!isValidPhone(phone)) {
+      presentToast({
+        message: t('login.invalidPhone'),
+        duration: 2000,
+        position: 'top',
+        color: 'danger',
+      });
+      return;
+    }
+    history.push(`/otp-verify?phone=${encodeURIComponent(phone)}`);
+  };
+
   return (
     <IonPage>
       <IonHeader translucent>

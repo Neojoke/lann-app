@@ -103,41 +103,8 @@ const BorrowPage: React.FC = () => {
       return;
     }
 
-    setLoading(true);
-    try {
-      const token = localStorage.getItem('auth_token');
-      if (!token) {
-        presentToast({
-          message: t('borrow.pleaseLogin'),
-          duration: 2000,
-          position: 'top',
-          color: 'danger',
-        });
-        history.push('/login');
-        return;
-      }
-
-      const response = await loanService.createLoan(token, amount, selectedDays);
-      
-      if (response.success) {
-        presentToast({
-          message: t('borrow.borrowSuccess'),
-          duration: 2000,
-          position: 'top',
-          color: 'success',
-        });
-        history.push('/home');
-      }
-    } catch (error) {
-      presentToast({
-        message: t('borrow.borrowFailed'),
-        duration: 2000,
-        position: 'top',
-        color: 'danger',
-      });
-    } finally {
-      setLoading(false);
-    }
+    // 跳转到确认页面
+    history.push(`/loan-confirm?amount=${amount}&days=${selectedDays}`);
   };
 
   if (checkingCredit) {

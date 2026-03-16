@@ -56,6 +56,9 @@ const App: React.FC = () => (
         <Route exact path="/register">
           <Register />
         </Route>
+        <Route exact path="/otp-verify">
+          <OTPVerify />
+        </Route>
         <Route exact path="/profile">
           <Profile />
         </Route>
@@ -74,6 +77,16 @@ const App: React.FC = () => (
         <Route exact path="/repay-schedule">
           <RepaySchedule />
         </Route>
+        <Route exact path="/">
+          <Redirect to="/home" />
+        </Route>
+      </IonRouterOutlet>
+    </IonReactRouter>
+  </IonApp>
+);
+
+export default App;
+oute>
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>

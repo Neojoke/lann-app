@@ -41,9 +41,23 @@
 ### 危险操作策略
 **confirm-risky** - 危险操作前必须确认
 
-### 模型策略
-- **Orchestrator:** bailian/qwen3.5-plus
-- **Subagents:** bailian/qwen3.5-plus (按任务类型自动选择)
+### 模型策略 (已更新 - v3.0)
+
+| 任务类型 | 模型 | 思考模式 | 说明 |
+|---------|------|---------|------|
+| **Orchestrator** | qwen3.5-plus | off | 项目协调、日志管理 |
+| **管理后台开发** | qwen3-coder-plus | on | 复杂业务组件 |
+| **后端 API 开发** | qwen3-coder-plus | on | TypeScript/Node.js |
+| **前端 App 开发** | qwen3-coder-plus | off | React/Ionic 组件 |
+| **业务设计** | glm-5 | on | 架构设计、需求分析 |
+| **测试生成** | qwen3-coder-next | off | 快速生成测试代码 |
+| **文档编写** | qwen3-coder-next | off | 文档生成 |
+| **快速任务** | qwen3-coder-next | off | 简单修复、问答 |
+
+**模型优势:**
+- qwen3-coder-plus: 代码质量最高，977k 上下文
+- qwen3-coder-next: 响应速度快，成本降低 50%
+- glm-5: 逻辑推理强，适合业务设计
 
 ### 完成标准
 - [ ] 用户可完成注册 + 登录

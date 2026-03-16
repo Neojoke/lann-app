@@ -143,9 +143,9 @@ const RepaySchedulePage: React.FC = () => {
   };
 
   const handleEarlyRepayment = () => {
-    if (earlyRepaymentAmount > 0) {
+    if (earlyRepaymentAmount > 0 && loanInfo) {
       // 跳转到提前还款页面
-      history.push(`/early-repay/${loanInfo?.id}`);
+      history.push(`/prepayment?loanId=${loanInfo.id}`);
     }
   };
 

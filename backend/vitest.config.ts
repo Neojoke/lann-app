@@ -4,7 +4,8 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['tests/credit.test.ts'],
+    include: ['tests/**/*.test.ts'],
+    exclude: ['tests/loan.test.ts', 'tests/repay.test.ts'],  // 排除旧的 bun 测试
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
