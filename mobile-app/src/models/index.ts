@@ -32,6 +32,23 @@ export interface CreditInfo {
   available: number;
 }
 
+// 导出通用 API 响应类型
+export interface ApiResponse<T> {
+  /** 是否成功 */
+  success: boolean;
+  /** 数据 */
+  data?: T;
+  /** 错误信息 */
+  error?: {
+    /** 错误码 */
+    code: string;
+    /** 错误消息（英文） */
+    message: string;
+    /** 错误消息（泰文） */
+    message_th?: string;
+  };
+}
+
 // 导出信用服务完整类型
 export * from './credit';
 

@@ -1,0 +1,105 @@
+{
+  "products": [
+    {
+      "id": "payday",
+      "name": {
+        "en": "Payday Loan",
+        "th": "เงินด่วน"
+      },
+      "type": "payday",
+      "description": {
+        "en": "Short-term loan for immediate cash needs",
+        "th": "เงินกู้ระยะสั้นสำหรับความต้องการเงินสดทันที"
+      },
+      "minAmount": 1000,
+      "maxAmount": 50000,
+      "terms": [
+        {
+          "days": 7,
+          "label": { "en": "7 Days", "th": "7 วัน" },
+          "minAmount": 1000,
+          "maxAmount": 10000,
+          "repaymentType": "bullet"
+        },
+        {
+          "days": 14,
+          "label": { "en": "14 Days", "th": "14 วัน" },
+          "minAmount": 1000,
+          "maxAmount": 20000,
+          "repaymentType": "bullet"
+        },
+        {
+          "days": 30,
+          "label": { "en": "30 Days", "th": "30 วัน" },
+          "minAmount": 5000,
+          "maxAmount": 50000,
+          "repaymentType": "bullet"
+        }
+      ],
+      "interestRate": {
+        "type": "daily",
+        "rate": 0.01,
+        "calculationMethod": "flat"
+      },
+      "fees": [
+        {
+          "type": "late",
+          "percentage": 0.005,
+          "minAmount": 50
+        }
+      ],
+      "repaymentMethods": ["bank_transfer", "promptpay"],
+      "status": "active",
+      "targetSegment": "regular"
+    },
+    {
+      "id": "installment",
+      "name": {
+        "en": "Installment Loan",
+        "th": "เงินผ่อน"
+      },
+      "type": "installment",
+      "description": {
+        "en": "Long-term loan with monthly installments",
+        "th": "เงินกู้ระยะยาวพร้อมการชำระเงินรายเดือน"
+      },
+      "minAmount": 5000,
+      "maxAmount": 100000,
+      "terms": [
+        {
+          "days": 90,
+          "label": { "en": "3 Months", "th": "3 เดือน" },
+          "minAmount": 5000,
+          "maxAmount": 30000,
+          "repaymentType": "installment"
+        },
+        {
+          "days": 180,
+          "label": { "en": "6 Months", "th": "6 เดือน" },
+          "minAmount": 10000,
+          "maxAmount": 60000,
+          "repaymentType": "installment"
+        }
+      ],
+      "interestRate": {
+        "type": "monthly",
+        "rate": 0.02,
+        "calculationMethod": "reducing"
+      },
+      "fees": [
+        {
+          "type": "processing",
+          "percentage": 0.02,
+          "maxAmount": 1000
+        },
+        {
+          "type": "late",
+          "percentage": 0.005
+        }
+      ],
+      "repaymentMethods": ["bank_transfer", "promptpay"],
+      "status": "active",
+      "targetSegment": "regular"
+    }
+  ]
+}

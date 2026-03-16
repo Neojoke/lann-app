@@ -1,0 +1,52 @@
+{
+  "users": [
+    {
+      "id": "test_user_001",
+      "phone": "0812345678",
+      "nationality": "TH",
+      "dateOfBirth": "1990-01-15",
+      "email": "test.user@example.com",
+      "employment": {
+        "company": "Test Company Ltd.",
+        "position": "Software Engineer",
+        "type": "employee",
+        "monthlyIncome": 50000,
+        "employmentYears": 5
+      },
+      "creditScore": 750,
+      "creditGrade": "A+"
+    },
+    {
+      "id": "test_user_002",
+      "phone": "0823456789",
+      "nationality": "TH",
+      "dateOfBirth": "1985-06-20",
+      "email": "john.doe@example.com",
+      "employment": {
+        "company": "Bangkok Tech",
+        "position": "Manager",
+        "type": "employee",
+        "monthlyIncome": 80000,
+        "employmentYears": 8
+      },
+      "creditScore": 800,
+      "creditGrade": "A+"
+    },
+    {
+      "id": "test_user_003",
+      "phone": "0834567890",
+      "nationality": "Other",
+      "dateOfBirth": "1995-03-10",
+      "email": "jane.smith@example.com",
+      "employment": {
+        "company": "Freelance",
+        "position": "Consultant",
+        "type": "self_employed",
+        "monthlyIncome": 40000,
+        "employmentYears": 3
+      },
+      "creditScore": 650,
+      "creditGrade": "A"
+    }
+  ]
+}

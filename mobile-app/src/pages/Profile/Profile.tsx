@@ -35,7 +35,7 @@ import {
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { UserService, UserProfile } from '../../services/user.service';
-import LanguageSwitcher from '../../components/LanguageSwitcher';
+import LanguageSelector from '../../components/LanguageSelector';
 import './Profile.scss';
 
 const Profile: React.FC = () => {
@@ -427,7 +427,7 @@ const Profile: React.FC = () => {
           <IonTitle>{steps[currentStep].title}</IonTitle>
           {currentStep === 0 && (
             <IonButtons slot="end">
-              <LanguageSwitcher />
+              <LanguageSelector />
             </IonButtons>
           )}
         </IonToolbar>

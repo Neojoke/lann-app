@@ -271,7 +271,7 @@ const resources = {
       'go_to_profile': 'ไปยังโปรไฟล์',
       'approved': 'อนุมัติแล้ว',
       'pending': 'รอการอนุมัติ',
-      'rejected': 'ไม่อนุมัติ',
+      'rejected': '不อนุมัติ',
       'total_limit': 'วงเงินรวม',
       'used_limit': 'วงเงินที่ใช้ไป',
       'credit_limit': 'วงเงินเครดิต',
@@ -374,12 +374,22 @@ const resources = {
   },
 };
 
+// 获取保存的语言偏好
+const getSavedLanguage = (): string => {
+  const saved = localStorage.getItem('preferred_language');
+  if (saved && (saved === 'en' || saved === 'th')) {
+    return saved;
+  }
+  // 默认使用泰语
+  return 'th';
+};
+
 // 初始化 i18n
 i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: 'th', // 默认语言为泰语
+    lng: getSavedLanguage(), // 默认语言为泰语
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false, // React 已经处理了 XSS 防护
@@ -388,5 +398,16 @@ i18n
       useSuspense: false,
     },
   });
+
+// 保存语言偏好
+export const saveLanguagePreference = (lng: string) => {
+  localStorage.setItem('preferred_language', lng);
+  i18n.changeLanguage(lng);
+};
+
+// 获取当前语言
+export const getCurrentLanguage = (): string => {
+  return i18n.language;
+};
 
 export default i18n;

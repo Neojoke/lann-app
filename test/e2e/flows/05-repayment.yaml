@@ -1,0 +1,44 @@
+# Lann App - 还款流程 E2E 测试
+# 测试还款完整流程
+
+appId: com.lann.thailand
+env:
+  REPAY_AMOUNT: "5000"
+
+---
+- launchApp
+- tapOn: "Login"
+
+# 登录
+- inputText: "0812345678"
+- tapOn: "Next"
+- inputText: "TestPassword123!"
+- tapOn: "Login"
+
+# 进入还款页面
+- tapOn: "Repay"
+- assertVisible: "Outstanding Loan"
+
+# 查看还款计划
+- assertVisible: "Due Date"
+- assertVisible: "Amount Due"
+
+# 选择还款金额
+- tapOn: "Repay"
+- inputText: "${REPAY_AMOUNT}"
+
+# 选择还款方式
+- tapOn: "PromptPay"
+
+# 确认还款
+- tapOn: "Confirm Payment"
+
+# 处理支付
+- assertVisible: "Processing Payment"
+
+# 验证还款成功
+- assertVisible: "Payment Successful"
+- assertVisible: "Receipt"
+
+# 查看更新后的余额
+- assertVisible: "Remaining Balance"

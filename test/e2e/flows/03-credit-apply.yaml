@@ -1,0 +1,55 @@
+# Lann App - 信用申请流程 E2E 测试
+# 测试信用申请完整流程
+
+appId: com.lann.thailand
+env:
+  INCOME: "50000"
+  EMPLOYER: "Test Company"
+  POSITION: "Software Developer"
+  EMPLOYMENT_YEARS: "3"
+
+---
+- launchApp
+- tapOn: "Login"
+
+# 登录
+- inputText: "0812345678"
+- tapOn: "Next"
+- inputText: "TestPassword123!"
+- tapOn: "Login"
+
+# 进入信用申请页面
+- tapOn: "Apply Credit"
+- assertVisible: "Credit Application"
+
+# 填写就业信息
+- scroll
+- inputText: "${INCOME}"
+- inputText: "${EMPLOYER}"
+- inputText: "${POSITION}"
+- inputText: "${EMPLOYMENT_YEARS}"
+
+# 填写联系信息
+- scroll
+- inputText: "test@example.com"
+- tapOn: "Email Verified"
+
+# 填写紧急联系人
+- scroll
+- inputText: "John Doe"
+- inputText: "0823456789"
+- tapOn: "Relationship"
+- tapOn: "Spouse"
+
+# 提交申请
+- scroll
+- tapOn: "Terms and Conditions"
+- tapOn: "Submit Application"
+
+# 等待审批
+- assertVisible: "Application Submitted"
+- assertVisible: "Application ID"
+
+# 验证申请状态
+- tapOn: "Check Status"
+- assertVisible: "Pending Review"

@@ -13,7 +13,9 @@ export { ApiService } from './api.service';
 export { AuthService } from './auth.service';
 
 // 业务服务（React 版本，单例模式）
-export { CreditService, creditService, type CreditScoreData, type CreditScoreResult } from './credit.service';
+export { CreditService, creditService } from './credit.service';
+export type { CreditScoreData, CreditScoreResult } from './credit.service';
+
 export { LoanService, loanService } from './loan.service';
 export { RepayService, repayService } from './repay.service';
 export { UserService } from './user.service';

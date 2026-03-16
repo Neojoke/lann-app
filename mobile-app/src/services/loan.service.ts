@@ -1,16 +1,15 @@
 import { ApiClient } from './api.client';
-import {
+import type {
   ApplyLoanRequest,
   ApplyLoanResponse,
   ConfirmLoanRequest,
   LoanStatusResponse,
   LoanDetailsResponse,
   GetProductsResponse,
-  ApiResponse,
-  LoanProduct,
   LoanStatus,
   LoanProductType,
 } from '../models/loan';
+import type { ApiResponse } from '../models';
 
 /**
  * 借款服务

@@ -1,0 +1,112 @@
+# Maestro E2E 测试配置
+# https://maestro.mobile.dev/
+
+# 全局配置
+flows:
+  # 测试流程目录
+  - test/e2e/flows/*.yaml
+
+# 设备配置
+device:
+  # 设备类型
+  type: android
+  # 或 iOS
+  # type: ios
+  
+# 应用配置
+app:
+  # Android
+  android:
+    package: com.lann.thailand
+    # 或使用本地 APK
+    # apk: ./mobile-app/android/app/build/outputs/apk/release/app-release.apk
+  
+  # iOS
+  ios:
+    bundleId: com.lann.thailand
+    # 或使用本地 IPA
+    # ipa: ./mobile-app/ios/build/Lann.app
+
+# 测试配置
+config:
+  # 超时设置 (毫秒)
+  timeout: 30000
+  
+  # 重试次数
+  retryCount: 2
+  
+  # 重试延迟 (毫秒)
+  retryDelay: 1000
+  
+  # 截图配置
+  screenshots:
+    # 失败时截图
+    onFailure: true
+    # 每个步骤后截图
+    onEachStep: false
+    # 截图目录
+    outputDir: test/e2e/reports/screenshots
+  
+  # 视频录制
+  video:
+    enabled: true
+    outputDir: test/e2e/reports/videos
+  
+  # 日志
+  logging:
+    level: debug
+    outputDir: test/e2e/reports/logs
+
+# 环境变量
+env:
+  # API 基础 URL
+  API_BASE_URL: "http://localhost:8787"
+  
+  # 测试用户凭据
+  TEST_USER_PHONE: "0812345678"
+  TEST_USER_PASSWORD: "TestPassword123!"
+  
+  # 管理员凭据
+  ADMIN_USERNAME: "admin"
+  ADMIN_PASSWORD: "AdminPassword123!"
+
+# 报告配置
+reporting:
+  # 报告格式
+  formats:
+    - html
+    - json
+    - junit
+  
+  # 报告输出目录
+  outputDir: test/e2e/reports
+  
+  # 报告标题
+  title: "Lann E2E Test Report"
+
+# 并行执行
+parallel:
+  enabled: false
+  # 最大并发数
+  maxWorkers: 3
+
+# 网络配置
+network:
+  # 网络条件模拟
+  throttling:
+    enabled: false
+    # 网络类型: 4g, 3g, 2g, slow-3g
+    type: 4g
+  
+  # 离线模式
+  offline: false
+
+# 权限配置
+permissions:
+  # 自动授予权限
+  autoGrant: true
+  # 需要授予的权限
+  list:
+    - camera
+    - notifications
+    - location

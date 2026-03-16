@@ -1,0 +1,76 @@
+{
+  "name": "lann-thailand-loan-app",
+  "version": "1.0.0",
+  "description": "Lann Thailand Loan Application - Complete Testing Suite",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "mobile-app"
+  ],
+  "scripts": {
+    "test": "npm run test:all",
+    "test:all": "npm run test:backend && npm run test:frontend && npm run test:api && npm run test:database",
+    "test:backend": "cd backend && npm test",
+    "test:backend:watch": "cd backend && npm run test:watch",
+    "test:backend:coverage": "cd backend && npm run test:coverage",
+    "test:frontend": "cd test && npx vitest run --config vitest.config.ts",
+    "test:frontend:watch": "cd test && npx vitest --config vitest.config.ts",
+    "test:frontend:coverage": "cd test && npx vitest run --config vitest.config.ts --coverage",
+    "test:api": "npx jest --config test/jest.config.js --testPathPattern='test/api'",
+    "test:api:coverage": "npx jest --config test/jest.config.js --testPathPattern='test/api' --coverage",
+    "test:database": "npx jest --config test/jest.config.js --testPathPattern='test/database-logic'",
+    "test:database:coverage": "npx jest --config test/jest.config.js --testPathPattern='test/database-logic' --coverage",
+    "test:e2e": "maestro test test/e2e/flows/ --config test/maestro/config.yaml",
+    "test:e2e:android": "maestro test test/e2e/flows/ --device android",
+    "test:e2e:ios": "maestro test test/e2e/flows/ --device ios",
+    "test:unit": "npm run test:backend && npm run test:frontend",
+    "test:integration": "npm run test:api",
+    "test:coverage": "npm run test:backend:coverage && npm run test:frontend:coverage",
+    "test:report": "npm run test:all && open test/reports/frontend/index.html && open test/reports/backend/index.html",
+    "test:ci": "CI=true npm run test:all -- --reporters=jest-junit --coverage",
+    "test:clean": "rm -rf test/reports && rm -rf node_modules/.cache",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "typecheck": "tsc --noEmit -p backend/tsconfig.json && tsc --noEmit -p mobile-app/tsconfig.json"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/react": "^14.0.0",
+    "@types/jest": "^29.0.0",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "@vitest/coverage-v8": "^2.0.0",
+    "eslint": "^8.0.0",
+    "eslint-plugin-react": "^7.0.0",
+    "eslint-plugin-react-hooks": "^4.0.0",
+    "jest": "^29.0.0",
+    "jest-html-reporter": "^3.10.0",
+    "jest-junit": "^16.0.0",
+    "jsdom": "^22.0.0",
+    "ts-jest": "^29.0.0",
+    "typescript": "^5.0.0",
+    "vite": "^5.0.0",
+    "vitest": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lann-thailand/loan-app.git"
+  },
+  "keywords": [
+    "loan",
+    "thailand",
+    "fintech",
+    "credit",
+    "mobile"
+  ],
+  "author": "Lann Team",
+  "license": "MIT"
+}

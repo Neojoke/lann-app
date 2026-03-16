@@ -1,0 +1,36 @@
+# Lann App - 用户登录流程 E2E 测试
+# 测试用户登录完整流程
+
+appId: com.lann.thailand
+env:
+  PHONE_NUMBER: "0812345678"
+  PASSWORD: "TestPassword123!"
+
+---
+- launchApp
+- assertVisible: "Welcome"
+
+# 点击登录按钮
+- tapOn: "Login"
+- assertVisible: "Phone Number"
+
+# 输入手机号
+- inputText: "${PHONE_NUMBER}"
+- tapOn: "Next"
+
+# 输入密码
+- assertVisible: "Password"
+- inputText: "${PASSWORD}"
+
+# 点击登录
+- tapOn: "Login"
+
+# 验证登录成功
+- assertVisible: "Credit Status"
+- assertVisible: "Available Limit"
+
+# 验证导航栏
+- assertVisible: "Home"
+- assertVisible: "Credit"
+- assertVisible: "Loan"
+- assertVisible: "Profile"

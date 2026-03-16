@@ -1,0 +1,60 @@
+# Lann App - 后台审核流程 E2E 测试
+# 测试管理员审核信用和借款申请
+
+appId: com.lann.thailand.admin
+env:
+  ADMIN_USERNAME: "admin"
+  ADMIN_PASSWORD: "AdminPassword123!"
+
+---
+- launchApp
+- assertVisible: "Admin Portal"
+
+# 管理员登录
+- inputText: "${ADMIN_USERNAME}"
+- tapOn: "Next"
+- inputText: "${ADMIN_PASSWORD}"
+- tapOn: "Login"
+
+# 进入待审核列表
+- tapOn: "Pending Reviews"
+- assertVisible: "Credit Applications"
+- assertVisible: "Loan Applications"
+
+# 审核信用申请
+- tapOn: "Credit Applications"
+- tapOn: "Application #1"
+- assertVisible: "Applicant Details"
+- assertVisible: "Credit Score"
+
+# 查看申请人信息
+- scroll
+- assertVisible: "Income"
+- assertVisible: "Employment"
+
+# 批准申请
+- tapOn: "Approve"
+- inputText: "Good credit history"
+- tapOn: "Confirm Approval"
+
+# 验证批准成功
+- assertVisible: "Approved"
+- assertVisible: "Credit Limit Granted"
+
+# 审核借款申请
+- tapOn: "Back"
+- tapOn: "Loan Applications"
+- tapOn: "Application #1"
+
+# 查看借款详情
+- assertVisible: "Loan Amount"
+- assertVisible: "Term"
+- assertVisible: "Purpose"
+
+# 批准借款
+- tapOn: "Approve"
+- tapOn: "Confirm"
+
+# 验证批准成功
+- assertVisible: "Loan Approved"
+- assertVisible: "Disbursement Scheduled"

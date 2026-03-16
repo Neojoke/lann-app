@@ -1,0 +1,44 @@
+{
+  "loans": [
+    {
+      "id": "test_loan_001",
+      "userId": "test_user_001",
+      "productId": "payday",
+      "principal": 10000,
+      "interestRate": 0.01,
+      "termDays": 14,
+      "totalRepayment": 11400,
+      "remainingAmount": 11400,
+      "status": "active",
+      "disbursedAt": "2026-03-01",
+      "dueDate": "2026-03-15"
+    },
+    {
+      "id": "test_loan_002",
+      "userId": "test_user_002",
+      "productId": "installment",
+      "principal": 50000,
+      "interestRate": 0.02,
+      "termDays": 90,
+      "totalRepayment": 53000,
+      "remainingAmount": 35000,
+      "status": "active",
+      "disbursedAt": "2026-01-15",
+      "dueDate": "2026-04-15"
+    },
+    {
+      "id": "test_loan_003",
+      "userId": "test_user_001",
+      "productId": "payday",
+      "principal": 5000,
+      "interestRate": 0.01,
+      "termDays": 7,
+      "totalRepayment": 5350,
+      "remainingAmount": 0,
+      "status": "completed",
+      "disbursedAt": "2026-02-01",
+      "dueDate": "2026-02-08",
+      "completedAt": "2026-02-07"
+    }
+  ]
+}
