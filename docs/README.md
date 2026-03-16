@@ -10,9 +10,9 @@
 
 | 类别 | 链接 | 文档数 |
 |------|------|--------|
-| 📖 需求文档 | [01-requirements](#01-requirements-需求文档) | 2 |
+| 📖 需求文档 | [01-requirements](#01-requirements-需求文档) | 3 |
 | 🏗️ 设计文档 | [02-design](#02-design-设计文档) | 1 |
-| 💻 实现文档 | [03-implementation](#03-implementation-实现文档) | 4 |
+| 💻 实现文档 | [03-implementation](#03-implementation-实现文档) | 5 |
 | 🧪 测试文档 | [04-testing](#04-testing-测试文档) | 0 |
 | 🔧 运维文档 | [05-operations](#05-operations-运维文档) | 2 + 归档 |
 
@@ -24,15 +24,17 @@
 docs/
 ├── README.md                    # 📍 本文档 - 文档索引
 ├── 01-requirements/             # 📖 需求文档
+│   ├── admin-portal.md          # 后台管理系统需求
 │   ├── business-model.md        # 业务模型设计
 │   └── credit-flow.md           # 用户进件流程设计
 ├── 02-design/                   # 🏗️ 设计文档
 │   └── schema-spec.md           # Schema 规范
 ├── 03-implementation/           # 💻 实现文档
 │   ├── credit-api.md            # 信用服务 API
+│   ├── frontend.md              # 前端实现报告
 │   ├── loan-api.md              # 借款服务 API
-│   ├── repayment-api.md         # 还款服务 API
-│   └── frontend.md              # 前端实现报告
+│   ├── loan-implementation.md   # 借款 API 实施报告
+│   └── repayment-api.md         # 还款服务 API
 ├── 04-testing/                  # 🧪 测试文档 (待补充)
 └── 05-operations/               # 🔧 运维文档
     ├── android-build.md         # Android 打包指南
@@ -54,6 +56,14 @@ docs/
 - **相关文档:** 
   - [Schema 规范](02-design/schema-spec.md) - 数据模型定义
   - [信用 API](03-implementation/credit-api.md) - 实现参考
+
+### admin-portal.md
+**后台管理系统需求** - [查看文档](01-requirements/admin-portal.md)
+
+- **版本:** v1.0
+- **状态:** 🟡 待开发
+- **内容:** 后台管理门户功能需求
+- **相关文档:** 待补充
 
 ### credit-flow.md
 **用户进件流程设计** - [查看文档](01-requirements/credit-flow.md)
@@ -106,6 +116,16 @@ docs/
   - [业务模型](01-requirements/business-model.md) - 需求来源
   - [Schema 规范](02-design/schema-spec.md) - 数据模型
   - [还款 API](03-implementation/repayment-api.md) - 后续流程
+
+### loan-implementation.md
+**借款 API 实施报告** - [查看文档](03-implementation/loan-implementation.md)
+
+- **版本:** v1.0
+- **状态:** ✅ 已完成
+- **内容:** 借款产品服务、借款申请服务、合同服务实现详情
+- **相关文档:**
+  - [借款 API](./loan-api.md) - API 文档
+  - [业务模型](01-requirements/business-model.md) - 需求来源
 
 ### repayment-api.md
 **还款服务 API** - [查看文档](03-implementation/repayment-api.md)
@@ -176,6 +196,7 @@ docs/
 | [业务模型](01-requirements/business-model.md) | [Schema 规范](02-design/schema-spec.md) | [借款 API](03-implementation/loan-api.md) | ✅ |
 | [业务模型](01-requirements/business-model.md) | [Schema 规范](02-design/schema-spec.md) | [还款 API](03-implementation/repayment-api.md) | ✅ |
 | [用户进件流程](01-requirements/credit-flow.md) | - | [前端实现](03-implementation/frontend.md) | ✅ |
+| [后台管理](01-requirements/admin-portal.md) | - | - | 🟡 待开发 |
 | - | - | [Android 打包](05-operations/android-build.md) | 🟡 |
 
 ---
