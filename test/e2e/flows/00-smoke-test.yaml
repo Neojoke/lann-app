@@ -1,0 +1,9 @@
+# Lann App - 冒烟测试
+# 验证应用可以启动并显示主页面
+
+appId: com.lann.app
+env: {}
+
+---
+- launchApp
+- takeScreenshot: "smoke-test-completed.png"

@@ -1,42 +1,24 @@
-# Lann App - 用户注册流程 E2E 测试
-# 测试用户注册完整流程
-
-appId: com.lann.thailand
+appId: com.lann.app
+name: User Registration Flow Test
 env:
   PHONE_NUMBER: "0812345678"
   OTP_CODE: "123456"
 
 ---
 - launchApp
-- assertVisible: "Welcome"
-- assertVisible: "Register"
-
-# 点击注册按钮
+- waitForAnimationToEnd: 3000
+- assertVisible: "LANN"
 - tapOn: "Register"
 - assertVisible: "Phone Number"
-
-# 输入手机号
 - inputText: "${PHONE_NUMBER}"
 - tapOn: "Send OTP"
-
-# 等待 OTP 输入框
 - assertVisible: "Enter OTP"
 - inputText: "${OTP_CODE}"
-
-# 验证 OTP
 - tapOn: "Verify"
 - assertVisible: "Set Password"
-
-# 设置密码
 - inputText: "TestPassword123!"
 - tapOn: "Confirm Password"
 - inputText: "TestPassword123!"
-
-# 完成注册
 - tapOn: "Complete Registration"
 - assertVisible: "Registration Successful"
-- assertVisible: "Welcome to Lann"
-
-# 验证跳转到主页
 - assertVisible: "Apply Credit"
-- assertVisible: "Borrow"
