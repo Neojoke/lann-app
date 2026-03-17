@@ -62,17 +62,23 @@ if [ -n "$VIDEO_OUTPUT" ] && [ -f "$VIDEO_OUTPUT" ]; then
     # 上传到飞书云盘
     echo "☁️ 上传到飞书云盘..."
     
-    # 使用飞书 CLI 或 API 上传
+    # 使用飞书 CLI 上传
     if command -v feishu &> /dev/null; then
+        echo "📤 使用飞书 CLI 上传视频..."
+        
+        # 创建测试文件夹 (如果不存在)
+        feishu drive mkdir -p "/Lann E2E Tests/$TIMESTAMP" 2>/dev/null || true
+        
+        # 上传视频文件
         UPLOAD_RESULT=$(feishu drive upload \
             --file "$VIDEO_OUTPUT" \
-            --parent-folder "$UPLOAD_DIR" \
-            --description "E2E Test: $TEST_NAME | Status: $TEST_STATUS | Date: $TIMESTAMP")
+            --parent "/Lann E2E Tests/$TIMESTAMP" \
+            --description "E2E Test: $TEST_NAME | Status: $TEST_STATUS | Date: $TIMESTAMP" 2>&1)
         
         echo "上传结果：$UPLOAD_RESULT"
         
         # 提取文件链接
-        FILE_LINK=$(echo "$UPLOAD_RESULT" | grep -o 'https://[^"]*')
+        FILE_LINK=$(echo "$UPLOAD_RESULT" | grep -o 'https://[^"]*' | head -1)
         
         # 更新报告
         echo "" >> "$REPORT_FILE"
@@ -85,6 +91,19 @@ if [ -n "$VIDEO_OUTPUT" ] && [ -f "$VIDEO_OUTPUT" ]; then
         echo ""
         echo "📤 上传成功！"
         echo "视频链接：$FILE_LINK"
+        
+        # 发送到飞书群
+        echo ""
+        echo "💬 发送到飞书群..."
+        feishu send \
+            --target "chat:oc_89f64fce7bd05bd178a259ae0e9a7162" \
+            --message "🎬 E2E 测试完成
+
+测试名称：$TEST_NAME
+测试状态：$TEST_STATUS
+执行时间：$TIMESTAMP
+
+📹 视频：$FILE_LINK" 2>&1 || echo "消息发送失败"
     else
         echo "⚠️  飞书 CLI 未安装，使用备用方案..."
         

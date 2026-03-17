@@ -1,0 +1,8 @@
+appId: com.lann.app
+name: Simple Register Test
+
+---
+- launchApp
+- waitForAnimationToEnd: 3000
+- tapOn: "Register"
+- assertVisible: "Phone Number"
