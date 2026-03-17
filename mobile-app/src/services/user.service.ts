@@ -48,7 +48,8 @@ export interface CreditStatusResponse {
 
 const API_BASE_URL = 'http://localhost:8787';
 
-@Injectable({
+// Ionic React 不使用 Injectable 装饰器
+export class UserService {
   providedIn: 'root',
 })
 export class UserService {

@@ -1,4 +1,5 @@
-import { Injectable } from '@ionic/react';
+// Ionic React 不使用 Injectable 装饰器
+// 使用普通 TypeScript 类 + 单例模式
 
 export interface LoginRequest {
   phone: string;
@@ -33,13 +34,19 @@ export interface SendOtpResponse {
 
 const API_BASE_URL = 'http://localhost:8787';
 
-@Injectable({
-  providedIn: 'root',
-})
+// Ionic React 单例模式
 export class AuthService {
+  private static instance: AuthService;
   private token: string | null = null;
 
-  constructor() {}
+  private constructor() {}
+
+  public static getInstance(): AuthService {
+    if (!AuthService.instance) {
+      AuthService.instance = new AuthService();
+    }
+    return AuthService.instance;
+  }
 
   async sendOtp(phone: string): Promise<SendOtpResponse> {
     const response = await fetch(`${API_BASE_URL}/api/auth/send-otp`, {
@@ -51,10 +58,10 @@ export class AuthService {
     });
 
     if (!response.ok) {
-      throw new Error('发送 OTP 失败');
+      throw new Error('Failed to send OTP');
     }
 
-    return await response.json();
+    return response.json();
   }
 
   async verifyOtp(phone: string, otp: string): Promise<AuthResponse> {
@@ -67,60 +74,41 @@ export class AuthService {
     });
 
     if (!response.ok) {
-      throw new Error('验证 OTP 失败');
+      throw new Error('Failed to verify OTP');
     }
 
     const data = await response.json();
-    
     if (data.token) {
       this.token = data.token;
-      localStorage.setItem('auth_token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
     }
-
     return data;
   }
 
-  async logout(): Promise<void> {
-    this.token = null;
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user');
+  async login(phone: string, password: string): Promise<AuthResponse> {
+    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ phone, password }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Login failed');
+    }
+
+    const data = await response.json();
+    if (data.token) {
+      this.token = data.token;
+    }
+    return data;
   }
 
   getToken(): string | null {
-    return this.token || localStorage.getItem('auth_token');
+    return this.token;
   }
 
   isAuthenticated(): boolean {
-    return !!this.getToken();
-  }
-
-  async getCurrentUser(): Promise<any> {
-    const userStr = localStorage.getItem('user');
-    if (userStr) {
-      return JSON.parse(userStr);
-    }
-
-    const token = this.getToken();
-    if (!token) {
-      return null;
-    }
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        return null;
-      }
-
-      const data = await response.json();
-      return data.user;
-    } catch (error) {
-      return null;
-    }
+    return !!this.token;
   }
 }
