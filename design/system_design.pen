@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://www.evolus.vn/Namespace/Pencil" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" name="Sook Lending Platform - Design System" id="0" rev="1">
+  <properties>
+    <property name="width">1440</property>
+    <property name="height">900</property>
+    <property name="dimensionConstraint"></property>
+    <property name="background">#F8F9FC</property>
+    <property name="shadowVisible">false</property>
+    <property name="pageShadowVisible">true</property>
+  </properties>
+
+  <!-- 设计系统封面 -->
+  <Page id="cover" name="0. Design System Cover">
+    <content>
+      <svg:svg>
+        <svg:g>
+          <!-- 标题 -->
+          <svg:text x="720" y="100" text-anchor="middle" font-family="Inter, Noto Sans Thai" font-size="32" font-weight="700" fill="#1A1C1E">Sook Lending Platform</svg:text>
+          <svg:text x="720" y="140" text-anchor="middle" font-family="Inter" font-size="16" fill="#6C727A">Design System v2026.Q1</svg:text>
+          
+          <!-- Bento 卡片示例 -->
+          <svg:rect x="420" y="200" width="600" height="400" rx="24" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+          <svg:text x="720" y="250" text-anchor="middle" font-family="Inter" font-size="20" font-weight="600" fill="#1A1C1E">Design Principles</svg:text>
+          
+          <!-- 设计原则列表 -->
+          <svg:rect x="460" y="290" width="520" height="60" rx="16" fill="#F5F3FF"/>
+          <svg:text x="490" y="325" font-family="Inter" font-size="14" fill="#8B5CF6">✓ Bento-Style Architecture</svg:text>
+          
+          <svg:rect x="460" y="360" width="520" height="60" rx="16" fill="#FFF7ED"/>
+          <svg:text x="490" y="395" font-family="Inter" font-size="14" fill="#F97316">✓ Trustworthy &amp; Fluid</svg:text>
+          
+          <svg:rect x="460" y="430" width="520" height="60" rx="16" fill="#ECFDF5"/>
+          <svg:text x="490" y="465" font-family="Inter" font-size="14" fill="#10B981">✓ WCAG 2.1 AA Compliant</svg:text>
+        </svg:g>
+      </svg:svg>
+    </content>
+  </Page>
+
+  <!-- 颜色系统 -->
+  <Page id="colors" name="1. Color System">
+    <content>
+      <svg:svg>
+        <svg:g>
+          <svg:text x="100" y="50" font-family="Inter" font-size="24" font-weight="700" fill="#1A1C1E">Color Palette</svg:text>
+          
+          <!-- Primary Colors -->
+          <svg:text x="100" y="100" font-family="Inter" font-size="16" font-weight="600" fill="#1A1C1E">Primary (Brand Purple)</svg:text>
+          <svg:rect x="100" y="120" width="100" height="60" rx="12" fill="#F5F3FF" stroke="#EDE9FE"/>
+          <svg:text x="150" y="155" text-anchor="middle" font-family="Inter" font-size="12" fill="#8B5CF6">50</svg:text>
+          
+          <svg:rect x="210" y="120" width="100" height="60" rx="12" fill="#EDE9FE" stroke="#C4B5FD"/>
+          <svg:text x="260" y="155" text-anchor="middle" font-family="Inter" font-size="12" fill="#7C3AED">100</svg:text>
+          
+          <svg:rect x="320" y="120" width="100" height="60" rx="12" fill="#8B5CF6"/>
+          <svg:text x="370" y="155" text-anchor="middle" font-family="Inter" font-size="12" fill="#FFFFFF" font-weight="600">500</svg:text>
+          
+          <svg:rect x="430" y="120" width="100" height="60" rx="12" fill="#7C3AED"/>
+          <svg:text x="480" y="155" text-anchor="middle" font-family="Inter" font-size="12" fill="#FFFFFF" font-weight="600">600</svg:text>
+          
+          <svg:rect x="540" y="120" width="100" height="60" rx="12" fill="#6D28D9"/>
+          <svg:text x="590" y="155" text-anchor="middle" font-family="Inter" font-size="12" fill="#FFFFFF" font-weight="600">700</svg:text>
+          
+          <!-- Secondary Colors -->
+          <svg:text x="100" y="220" font-family="Inter" font-size="16" font-weight="600" fill="#1A1C1E">Secondary (Action Orange)</svg:text>
+          <svg:rect x="100" y="240" width="100" height="60" rx="12" fill="#FFF7ED" stroke="#FFEDD5"/>
+          <svg:text x="150" y="275" text-anchor="middle" font-family="Inter" font-size="12" fill="#F97316">50</svg:text>
+          
+          <svg:rect x="210" y="240" width="100" height="60" rx="12" fill="#FFEDD5" stroke="#FDBA74"/>
+          <svg:text x="260" y="275" text-anchor="middle" font-family="Inter" font-size="12" fill="#EA580C">100</svg:text>
+          
+          <svg:rect x="320" y="240" width="100" height="60" rx="12" fill="#F97316"/>
+          <svg:text x="370" y="275" text-anchor="middle" font-family="Inter" font-size="12" fill="#FFFFFF" font-weight="600">500</svg:text>
+          
+          <svg:rect x="430" y="240" width="100" height="60" rx="12" fill="#EA580C"/>
+          <svg:text x="480" y="275" text-anchor="middle" font-family="Inter" font-size="12" fill="#FFFFFF" font-weight="600">600</svg:text>
+          
+          <!-- Semantic Colors -->
+          <svg:text x="100" y="340" font-family="Inter" font-size="16" font-weight="600" fill="#1A1C1E">Semantic Colors</svg:text>
+          <svg:rect x="100" y="360" width="120" height="60" rx="12" fill="#ECFDF5"/>
+          <svg:text x="160" y="395" text-anchor="middle" font-family="Inter" font-size="12" fill="#10B981" font-weight="600">Success</svg:text>
+          
+          <svg:rect x="230" y="360" width="120" height="60" rx="12" fill="#FEF2F2"/>
+          <svg:text x="290" y="395" text-anchor="middle" font-family="Inter" font-size="12" fill="#EF4444" font-weight="600">Error</svg:text>
+          
+          <svg:rect x="360" y="360" width="120" height="60" rx="12" fill="#FFFBEB"/>
+          <svg:text x="420" y="395" text-anchor="middle" font-family="Inter" font-size="12" fill="#F59E0B" font-weight="600">Warning</svg:text>
+        </svg:g>
+      </svg:svg>
+    </content>
+  </Page>
+
+  <!-- 字体系统 -->
+  <Page id="typography" name="2. Typography">
+    <content>
+      <svg:svg>
+        <svg:g>
+          <svg:text x="100" y="50" font-family="Inter" font-size="24" font-weight="700" fill="#1A1C1E">Typography Scale</svg:text>
+          
+          <svg:text x="100" y="120" font-family="Inter" font-size="32" font-weight="700" fill="#1A1C1E">Display - 32px/700</svg:text>
+          <svg:text x="100" y="180" font-family="Inter" font-size="24" font-weight="700" fill="#1A1C1E">Heading 1 - 24px/700</svg:text>
+          <svg:text x="100" y="230" font-family="Inter" font-size="20" font-weight="600" fill="#1A1C1E">Heading 2 - 20px/600</svg:text>
+          <svg:text x="100" y="275" font-family="Inter" font-size="16" font-weight="400" fill="#1A1C1E">Body Large - 16px/400 (正文)</svg:text>
+          <svg:text x="100" y="315" font-family="Inter" font-size="14" font-weight="400" fill="#6C727A">Body Small - 14px/400 (辅助文字)</svg:text>
+          <svg:text x="100" y="350" font-family="Inter" font-size="12" font-weight="500" fill="#9BA1A8">Caption - 12px/500 (说明文字)</svg:text>
+          
+          <!-- 泰语支持示例 -->
+          <svg:text x="100" y="420" font-family="Noto Sans Thai" font-size="16" fill="#1A1C1E">ภาษาไทย: สู่ความน่าเชื่อถือ ทันสมัย</svg:text>
+          <svg:text x="100" y="450" font-family="Inter" font-size="16" fill="#1A1C1E">English: Trustworthy, Fluid, Modern</svg:text>
+        </svg:g>
+      </svg:svg>
+    </content>
+  </Page>
+
+  <!-- 组件系统 -->
+  <Page id="components" name="3. Components">
+    <content>
+      <svg:svg>
+        <svg:g>
+          <svg:text x="100" y="50" font-family="Inter" font-size="24" font-weight="700" fill="#1A1C1E">Component Library</svg:text>
+          
+          <!-- Buttons -->
+          <svg:text x="100" y="100" font-family="Inter" font-size="16" font-weight="600" fill="#1A1C1E">Buttons</svg:text>
+          
+          <!-- Primary Button -->
+          <svg:rect x="100" y="120" width="160" height="48" rx="16" fill="#8B5CF6"/>
+          <svg:text x="180" y="148" text-anchor="middle" font-family="Inter" font-size="14" font-weight="600" fill="#FFFFFF">Primary Button</svg:text>
+          
+          <!-- Secondary Button -->
+          <svg:rect x="280" y="120" width="160" height="48" rx="16" fill="#F5F3FF"/>
+          <svg:text x="360" y="148" text-anchor="middle" font-family="Inter" font-size="14" font-weight="600" fill="#7C3AED">Secondary Button</svg:text>
+          
+          <!-- Ghost Button -->
+          <svg:rect x="460" y="120" width="160" height="48" rx="16" fill="none" stroke="#9BA1A8" stroke-width="2"/>
+          <svg:text x="540" y="148" text-anchor="middle" font-family="Inter" font-size="14" fill="#6C727A">Ghost Button</svg:text>
+          
+          <!-- Input Fields -->
+          <svg:text x="100" y="200" font-family="Inter" font-size="16" font-weight="600" fill="#1A1C1E">Input Fields</svg:text>
+          
+          <!-- Default Input -->
+          <svg:rect x="100" y="220" width="300" height="48" rx="16" fill="#F9FAFB" stroke="#E5E7EB"/>
+          <svg:text x="120" y="248" font-family="Inter" font-size="14" fill="#9BA1A8">Default State</svg:text>
+          
+          <!-- Focus Input -->
+          <svg:rect x="420" y="220" width="300" height="48" rx="16" fill="#FFFFFF" stroke="#8B5CF6" stroke-width="2"/>
+          <svg:text x="440" y="248" font-family="Inter" font-size="14" fill="#1A1C1E">Focus State</svg:text>
+          
+          <!-- Error Input -->
+          <svg:rect x="100" y="280" width="300" height="48" rx="16" fill="#FFFFFF" stroke="#EF4444" stroke-width="2"/>
+          <svg:text x="120" y="308" font-family="Inter" font-size="14" fill="#EF4444">Error State</svg:text>
+          <svg:text x="350" y="308" font-family="Inter" font-size="12" fill="#EF4444">⚠ Invalid format</svg:text>
+          
+          <!-- Bento Cards -->
+          <svg:text x="100" y="360" font-family="Inter" font-size="16" font-weight="600" fill="#1A1C1E">Bento Cards (z-10)</svg:text>
+          
+          <svg:rect x="100" y="380" width="280" height="160" rx="24" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+          <svg:text x="240" y="420" text-anchor="middle" font-family="Inter" font-size="14" font-weight="600" fill="#1A1C1E">可用额度</svg:text>
+          <svg:text x="240" y="460" text-anchor="middle" font-family="Inter" font-size="24" font-weight="700" fill="#8B5CF6">฿ 50,000</svg:text>
+          <svg:rect x="140" y="490" width="200" height="40" rx="20" fill="#8B5CF6"/>
+          <svg:text x="240" y="516" text-anchor="middle" font-family="Inter" font-size="14" font-weight="600" fill="#FFFFFF">立即借款</svg:text>
+        </svg:g>
+      </svg:svg>
+    </content>
+  </Page>
+
+  <!-- 页面模板 -->
+  <Page id="templates" name="4. Page Templates">
+    <content>
+      <svg:svg>
+        <svg:g>
+          <svg:text x="100" y="50" font-family="Inter" font-size="24" font-weight="700" fill="#1A1C1E">Home Page Template</svg:text>
+          
+          <!-- Mobile Frame -->
+          <svg:rect x="100" y="80" width="375" height="812" rx="32" fill="#F8F9FC" stroke="#E5E7EB" stroke-width="2"/>
+          
+          <!-- Status Bar -->
+          <svg:rect x="100" y="80" width="375" height="44" rx="32" fill="#F8F9FC"/>
+          <svg:text x="120" y="108" font-family="Inter" font-size="12" font-weight="600" fill="#1A1C1E">9:41</svg:text>
+          
+          <!-- Header (z-100) -->
+          <svg:rect x="100" y="124" width="375" height="60" fill="#FFFFFF"/>
+          <svg:text x="140" y="160" font-family="Inter" font-size="18" font-weight="700" fill="#1A1C1E">Sook</svg:text>
+          <svg:circle cx="435" cy="154" r="20" fill="#8B5CF6"/>
+          <svg:text x="435" y="160" text-anchor="middle" font-family="Inter" font-size="12" font-weight="600" fill="#FFFFFF">U</svg:text>
+          
+          <!-- Hero Card (z-10) -->
+          <svg:rect x="120" y="204" width="335" height="200" rx="24" fill="#FFFFFF" stroke="#E5E7EB"/>
+          <svg:text x="140" y="240" font-family="Inter" font-size="14" fill="#6C727A">可用额度</svg:text>
+          <svg:text x="140" y="280" font-family="Inter" font-size="32" font-weight="700" fill="#8B5CF6">฿ 50,000</svg:text>
+          <svg:rect x="140" y="320" width="295" height="48" rx="24" fill="#8B5CF6"/>
+          <svg:text x="287" y="348" text-anchor="middle" font-family="Inter" font-size="14" font-weight="600" fill="#FFFFFF">立即借款</svg:text>
+          
+          <!-- Quick Actions (z-10) -->
+          <svg:rect x="120" y="424" width="100" height="100" rx="24" fill="#FFFFFF" stroke="#E5E7EB"/>
+          <svg:circle cx="170" cy="454" r="20" fill="#F5F3FF"/>
+          <svg:text x="170" y="460" text-anchor="middle" font-family="Inter" font-size="12" fill="#8B5CF6">💰</svg:text>
+          <svg:text x="170" y="490" text-anchor="middle" font-family="Inter" font-size="12" font-weight="600" fill="#1A1C1E">借款</svg:text>
+          
+          <svg:rect x="235" y="424" width="100" height="100" rx="24" fill="#FFFFFF" stroke="#E5E7EB"/>
+          <svg:circle cx="285" cy="454" r="20" fill="#FFF7ED"/>
+          <svg:text x="285" y="460" text-anchor="middle" font-family="Inter" font-size="12" fill="#F97316">💳</svg:text>
+          <svg:text x="285" y="490" text-anchor="middle" font-family="Inter" font-size="12" font-weight="600" fill="#1A1C1E">还款</svg:text>
+          
+          <svg:rect x="350" y="424" width="100" height="100" rx="24" fill="#FFFFFF" stroke="#E5E7EB"/>
+          <svg:circle cx="400" cy="454" r="20" fill="#ECFDF5"/>
+          <svg:text x="400" y="460" text-anchor="middle" font-family="Inter" font-size="12" fill="#10B981">📊</svg:text>
+          <svg:text x="400" y="490" text-anchor="middle" font-family="Inter" font-size="12" font-weight="600" fill="#1A1C1E">记录</svg:text>
+          
+          <!-- Bottom Navigation (z-100) -->
+          <svg:rect x="100" y="836" width="375" height="80" rx="0" fill="#FFFFFF" stroke="#E5E7EB"/>
+          <svg:text x="193" y="870" text-anchor="middle" font-family="Inter" font-size="12" font-weight="600" fill="#8B5CF6">🏠 首页</svg:text>
+          <svg:text x="287" y="870" text-anchor="middle" font-family="Inter" font-size="12" fill="#6C727A">💰 借款</svg:text>
+          <svg:text x="381" y="870" text-anchor="middle" font-family="Inter" font-size="12" fill="#6C727A">👤 我的</svg:text>
+        </svg:g>
+      </svg:svg>
+    </content>
+  </Page>
+
+  <!-- Z-Index 层级 -->
+  <Page id="layers" name="5. Z-Index Layers">
+    <content>
+      <svg:svg>
+        <svg:g>
+          <svg:text x="100" y="50" font-family="Inter" font-size="24" font-weight="700" fill="#1A1C1E">Z-Index Stack</svg:text>
+          
+          <!-- Layer 7: Feedback -->
+          <svg:rect x="100" y="80" width="1200" height="40" rx="8" fill="#FEF2F2" stroke="#EF4444"/>
+          <svg:text x="120" y="105" font-family="Inter" font-size="12" font-weight="700" fill="#EF4444">Level 7 - Feedback (z-1000)</svg:text>
+          <svg:text x="1200" y="105" text-anchor="end" font-family="Inter" font-size="12" fill="#EF4444">Toasts, Loading</svg:text>
+          
+          <!-- Layer 6: Modal -->
+          <svg:rect x="100" y="130" width="1200" height="40" rx="8" fill="#F5F3FF" stroke="#8B5CF6"/>
+          <svg:text x="120" y="155" font-family="Inter" font-size="12" font-weight="700" fill="#7C3AED">Level 6 - Modal (z-700)</svg:text>
+          <svg:text x="1200" y="155" text-anchor="end" font-family="Inter" font-size="12" fill="#7C3AED">KYC, Loan Agreement</svg:text>
+          
+          <!-- Layer 5: Drawer -->
+          <svg:rect x="100" y="180" width="1200" height="40" rx="8" fill="#FFF7ED" stroke="#F97316"/>
+          <svg:text x="120" y="205" font-family="Inter" font-size="12" font-weight="700" fill="#EA580C">Level 5 - Drawer (z-600)</svg:text>
+          <svg:text x="1200" y="205" text-anchor="end" font-family="Inter" font-size="12" fill="#EA580C">Action Sheets</svg:text>
+          
+          <!-- Layer 4: Overlay -->
+          <svg:rect x="100" y="230" width="1200" height="40" rx="8" fill="#F3F4F6" stroke="#9CA3AF"/>
+          <svg:text x="120" y="255" font-family="Inter" font-size="12" font-weight="700" fill="#4B5563">Level 4 - Overlay (z-500)</svg:text>
+          <svg:text x="1200" y="255" text-anchor="end" font-family="Inter" font-size="12" fill="#4B5563">Background Blur</svg:text>
+          
+          <!-- Layer 3: Sticky -->
+          <svg:rect x="100" y="280" width="1200" height="40" rx="8" fill="#ECFDF5" stroke="#10B981"/>
+          <svg:text x="120" y="305" font-family="Inter" font-size="12" font-weight="700" fill="#059669">Level 3 - Sticky (z-100)</svg:text>
+          <svg:text x="1200" y="305" text-anchor="end" font-family="Inter" font-size="12" fill="#059669">Header, Bottom Nav</svg:text>
+          
+          <!-- Layer 2: Card -->
+          <svg:rect x="100" y="330" width="1200" height="40" rx="8" fill="#FFFFFF" stroke="#E5E7EB"/>
+          <svg:text x="120" y="355" font-family="Inter" font-size="12" font-weight="700" fill="#6B7280">Level 2 - Card (z-10)</svg:text>
+          <svg:text x="1200" y="355" text-anchor="end" font-family="Inter" font-size="12" fill="#6B7280">Bento Cards</svg:text>
+          
+          <!-- Layer 1: Base -->
+          <svg:rect x="100" y="380" width="1200" height="40" rx="8" fill="#F9FAFB" stroke="#D1D5DB"/>
+          <svg:text x="120" y="405" font-family="Inter" font-size="12" font-weight="700" fill="#6B7280">Level 1 - Base (z-0)</svg:text>
+          <svg:text x="1200" y="405" text-anchor="end" font-family="Inter" font-size="12" fill="#6B7280">Page Content</svg:text>
+          
+          <!-- Layer 0: Background -->
+          <svg:rect x="100" y="430" width="1200" height="40" rx="8" fill="#F8F9FC" stroke="#E5E7EB"/>
+          <svg:text x="120" y="455" font-family="Inter" font-size="12" font-weight="700" fill="#6B7280">Level 0 - Background (z--1)</svg:text>
+          <svg:text x="1200" y="455" text-anchor="end" font-family="Inter" font-size="12" fill="#6B7280">Canvas</svg:text>
+        </svg:g>
+      </svg:svg>
+    </content>
+  </Page>
+</document>
