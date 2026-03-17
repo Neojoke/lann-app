@@ -1,0 +1,228 @@
+# Product Management Flow (Admin)
+appId: com.lann.thailand.loan.app.admin
+
+---
+# Flow: Admin Login
+- launchApp
+- runFlow:
+    when:
+      visible: "Admin Login"
+    steps:
+      - inputText: "{{env.ADMIN_EMAIL}}"
+        into: "Email"
+      - inputText: "{{env.ADMIN_PASSWORD}}"
+        into: "Password"
+      - tapOn: "Login"
+      - assertVisible: "Admin Dashboard"
+
+---
+# Flow: View Loan Products
+- tapOn: "Products"
+- assertVisible: "Loan Products Management"
+- assertVisible: "Product Count:"
+- tapOn: "View All Products"
+
+---
+# Flow: Create New Loan Product
+- tapOn: "Add New Product"
+- runFlow:
+    when:
+      visible: "Create Loan Product"
+    steps:
+      - inputText: "Personal Express Loan"
+        into: "Product Name"
+      - inputText: "Quick personal loan for immediate needs"
+        into: "Product Description"
+      - inputText: "10000"
+        into: "Minimum Amount"
+      - inputText: "500000"
+        into: "Maximum Amount"
+      - inputText: "6"
+        into: "Minimum Term (months)"
+      - inputText: "36"
+        into: "Maximum Term (months)"
+      - inputText: "0.15"
+        into: "Interest Rate (decimal)"
+      - tapOn: "Eligibility Criteria"
+      - inputText: "20"
+        into: "Minimum Age"
+      - inputText: "60"
+        into: "Maximum Age"
+      - inputText: "15000"
+        into: "Minimum Monthly Income"
+      - inputText: "6"
+        into: "Minimum Employment Months"
+      - tapOn: "Enable Product"
+      - tapOn: "Save Product"
+      - assertVisible: "Product Created Successfully"
+      - tapOn: "OK"
+
+---
+# Flow: Edit Existing Product
+- tapOn: "Personal Express Loan"
+- tapOn: "Edit Product"
+- runFlow:
+    when:
+      visible: "Edit Loan Product"
+    steps:
+      - inputText: "Personal Express Loan - Updated"
+        into: "Product Name"
+      - inputText: "0.12"
+        into: "Interest Rate (decimal)"
+      - tapOn: "Disable Product"
+      - tapOn: "Save Changes"
+      - assertVisible: "Product Updated Successfully"
+      - tapOn: "OK"
+
+---
+# Flow: View Product Details
+- tapOn: "Personal Express Loan - Updated"
+- assertVisible: "Product Name: Personal Express Loan - Updated"
+- assertVisible: "Interest Rate: 12%"
+- assertVisible: "Status: Disabled"
+- assertVisible: "Created: {{date.now}}"
+- assertVisible: "Applications: 0"
+- tapOn: "Enable Product"
+
+---
+# Flow: Create Special Promotional Product
+- tapOn: "Add New Product"
+- runFlow:
+    when:
+      visible: "Create Loan Product"
+    steps:
+      - inputText: "New Year Special Loan"
+        into: "Product Name"
+      - inputText: "Special promotional loan for new year"
+        into: "Product Description"
+      - inputText: "50000"
+        into: "Minimum Amount"
+      - inputText: "200000"
+        into: "Maximum Amount"
+      - inputText: "0.08"
+        into: "Interest Rate (decimal)"
+      - tapOn: "Promotional Product"
+      - tapOn: "Set Promotion Dates"
+      - tapOn: "{{date.now}}"
+      - tapOn: "{{date.future.offset(90, 'days')}}"  # 3 months from now
+      - tapOn: "Save Product"
+      - assertVisible: "Promotional Product Created"
+      - tapOn: "OK"
+
+---
+# Flow: View Product Analytics
+- tapOn: "Analytics"
+- tapOn: "Product Performance"
+- assertVisible: "Product Performance Dashboard"
+- assertVisible: "Personal Express Loan - Updated"
+- assertVisible: "Applications: 0"
+- assertVisible: "Approvals: 0"
+- assertVisible: "Disbursements: 0"
+- tapOn: "View Detailed Analytics"
+
+---
+# Flow: Compare Products
+- assertVisible: "Product Comparison Chart"
+- assertVisible: "Interest Rates Comparison"
+- assertVisible: "Application Volume Comparison"
+- tapOn: "Export Data"
+- assertVisible: "Export Options"
+- tapOn: "CSV Format"
+- assertVisible: "Data Exported Successfully"
+- tapOn: "OK"
+
+---
+# Flow: Update Product Terms
+- tapOn: "Products"
+- tapOn: "Personal Express Loan - Updated"
+- tapOn: "Update Terms"
+- runFlow:
+    when:
+      visible: "Update Product Terms"
+    steps:
+      - inputText: "0.10"
+        into: "New Interest Rate"
+      - inputText: "100000"
+        into: "New Maximum Amount"
+      - tapOn: "Apply to Existing Customers"
+      - tapOn: "Update Terms"
+      - assertVisible: "Terms Updated Successfully"
+      - tapOn: "Apply Changes"
+
+---
+# Flow: Create Tiered Product
+- tapOn: "Add New Product"
+- runFlow:
+    when:
+      visible: "Create Loan Product"
+    steps:
+      - inputText: "Tiered Premium Loan"
+        into: "Product Name"
+      - tapOn: "Tiered Interest Rate"
+      - tapOn: "Add Tier"
+      - inputText: "0-100000"
+        into: "Amount Range"
+      - inputText: "0.15"
+        into: "Interest Rate"
+      - tapOn: "Add Tier"
+      - inputText: "100001-500000"
+        into: "Amount Range"
+      - inputText: "0.12"
+        into: "Interest Rate"
+      - tapOn: "Add Tier"
+      - inputText: "500001+"
+        into: "Amount Range"
+      - inputText: "0.10"
+        into: "Interest Rate"
+      - tapOn: "Save Product"
+      - assertVisible: "Tiered Product Created"
+      - tapOn: "OK"
+
+---
+# Flow: Archive Product
+- tapOn: "All Products"
+- tapOn: "Personal Express Loan - Updated"
+- tapOn: "More Options"
+- tapOn: "Archive Product"
+- assertVisible: "Are you sure you want to archive this product?"
+- tapOn: "Confirm Archive"
+- assertVisible: "Product Archived Successfully"
+- tapOn: "OK"
+- assertVisible: "Status: Archived"
+
+---
+# Flow: Create Custom Product for Specific Segment
+- tapOn: "Add New Product"
+- runFlow:
+    when:
+      visible: "Create Loan Product"
+    steps:
+      - inputText: "Teacher Exclusive Loan"
+        into: "Product Name"
+      - inputText: "Special loan product for teachers"
+        into: "Product Description"
+      - inputText: "20000"
+        into: "Minimum Amount"
+      - inputText: "300000"
+        into: "Maximum Amount"
+      - inputText: "0.09"
+        into: "Interest Rate (decimal)"
+      - tapOn: "Set Eligibility Criteria"
+      - tapOn: "Occupation Filter"
+      - tapOn: "Teacher"
+      - tapOn: "Employment Verification Required"
+      - tapOn: "Education Certificate Required"
+      - tapOn: "Save Product"
+      - assertVisible: "Segment-Specific Product Created"
+      - tapOn: "OK"
+
+---
+# Flow: Review Product Portfolio
+- tapOn: "Portfolio Overview"
+- assertVisible: "Total Active Products:"
+- assertVisible: "Total Applications:"
+- assertVisible: "Average Interest Rate:"
+- assertVisible: "Portfolio Risk Level:"
+- tapOn: "Generate Portfolio Report"
+- assertVisible: "Report Generated Successfully"
+- tapOn: "Download Report"

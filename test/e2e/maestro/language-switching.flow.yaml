@@ -1,0 +1,194 @@
+# Language Switching Flow
+appId: com.lann.thailand.loan.app
+
+---
+# Flow: Initial App Launch (Default Language)
+- launchApp
+- assertVisible: "Welcome to Lann Thailand Loan App"
+- assertVisible: "Login"
+- assertVisible: "Register"
+- tapOn: "Profile"
+- assertVisible: "Profile Settings"
+- assertVisible: "Language Settings"
+- tapOn: "Language Settings"
+
+---
+# Flow: Switch to Thai Language
+- tapOn: "ภาษาไทย"
+- assertVisible: "ยินดีต้อนรับสู่แอปเงินกู้ลั่นนาประเทศไทย"
+- assertVisible: "เข้าสู่ระบบ"
+- assertVisible: "ลงทะเบียน"
+- tapOn: "ข้อมูลส่วนตัว"
+- assertVisible: "การตั้งค่าโปรไฟล์"
+- assertVisible: "การตั้งค่าภาษา"
+- tapOn: "การตั้งค่าภาษา"
+
+---
+# Flow: Switch to English Language
+- tapOn: "English"
+- assertVisible: "Welcome to Lann Thailand Loan App"
+- assertVisible: "Login"
+- assertVisible: "Register"
+- tapOn: "Profile"
+- assertVisible: "Profile Settings"
+- assertVisible: "Language Settings"
+- tapOn: "Language Settings"
+
+---
+# Flow: Switch to Chinese Language
+- tapOn: "中文"
+- assertVisible: "欢迎使用兰纳泰国贷款应用"
+- assertVisible: "登录"
+- assertVisible: "注册"
+- tapOn: "个人信息"
+- assertVisible: "个人资料设置"
+- assertVisible: "语言设置"
+- tapOn: "语言设置"
+
+---
+# Flow: Test Language Persistence
+- tapOn: "English"  # Switch back to English
+- tapOn: "OK"  # Confirm language selection
+- tapOn: "Dashboard"
+- tapOn: "My Loans"
+- assertVisible: "My Loans"
+- assertVisible: "Active Loans"
+- tapOn: "Settings"
+- tapOn: "Language Settings"
+- tapOn: "ภาษาไทย"
+- tapOn: "ตกลง"  # Confirm language selection
+- tapOn: "แดชบอร์ด"
+- tapOn: "สินเชื่อของฉัน"
+- assertVisible: "สินเชื่อของฉัน"
+- assertVisible: "สินเชื่อที่ใช้งานอยู่"
+
+---
+# Flow: Test Language in Forms
+- tapOn: "สมัครสินเชื่อ"
+- assertVisible: "แบบฟอร์มขอสินเชื่อ"
+- assertVisible: "จำนวนเงินกู้"
+- assertVisible: "ระยะเวลา"
+- inputText: "50000"
+  into: "จำนวนเงินกู้"
+- tapOn: "เลือกประเภท"
+- tapOn: "ส่วนบุคคล"
+- tapOn: "ส่งคำขอ"
+- assertVisible: "กำลังประมวลผลคำขอ..."
+- tapOn: "ยกเลิก"
+
+---
+# Flow: Test Language in Notifications
+- tapOn: "การตั้งค่า"
+- tapOn: "การตั้งค่าภาษา"
+- tapOn: "English"
+- tapOn: "OK"
+- tapOn: "Notifications"
+- assertVisible: "Notifications"
+- assertVisible: "All Notifications"
+- assertVisible: "Promotional"
+- assertVisible: "Transactional"
+- tapOn: "Back"
+
+---
+# Flow: Test Language in Error Messages
+- tapOn: "Login"
+- inputText: "invalid@email"
+  into: "Email"
+- inputText: "short"
+  into: "Password"
+- tapOn: "Login"
+- assertVisible: "Please enter a valid email address"
+- assertVisible: "Password must be at least 8 characters"
+- tapOn: "Language Settings"
+- tapOn: "ภาษาไทย"
+- tapOn: "ตกลง"
+- tapOn: "เข้าสู่ระบบ"
+- inputText: "invalid@email"
+  into: "อีเมล"
+- inputText: "short"
+  into: "รหัสผ่าน"
+- tapOn: "เข้าสู่ระบบ"
+- assertVisible: "กรุณากรอกอีเมลให้ถูกต้อง"
+- assertVisible: "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร"
+
+---
+# Flow: Test Language in Currency Display
+- tapOn: "ภาษาไทย"
+- tapOn: "ตกลง"
+- tapOn: "แดชบอร์ด"
+- tapOn: "สินเชื่อของฉัน"
+- assertVisible: "บาทไทย"  # THB in Thai
+- tapOn: "ข้อมูลส่วนตัว"
+- tapOn: "การตั้งค่า"
+- tapOn: "การตั้งค่าภาษา"
+- tapOn: "English"
+- tapOn: "OK"
+- tapOn: "Profile"
+- tapOn: "Settings"
+- assertVisible: "THB"  # THB in English
+
+---
+# Flow: Test Language in Date Formats
+- tapOn: "My Loans"
+- assertVisible: "Application Date:"  # English date label
+- tapOn: "Language Settings"
+- tapOn: "ภาษาไทย"
+- tapOn: "ตกลง"
+- tapOn: "สินเชื่อของฉัน"
+- assertVisible: "วันที่สมัคร:"  # Thai date label
+- tapOn: "การตั้งค่า"
+- tapOn: "การตั้งค่าภาษา"
+- tapOn: "中文"
+- tapOn: "确定"
+- tapOn: "我的贷款"
+- assertVisible: "申请日期:"  # Chinese date label
+
+---
+# Flow: Test Language in Navigation
+- tapOn: "首页"
+- tapOn: "我的贷款"
+- tapOn: "我的信用"
+- tapOn: "个人资料"
+- tapOn: "设置"
+- tapOn: "设置"
+- tapOn: "语言设置"
+- tapOn: "English"
+- tapOn: "OK"
+- tapOn: "Dashboard"
+- tapOn: "My Loans"
+- tapOn: "My Credit"
+- tapOn: "Profile"
+- tapOn: "Settings"
+
+---
+# Flow: Test Language Switching During Operations
+- tapOn: "My Loans"
+- tapOn: "Apply for Loan"
+- inputText: "25000"
+  into: "Loan Amount"
+- tapOn: "Select Term"
+- tapOn: "6 months"
+- tapOn: "Settings"  # Go to settings without completing form
+- tapOn: "Language Settings"
+- tapOn: "ภาษาไทย"
+- tapOn: "ตกลง"
+- assertVisible: "การตั้งค่า"
+- tapOn: "กลับไปยังสินเชื่อ"
+- assertVisible: "จำนวนเงินกู้"  # Should maintain context
+- assertVisible: "25,000"  # Should maintain entered value
+- tapOn: "ยกเลิก"
+
+---
+# Flow: Test Language Settings Persistence Across Sessions
+- tapOn: "Settings"
+- tapOn: "Language Settings"
+- tapOn: "English"
+- tapOn: "OK"
+- closeApp
+- launchApp
+- tapOn: "Profile"
+- tapOn: "Settings"
+- tapOn: "Language Settings"
+- assertVisible: "Current Language: English"
+- tapOn: "Back"
+- assertVisible: "Profile Settings"  # Still in English

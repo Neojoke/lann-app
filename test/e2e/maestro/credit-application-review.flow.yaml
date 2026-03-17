@@ -1,0 +1,125 @@
+# Credit Application and Review Flow
+appId: com.lann.thailand.loan.app
+
+---
+# Flow: Credit Application
+- launchApp
+- runFlow:
+    when:
+      visible: "Login"
+    steps:
+      - inputText: "{{env.USER_EMAIL}}"
+        into: "Email"
+      - inputText: "{{env.USER_PASSWORD}}"
+        into: "Password"
+      - tapOn: "Login"
+      - assertVisible: "Dashboard"
+
+- tapOn: "Apply for Credit"
+- runFlow:
+    when:
+      visible: "Credit Application"
+    steps:
+      - inputText: "50000"
+        into: "Desired Credit Limit"
+      - tapOn: "Personal Income"
+      - inputText: "35000"
+        into: "Monthly Income"
+      - tapOn: "Employment Type"
+      - tapOn: "Full-time Employee"
+      - inputText: "ABC Company"
+        into: "Company Name"
+      - inputText: "5"
+        into: "Years at Company"
+      - tapOn: "Credit Purpose"
+      - tapOn: "Personal Use"
+      - tapOn: "Submit Application"
+      - assertVisible: "Application Submitted"
+      - assertVisible: "Your application is under review"
+      - tapOn: "OK"
+
+---
+# Flow: View Credit Application Status
+- tapOn: "My Applications"
+- assertVisible: "Credit Application"
+- assertVisible: "Status: Under Review"
+- assertVisible: "Applied Limit: 50,000 THB"
+- tapOn: "View Details"
+- assertVisible: "Application ID"
+- assertVisible: "Submitted On"
+- assertVisible: "Required Documents"
+- tapOn: "Back"
+
+---
+# Flow: Upload Required Documents
+- tapOn: "Upload Documents"
+- runFlow:
+    when:
+      visible: "Required Documents"
+    steps:
+      - tapOn: "National ID Card"
+      - tapOn: "Upload from Gallery"
+      - tapOn: "Select Image"
+      - tapOn: "Confirm Upload"
+      - assertVisible: "Document Uploaded Successfully"
+      - tapOn: "Income Statement"
+      - tapOn: "Upload from Gallery"
+      - tapOn: "Select Image"
+      - tapOn: "Confirm Upload"
+      - assertVisible: "Document Uploaded Successfully"
+      - tapOn: "Bank Statement"
+      - tapOn: "Upload from Gallery"
+      - tapOn: "Select Image"
+      - tapOn: "Confirm Upload"
+      - assertVisible: "All Documents Uploaded"
+      - tapOn: "Submit Documents"
+
+---
+# Flow: Wait for Credit Approval (Simulated)
+- runFlow:
+    when:
+      visible: "Documents Submitted"
+    steps:
+      - tapOn: "OK"
+      - tapOn: "Dashboard"
+      - tapOn: "Notifications"
+      - assertVisible: "Credit Application Approved"  # Assuming admin approved it
+      - tapOn: "View Credit Status"
+
+---
+# Flow: View Approved Credit
+- assertVisible: "Credit Status: Approved"
+- assertVisible: "Approved Limit: 50,000 THB"
+- assertVisible: "Available: 50,000 THB"
+- tapOn: "Credit History"
+- assertVisible: "Application Date"
+- assertVisible: "Approval Date"
+- assertVisible: "Terms and Conditions"
+- tapOn: "Accept Terms"
+- tapOn: "Confirm"
+
+---
+# Flow: Credit Limit Increase Request
+- tapOn: "Request Limit Increase"
+- runFlow:
+    when:
+      visible: "Increase Credit Limit"
+    steps:
+      - inputText: "75000"
+        into: "New Credit Limit"
+      - inputText: "Need higher limit for home renovation"
+        into: "Reason for Increase"
+      - tapOn: "Submit Request"
+      - assertVisible: "Request Submitted"
+      - assertVisible: "Your request is under review"
+      - tapOn: "OK"
+
+---
+# Flow: Credit Renewal Process
+- tapOn: "Credit Management"
+- tapOn: "Renew Credit Line"
+- assertVisible: "Renewal Application"
+- assertVisible: "Current Credit Information"
+- tapOn: "Proceed with Renewal"
+- assertVisible: "Renewal Submitted"
+- tapOn: "OK"

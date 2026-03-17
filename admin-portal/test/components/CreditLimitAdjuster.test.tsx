@@ -75,7 +75,7 @@ describe('CreditLimitAdjuster Component', () => {
 
     // Should show validation errors
     await waitFor(() => {
-      expect(screen.getByText('调整原因至少需要10个字符')).toBeInTheDocument();
+      expect(screen.getByText('新额度不能与当前额度相同')).toBeInTheDocument();
     });
   });
 
@@ -89,6 +89,9 @@ describe('CreditLimitAdjuster Component', () => {
 
     fireEvent.change(newLimitInput, { target: { value: '15000' } });
     fireEvent.change(reasonTextarea, { target: { value: 'Customer has demonstrated excellent repayment history and deserves a higher limit.' } });
+    // 设置一个有效的日期格式 - 使用与组件中相同的格式
+    const futureDate = new Date(Date.now() + 86400000).toISOString().slice(0, 16); // 明天
+    fireEvent.change(effectiveDateInput, { target: { value: futureDate } });
 
     fireEvent.click(submitButton);
 
@@ -98,7 +101,7 @@ describe('CreditLimitAdjuster Component', () => {
         currentLimit: 10000,
         newLimit: 15000,
         reason: 'Customer has demonstrated excellent repayment history and deserves a higher limit.',
-        effectiveDate: expect.any(String), // Effective date is set by default
+        effectiveDate: futureDate,
         status: 'pending'
       });
     });

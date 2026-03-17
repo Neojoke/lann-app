@@ -4,7 +4,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
-import OTPVerify from './pages/OTPVerify/OTPVerify'; // 添加缺失的导入
+import OTPVerify from './pages/Auth/OTPVerify'; // 添加缺失的导入
 import Profile from './pages/Profile/Profile';
 import CreditApply from './pages/CreditApply/CreditApply';
 import CreditStatus from './pages/CreditStatus/CreditStatus';
@@ -106,16 +106,6 @@ const App: React.FC = () => (
         </IonRouterOutlet>
       </IonReactRouter>
     </ErrorBoundary>
-  </IonApp>
-);
-
-export default App;
-oute>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
   </IonApp>
 );
 

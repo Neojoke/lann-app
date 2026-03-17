@@ -15,7 +15,7 @@ export interface CreditLimitAdjustment {
 export const AdjustmentSchema = z.object({
   newLimit: z.number().positive('新额度必须大于0'),
   reason: z.string().min(10, '调整原因至少需要10个字符'),
-  effectiveDate: z.string().datetime({ message: '请选择有效的日期时间' })
+  effectiveDate: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/, '请选择有效的日期时间')
 });
 
 export type AdjustmentFormData = z.infer<typeof AdjustmentSchema>;

@@ -1,0 +1,84 @@
+# User Registration and Login Flow
+appId: com.lann.thailand.loan.app
+
+# Environment variables (would be set in CI/CD)
+# env:
+#   BASE_URL: https://staging.lann-thailand-loan-app.com
+
+---
+# Flow: User Registration
+- launchApp
+- tapOn: "Register"
+- runFlow:
+    when: 
+      visible: "Register Account"
+    steps:
+      - inputText: "{{faker.person.firstName}}"
+        into: "First Name"
+      - inputText: "{{faker.person.lastName}}"
+        into: "Last Name"
+      - inputText: "{{faker.internet.email}}"
+        into: "Email"
+      - inputText: "+66{{faker.phone.number}}"
+        into: "Phone Number"
+      - inputText: "SecurePassword123!"
+        into: "Password"
+      - inputText: "SecurePassword123!"
+        into: "Confirm Password"
+      - tapOn: "Register Account"
+      - assertVisible: "Registration Successful"
+      - assertVisible: "Please check your email for verification"
+
+---
+# Flow: Email Verification
+- tapOn: "Check Email"
+- runFlow:
+    when:
+      visible: "Verification Code"
+    steps:
+      - inputText: "123456"  # In real test, this would be retrieved from email service
+        into: "Verification Code Input"
+      - tapOn: "Verify"
+      - assertVisible: "Email Verified Successfully"
+      - tapOn: "Continue to Login"
+
+---
+# Flow: User Login
+- runFlow:
+    when:
+      visible: "Login"
+    steps:
+      - inputText: "{{env.EMAIL}}"  # Would be the email from registration
+        into: "Email"
+      - inputText: "SecurePassword123!"
+        into: "Password"
+      - tapOn: "Login"
+      - assertVisible: "Dashboard"
+      - assertVisible: "Welcome Back"
+
+---
+# Flow: Profile View and Edit
+- tapOn: "Profile"
+- assertVisible: "{{faker.person.firstName}}"  # Should show the registered name
+- assertVisible: "{{faker.internet.email}}"    # Should show the registered email
+- tapOn: "Edit Profile"
+- runFlow:
+    when:
+      visible: "Edit Profile"
+    steps:
+      - inputText: "Updated Name"
+        into: "First Name"
+      - inputText: "+66812345678"
+        into: "Phone Number"
+      - tapOn: "Save Changes"
+      - assertVisible: "Profile Updated Successfully"
+      - tapOn: "Back to Profile"
+      - assertVisible: "Updated Name"  # Verify the change took effect
+
+---
+# Flow: Logout
+- tapOn: "Logout"
+- assertVisible: "Are you sure you want to logout?"
+- tapOn: "Yes, Logout"
+- assertVisible: "Login"
+- assertVisible: "Welcome to Lann Thailand Loan App"

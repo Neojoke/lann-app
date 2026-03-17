@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { MessageQueueService, getQueueService } from '../services/queue.service';
+import { MessageQueueService, getQueueService } from '../../services/queue.service';
 
 describe('MessageQueueService', () => {
   let queueService: MessageQueueService;

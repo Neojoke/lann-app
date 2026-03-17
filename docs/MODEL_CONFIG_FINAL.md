@@ -33,6 +33,20 @@
 
 ## 🔧 立即实施步骤
 
+### Step 0: 执行优化方案 V2 (优先级最高)
+
+**文件:** `docs/OPTIMIZATION_PLAN_V2.md`
+
+**任务:**
+1. 删除前端 PWA 文件 (5 个)
+2. 重构后端服务 (删除 Redis，改用 Cloudflare KV/Queues)
+3. 更新 wrangler.toml 配置
+4. 测试验证
+
+**预计时间:** 105 分钟
+
+---
+
 ### Step 1: 更新 LOG_CHARTERS.md
 
 ```markdown

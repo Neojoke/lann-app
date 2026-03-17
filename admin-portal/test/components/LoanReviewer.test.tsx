@@ -61,9 +61,12 @@ describe('LoanReviewer Component', () => {
     expect(screen.getByText('¥50,000')).toBeInTheDocument();
     expect(screen.getByText('贷款期限:')).toBeInTheDocument();
     expect(screen.getByText('24个月')).toBeInTheDocument();
-    expect(screen.getByText(/利率: 5.5%/)).toBeInTheDocument();
-    expect(screen.getByText(/信用评分: 750/)).toBeInTheDocument();
-    expect(screen.getByText(/就业状况: Employed/)).toBeInTheDocument();
+    expect(screen.getByText('利率:')).toBeInTheDocument();
+    expect(screen.getByText('5.5%')).toBeInTheDocument();
+    expect(screen.getByText('信用评分:')).toBeInTheDocument();
+    expect(screen.getByText('750')).toBeInTheDocument();
+    expect(screen.getByText('就业状况:')).toBeInTheDocument();
+    expect(screen.getByText('Employed')).toBeInTheDocument();
   });
 
   it('allows reviewer to select action and submit', async () => {

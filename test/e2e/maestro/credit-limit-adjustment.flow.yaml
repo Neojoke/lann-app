@@ -1,0 +1,172 @@
+# Credit Limit Adjustment Flow
+appId: com.lann.thailand.loan.app
+
+---
+# Flow: View Current Credit Status
+- launchApp
+- runFlow:
+    when:
+      visible: "Login"
+    steps:
+      - inputText: "{{env.USER_EMAIL}}"
+        into: "Email"
+      - inputText: "{{env.USER_PASSWORD}}"
+        into: "Password"
+      - tapOn: "Login"
+      - assertVisible: "Dashboard"
+
+- tapOn: "My Credit"
+- assertVisible: "Current Credit Limit: 50,000 THB"
+- assertVisible: "Available Credit: 20,000 THB"
+- assertVisible: "Utilized: 30,000 THB"
+- assertVisible: "Credit Score: 750"
+- tapOn: "Credit Management"
+
+---
+# Flow: Request Credit Limit Increase
+- tapOn: "Request Limit Increase"
+- runFlow:
+    when:
+      visible: "Increase Credit Limit"
+    steps:
+      - assertVisible: "Current Limit: 50,000 THB"
+      - inputText: "75,000"
+        into: "New Credit Limit"
+      - tapOn: "Reason for Increase"
+      - tapOn: "Home Renovation"
+      - inputText: "Planning to renovate my home, need higher limit"
+        into: "Detailed Reason"
+      - tapOn: "Income Verification Required"
+      - tapOn: "Upload Income Documents"
+      - tapOn: "Upload Recent Pay Stubs"
+      - tapOn: "Upload Tax Returns"
+      - tapOn: "Submit Request"
+      - assertVisible: "Request Submitted"
+      - assertVisible: "Your request is under review"
+      - tapOn: "OK"
+
+---
+# Flow: View Request Status
+- tapOn: "My Requests"
+- assertVisible: "Credit Limit Increase Request"
+- assertVisible: "Status: Under Review"
+- assertVisible: "Requested Limit: 75,000 THB"
+- assertVisible: "Submitted On: {{date.now}}"
+- tapOn: "View Details"
+- assertVisible: "Expected Response Time: 3-5 Business Days"
+- tapOn: "Back"
+
+---
+# Flow: Receive Approval Notification
+- tapOn: "Dashboard"
+- tapOn: "Notifications"
+- assertVisible: "Credit Limit Increase Approved"  # Assuming approval
+- tapOn: "View Details"
+- assertVisible: "New Credit Limit: 75,000 THB"
+- assertVisible: "Effective Date: {{date.future}}"
+- tapOn: "Accept New Limit"
+
+---
+# Flow: Verify New Credit Limit
+- tapOn: "My Credit"
+- assertVisible: "New Credit Limit: 75,000 THB"
+- assertVisible: "Available Credit: 45,000 THB"
+- assertVisible: "Utilized: 30,000 THB"
+- tapOn: "Credit Utilization History"
+- assertVisible: "Credit Limit History Chart"
+- assertVisible: "Limit Increased on {{date.now}}"
+- tapOn: "Back"
+
+---
+# Flow: Request Temporary Limit Increase
+- tapOn: "Temporary Limit Increase"
+- runFlow:
+    when:
+      visible: "Temporary Credit Increase"
+    steps:
+      - inputText: "100,000"
+        into: "Temporary Limit"
+      - tapOn: "Start Date"
+      - tapOn: "{{date.future.offset(7, 'days')}}"
+      - tapOn: "End Date"
+      - tapOn: "{{date.future.offset(30, 'days')}}"
+      - tapOn: "Reason for Temporary Increase"
+      - tapOn: "Vacation Expenses"
+      - inputText: "Going on vacation next month, need temporary increase"
+        into: "Justification"
+      - tapOn: "Submit Request"
+      - assertVisible: "Temporary Limit Request Submitted"
+      - tapOn: "OK"
+
+---
+# Flow: Receive Temporary Limit Approval
+- tapOn: "Notifications"
+- assertVisible: "Temporary Limit Increase Approved"
+- tapOn: "View Details"
+- assertVisible: "Temporary Limit: 100,000 THB"
+- assertVisible: "Effective: {{date.future.offset(7, 'days')}}"
+- assertVisible: "Expires: {{date.future.offset(30, 'days')}}"
+- tapOn: "Acknowledge"
+
+---
+# Flow: Use Temporary Limit
+- tapOn: "Apply for Loan"
+- assertVisible: "Available Credit: 100,000 THB"  # Should show temporary limit
+- inputText: "80,000"
+  into: "Loan Amount"
+- tapOn: "Submit Application"
+- assertVisible: "Application Submitted"
+- tapOn: "OK"
+
+---
+# Flow: Request Credit Limit Decrease
+- tapOn: "My Credit"
+- tapOn: "Credit Management"
+- tapOn: "Adjust Credit Limit"
+- tapOn: "Reduce Limit"
+- runFlow:
+    when:
+      visible: "Reduce Credit Limit"
+    steps:
+      - inputText: "40,000"
+        into: "New Credit Limit"
+      - tapOn: "Reason for Reduction"
+      - tapOn: "Budget Management"
+      - inputText: "Want to reduce limit to better manage spending"
+        into: "Reason Details"
+      - tapOn: "Submit Request"
+      - assertVisible: "Warning: Reducing credit limit may affect credit score"
+      - tapOn: "Confirm Reduction"
+      - assertVisible: "Limit Reduction Request Submitted"
+      - tapOn: "OK"
+
+---
+# Flow: Automatic Credit Limit Review
+- tapOn: "Credit Health"
+- assertVisible: "Credit Utilization: 40%"
+- assertVisible: "Recommendation: Good utilization ratio"
+- tapOn: "Automatic Review Request"
+- assertVisible: "System will review your account quarterly"
+- assertVisible: "Based on payment history and income changes"
+- tapOn: "Request Manual Review"
+- tapOn: "Submit Income Update"
+- tapOn: "Upload New Income Proof"
+- assertVisible: "Income Documentation Uploaded"
+- tapOn: "Request Review"
+- assertVisible: "Manual Review Requested"
+- tapOn: "OK"
+
+---
+# Flow: Credit Limit Based on Performance
+- tapOn: "Dashboard"
+- tapOn: "My Loans"
+- tapOn: "Completed Loans"
+- assertVisible: "Perfect Payment History"
+- tapOn: "Notifications"
+- assertVisible: "Congratulations! Credit Limit Automatically Increased"
+- tapOn: "View Details"
+- assertVisible: "Based on Excellent Payment History"
+- assertVisible: "New Limit: 80,000 THB"
+- tapOn: "Thank You"
+- tapOn: "My Credit"
+- assertVisible: "Auto-Adjusted Limit: 80,000 THB"

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { exec as execPromise } from 'child_process';
-import { BackupService, getBackupService, BackupConfig } from '../services/backup.service';
+import { BackupService, getBackupService, BackupConfig } from '../../services/backup.service';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 

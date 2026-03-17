@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { ConfigService, getConfigService, ProductConfig, RateConfig, ChannelConfig } from '../services/config.service';
+import { ConfigService, getConfigService, ProductConfig, RateConfig, ChannelConfig } from '../../services/config.service';
 
 // Mock ioredis
 vi.mock('ioredis', () => {

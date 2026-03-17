@@ -1,0 +1,206 @@
+# Admin Review and Approval Flow
+appId: com.lann.thailand.loan.app.admin
+
+---
+# Flow: Admin Login
+- launchApp
+- runFlow:
+    when:
+      visible: "Admin Login"
+    steps:
+      - inputText: "{{env.ADMIN_EMAIL}}"
+        into: "Email"
+      - inputText: "{{env.ADMIN_PASSWORD}}"
+        into: "Password"
+      - tapOn: "Login"
+      - assertVisible: "Admin Dashboard"
+
+---
+# Flow: View Pending Applications
+- tapOn: "Applications"
+- tapOn: "Pending Reviews"
+- assertVisible: "Credit Applications Pending: "
+- assertVisible: "Loan Applications Pending: "
+- tapOn: "Credit Applications"
+
+---
+# Flow: Review Credit Application
+- assertVisible: "New Credit Application"
+- tapOn: "View Application #{{random.number}}"
+- assertVisible: "Applicant Information"
+- assertVisible: "Credit Score:"
+- assertVisible: "Requested Limit:"
+- assertVisible: "Income Information"
+- assertVisible: "Employment Details"
+- tapOn: "View Documents"
+- assertVisible: "National ID Uploaded"
+- assertVisible: "Income Statement Uploaded"
+- assertVisible: "Bank Statement Uploaded"
+- tapOn: "Back to Application"
+
+---
+# Flow: Perform Credit Check
+- tapOn: "External Credit Check"
+- assertVisible: "Running credit check..."
+- wait: 3s
+- assertVisible: "Credit Bureau Report"
+- assertVisible: "Previous Loans: 2"
+- assertVisible: "Payment History: Good"
+- assertVisible: "Outstanding Debts: 150,000 THB"
+- tapOn: "Back to Application"
+
+---
+# Flow: Approve Credit Application
+- tapOn: "Review Decision"
+- tapOn: "Approve Application"
+- runFlow:
+    when:
+      visible: "Approval Details"
+    steps:
+      - inputText: "75000"
+        into: "Approved Limit"
+      - inputText: "0.12"
+        into: "Interest Rate"
+      - inputText: "Verified all documents and credit check passed"
+        into: "Approval Notes"
+      - tapOn: "Submit Approval"
+      - assertVisible: "Application Approved Successfully"
+      - tapOn: "OK"
+
+---
+# Flow: Review Loan Application
+- tapOn: "Loan Applications"
+- assertVisible: "New Loan Application"
+- tapOn: "View Application #{{random.number}}"
+- assertVisible: "Loan Details"
+- assertVisible: "Requested Amount:"
+- assertVisible: "Term:"
+- assertVisible: "Purpose:"
+- assertVisible: "Credit Line Information"
+- tapOn: "Check Credit Line Status"
+- assertVisible: "Credit Line: Active"
+- assertVisible: "Available Credit: 75,000 THB"
+- assertVisible: "Utilized: 0 THB"
+
+---
+# Flow: Perform Risk Assessment
+- tapOn: "Risk Assessment"
+- assertVisible: "Risk Score: Medium"
+- assertVisible: "Income Verification: Complete"
+- assertVisible: "Employment Verification: Complete"
+- assertVisible: "Credit History: Good"
+- assertVisible: "Debt-to-Income Ratio: 0.3"
+- tapOn: "View Detailed Report"
+
+---
+# Flow: Approve Loan Application
+- tapOn: "Approve Loan"
+- runFlow:
+    when:
+      visible: "Loan Approval"
+    steps:
+      - inputText: "30000"
+        into: "Approved Amount"
+      - inputText: "12"
+        into: "Approved Term"
+      - inputText: "Approved based on good credit history"
+        into: "Approval Notes"
+      - tapOn: "Schedule Disbursement"
+      - tapOn: "Tomorrow"
+      - tapOn: "Submit Approval"
+      - assertVisible: "Loan Approved Successfully"
+      - tapOn: "OK"
+
+---
+# Flow: Review Suspicious Application
+- tapOn: "Flagged Applications"
+- assertVisible: "Potentially Fraudulent Application"
+- tapOn: "View Application #{{random.number}}"
+- assertVisible: "Risk Flags:"
+- assertVisible: "Different IP address"
+- assertVisible: "Unusual behavior pattern"
+- assertVisible: "Verify Identity"
+- tapOn: "Request Additional Documents"
+- runFlow:
+    when:
+      visible: "Request Additional Documents"
+    steps:
+      - tapOn: "Utility Bill"
+      - tapOn: "Salary Slip"
+      - tapOn: "Bank Verification Letter"
+      - tapOn: "Submit Request"
+      - assertVisible: "Additional Documents Requested"
+      - tapOn: "OK"
+
+---
+# Flow: Reject Application
+- tapOn: "Review Queue"
+- tapOn: "Application #{{random.number}}"
+- assertVisible: "Incomplete Documentation"
+- assertVisible: "Insufficient Income"
+- tapOn: "Reject Application"
+- runFlow:
+    when:
+      visible: "Rejection Details"
+    steps:
+      - tapOn: "Reason for Rejection"
+      - tapOn: "Insufficient Income Verification"
+      - inputText: "Income does not meet minimum requirements for requested amount"
+        into: "Rejection Notes"
+      - tapOn: "Send Rejection Notice"
+      - tapOn: "Submit Rejection"
+      - assertVisible: "Application Rejected Successfully"
+      - tapOn: "OK"
+
+---
+# Flow: Disburse Approved Loan
+- tapOn: "Ready for Disbursement"
+- assertVisible: "Loan Ready for Disbursement"
+- tapOn: "Disburse Loan #{{random.number}}"
+- assertVisible: "Disbursement Details"
+- assertVisible: "Amount: 30,000 THB"
+- assertVisible: "To Account: ***7890"
+- tapOn: "Verify Account Ownership"
+- assertVisible: "Account Verified: John Doe"
+- tapOn: "Execute Disbursement"
+- assertVisible: "Processing Disbursement..."
+- wait: 3s
+- assertVisible: "Loan Disbursed Successfully"
+- tapOn: "OK"
+
+---
+# Flow: Monitor Post-Disbursement
+- tapOn: "Recently Disbursed"
+- assertVisible: "Loan #{{random.number}} - Disbursed Today"
+- tapOn: "View Monitoring Dashboard"
+- assertVisible: "First Payment Due: {{date.future.offset(30, 'days')}}"
+- assertVisible: "Monitoring Status: Active"
+- assertVisible: "Risk Level: Low"
+- tapOn: "Set Payment Reminders"
+
+---
+# Flow: Handle Payment Issues
+- tapOn: "Payment Issues"
+- assertVisible: "Missed Payment Alert"
+- tapOn: "View Account #{{random.number}}"
+- assertVisible: "Days Overdue: 5"
+- tapOn: "Send Reminder"
+- tapOn: "SMS"
+- tapOn: "Email"
+- tapOn: "Set Follow-up"
+- tapOn: "In 3 days"
+- assertVisible: "Reminder Sent and Follow-up Scheduled"
+- tapOn: "OK"
+
+---
+# Flow: Audit Trail Review
+- tapOn: "Audit Trail"
+- assertVisible: "Recent Actions:"
+- assertVisible: "Approved Credit Application #{{random.number}}"
+- assertVisible: "Disbursed Loan #{{random.number}}"
+- assertVisible: "Sent Payment Reminder"
+- tapOn: "View Full Audit Trail"
+- assertVisible: "Action History Detailed Log"
+- tapOn: "Export Audit Report"
+- assertVisible: "Audit Report Exported Successfully"
+- tapOn: "OK"

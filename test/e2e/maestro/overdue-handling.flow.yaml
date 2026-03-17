@@ -1,0 +1,160 @@
+# Overdue Handling Flow
+appId: com.lann.thailand.loan.app
+
+---
+# Flow: Simulate Overdue Payment
+- launchApp
+- runFlow:
+    when:
+      visible: "Login"
+    steps:
+      - inputText: "{{env.USER_EMAIL}}"
+        into: "Email"
+      - inputText: "{{env.USER_PASSWORD}}"
+        into: "Password"
+      - tapOn: "Login"
+      - assertVisible: "Dashboard"
+
+- tapOn: "My Loans"
+- tapOn: "Active Loans"
+- assertVisible: "Loan #67890"
+- assertVisible: "Next Payment: 2,648 THB"
+- assertVisible: "Due Date: {{date.past}}"  # Past date to simulate overdue
+- assertVisible: "DAYS OVERDUE: 15"
+- tapOn: "View Loan Details"
+
+---
+# Flow: View Overdue Details
+- assertVisible: "LOAN STATUS: OVERDUE"
+- assertVisible: "Original Due Date: {{date.past}}"
+- assertVisible: "Current Outstanding: 2,648 THB"
+- assertVisible: "Late Fee: XXX THB"
+- assertVisible: "Total Amount Due: XXX THB"
+- assertVisible: "Overdue Days: 15"
+- tapOn: "Payment Options"
+
+---
+# Flow: Overdue Payment Options
+- assertVisible: "Payment Methods Available"
+- tapOn: "Prompt Payment Discount"
+- assertVisible: "Settlement Amount: ~2,600 THB"  # Reduced due to prompt payment
+- tapOn: "Pay Settlement Amount"
+- tapOn: "Review Payment"
+- tapOn: "Confirm Payment"
+- assertVisible: "Processing Payment"
+- wait: 3s
+- assertVisible: "Overdue Payment Successful"
+- assertVisible: "Status: Current"
+- tapOn: "OK"
+
+---
+# Flow: Missed Payment Again (Simulate Repeat Overdue)
+- tapOn: "Dashboard"
+- tapOn: "My Loans"
+- tapOn: "Active Loans"
+- tapOn: "View Details"
+- assertVisible: "Next Payment: 2,648 THB"
+- assertVisible: "Due Date: {{date.past}}"  # Another past date
+- assertVisible: "DAYS OVERDUE: 5"
+- assertVisible: "WARNING: Second Delinquency"
+- tapOn: "Payment Plan Options"
+
+---
+# Flow: Negotiate Payment Plan
+- tapOn: "Negotiate Payment Plan"
+- runFlow:
+    when:
+      visible: "Payment Plan Negotiation"
+    steps:
+      - inputText: "Going through temporary financial hardship"
+        into: "Reason for Difficulty"
+      - tapOn: "Propose Payment Plan"
+      - tapOn: "Extended Term"
+      - tapOn: "18 months"
+      - tapOn: "Lower Monthly Payment"
+      - inputText: "1500"
+        into: "Proposed Monthly Amount"
+      - tapOn: "Submit Proposal"
+      - assertVisible: "Proposal Submitted"
+      - assertVisible: "Awaiting Review"
+      - tapOn: "OK"
+
+---
+# Flow: Receive Payment Plan Approval
+- tapOn: "Notifications"
+- assertVisible: "Payment Plan Approved"
+- tapOn: "View Details"
+- assertVisible: "New Payment Amount: 1,500 THB"
+- assertVisible: "New Term: 18 months"
+- assertVisible: "Effective Date: {{date.future}}"
+- tapOn: "Accept Payment Plan"
+- tapOn: "Confirm"
+
+---
+# Flow: Miss Payment After Plan (Serious Delinquency)
+- tapOn: "Dashboard"
+- tapOn: "My Loans"
+- tapOn: "Active Loans"
+- assertVisible: "DAYS OVERDUE: 30"
+- assertVisible: "STATUS: SERIOUS DELINQUENCY"
+- tapOn: "Immediate Action Required"
+
+---
+# Flow: Restructure Loan Option
+- tapOn: "Restructure Loan"
+- runFlow:
+    when:
+      visible: "Loan Restructure Options"
+    steps:
+      - tapOn: "Capitalization"
+      - assertVisible: "Accrued Interest Added to Principal"
+      - tapOn: "Extended Term"
+      - tapOn: "24 months"
+      - tapOn: "Lower Interest Rate"
+      - assertVisible: "New Interest Rate: 10%"
+      - tapOn: "Submit Restructure Request"
+      - assertVisible: "Restructure Request Submitted"
+      - tapOn: "OK"
+
+---
+# Flow: Collateral/Legal Notice Simulation
+- tapOn: "Dashboard"
+- tapOn: "Notifications"
+- assertVisible: "LEGAL NOTICE"
+- tapOn: "View Legal Notice"
+- assertVisible: "Notice of Default"
+- assertVisible: "Collateral May Be Subject to Seizure"
+- assertVisible: "Contact Us Immediately"
+- tapOn: "Contact Customer Service"
+- assertVisible: "Call Support: XXX-XXX-XXXX"
+- tapOn: "Chat with Agent"
+
+---
+# Flow: Full Settlement Offer
+- runFlow:
+    when:
+      visible: "Chat with Agent"
+    steps:
+      - inputText: "I would like to discuss settlement options"
+        into: "Message Input"
+      - tapOn: "Send"
+      - wait: 2s
+      - assertVisible: "Agent: We can offer a settlement of 70% of outstanding balance"
+      - tapOn: "Accept Settlement Offer"
+      - assertVisible: "Settlement Payment: XXX THB"
+      - tapOn: "Make Settlement Payment"
+      - tapOn: "Confirm Settlement"
+      - assertVisible: "Settlement Payment Successful"
+      - assertVisible: "Loan Closed"
+      - tapOn: "OK"
+
+---
+# Flow: Post-Settlement Actions
+- tapOn: "Dashboard"
+- assertVisible: "All Loans Closed"
+- tapOn: "Credit Report"
+- assertVisible: "Note: Account Settled in Full"
+- assertVisible: "Impact on Credit Score"
+- tapOn: "Learn More"
+- assertVisible: "Information about credit recovery options"
+- tapOn: "OK"

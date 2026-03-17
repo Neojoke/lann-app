@@ -14,6 +14,11 @@ ENVIRONMENT = "development"
 APP_NAME = "Lann"
 SUPPORTED_LANGUAGES = "th,en"
 
+# KV 命名空间
+[[kv_namespaces]]
+binding = "CACHE"
+id = "xxx"
+
 # 数据库 (D1)
 [[d1_databases]]
 binding = "DB"
@@ -29,6 +34,10 @@ bucket_name = "lann-documents"
 [[queues.producers]]
 queue = "lann-tasks"
 binding = "TASK_QUEUE"
+
+[[queues.producers]]
+queue = "lann-queue"
+binding = "QUEUE"
 
 [[queues.consumers]]
 queue = "lann-tasks"

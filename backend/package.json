@@ -29,8 +29,9 @@
     "@types/node": "^20.0.0",
     "@types/nodemailer": "^6.4.0",
     "@vitest/coverage-v8": "^2.0.0",
+    "ts-node": "^10.9.2",
     "tsx": "^4.0.0",
-    "typescript": "^5.0.0",
+    "typescript": "^5.9.3",
     "vitest": "^2.0.0",
     "wrangler": "^3.0.0"
   }

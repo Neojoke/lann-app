@@ -83,8 +83,8 @@ describe('ProductList Component', () => {
       />
     );
 
-    expect(screen.getAllByText('启用')).toHaveLength(1); // 只有一个产品是启用状态
-    expect(screen.getAllByText('禁用')).toHaveLength(1); // 只有一个产品是禁用状态
+    expect(screen.getAllByText('启用', { selector: 'span' })).toHaveLength(1); // 只有一个产品是启用状态
+    expect(screen.getAllByText('禁用', { selector: 'span' })).toHaveLength(1); // 只有一个产品是禁用状态
   });
 
   it('handles edit action', () => {
@@ -258,6 +258,8 @@ describe('ProductList Component', () => {
     fireEvent.click(rateHeader);
 
     // Now sorted by interest rate ascending: Z-Product (4.0%), A-Product (8.0%)
-    expect(firstRow).toHaveTextContent('Z-Product');
+    const interestSortedRows = screen.getAllByRole('row');
+    const interestFirstDataRow = interestSortedRows[1];
+    expect(interestFirstDataRow).toHaveTextContent('Z-Product');
   });
 });

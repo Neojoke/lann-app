@@ -1,0 +1,132 @@
+# Loan Application, Approval and Disbursement Flow
+appId: com.lann.thailand.loan.app
+
+---
+# Flow: Loan Application
+- launchApp
+- runFlow:
+    when:
+      visible: "Login"
+    steps:
+      - inputText: "{{env.USER_EMAIL}}"
+        into: "Email"
+      - inputText: "{{env.USER_PASSWORD}}"
+        into: "Password"
+      - tapOn: "Login"
+      - assertVisible: "Dashboard"
+
+- tapOn: "Apply for Loan"
+- runFlow:
+    when:
+      visible: "Loan Application"
+    steps:
+      - assertVisible: "Available Credit: 50,000 THB"  # From approved credit line
+      - inputText: "30000"
+        into: "Loan Amount"
+      - tapOn: "Select Term"
+      - tapOn: "12 months"
+      - tapOn: "Purpose of Loan"
+      - tapOn: "Personal Use"
+      - tapOn: "Repayment Schedule"
+      - tapOn: "Monthly"
+      - tapOn: "Agree to Terms"
+      - tapOn: "Submit Application"
+      - assertVisible: "Application Submitted"
+      - assertVisible: "Your loan application is under review"
+      - tapOn: "OK"
+
+---
+# Flow: View Loan Application Status
+- tapOn: "My Loans"
+- assertVisible: "Loan Application"
+- assertVisible: "Status: Under Review"
+- assertVisible: "Amount: 30,000 THB"
+- tapOn: "View Details"
+- assertVisible: "Application ID"
+- assertVisible: "Submitted On"
+- assertVisible: "Estimated Interest Rate"
+- assertVisible: "Total Repayment Amount"
+- tapOn: "Back"
+
+---
+# Flow: Additional Document Upload for Loan
+- tapOn: "Upload Additional Documents"
+- runFlow:
+    when:
+      visible: "Additional Documents Required"
+    steps:
+      - tapOn: "Proof of Address"
+      - tapOn: "Upload from Gallery"
+      - tapOn: "Select Image"
+      - tapOn: "Confirm Upload"
+      - assertVisible: "Document Uploaded Successfully"
+      - tapOn: "Source of Funds"
+      - tapOn: "Upload from Gallery"
+      - tapOn: "Select Image"
+      - tapOn: "Confirm Upload"
+      - assertVisible: "Document Uploaded Successfully"
+      - tapOn: "Submit Documents"
+
+---
+# Flow: Wait for Loan Approval (Simulated)
+- tapOn: "Dashboard"
+- tapOn: "Notifications"
+- assertVisible: "Loan Application Approved"  # Assuming admin approved it
+- tapOn: "View Loan Status"
+
+---
+# Flow: Accept Loan Terms
+- assertVisible: "Loan Status: Approved"
+- assertVisible: "Approved Amount: 30,000 THB"
+- assertVisible: "Interest Rate: 12% per annum"
+- assertVisible: "Term: 12 months"
+- assertVisible: "Monthly Payment: 2,648 THB"
+- tapOn: "Accept Loan Terms"
+- tapOn: "Confirm Loan Agreement"
+- assertVisible: "Loan Accepted"
+- tapOn: "OK"
+
+---
+# Flow: Verify Loan Disbursement
+- tapOn: "My Loans"
+- tapOn: "Active Loans"
+- assertVisible: "Loan Status: Disbursed"
+- assertVisible: "Disbursed Amount: 30,000 THB"
+- assertVisible: "Disbursement Date"
+- assertVisible: "Next Payment Due"
+- tapOn: "Payment Details"
+
+---
+# Flow: View Amortization Schedule
+- assertVisible: "Amortization Schedule"
+- assertVisible: "Payment #1"
+- assertVisible: "Principal: ~2,400 THB"
+- assertVisible: "Interest: ~248 THB"
+- assertVisible: "Due Date"
+- swipeDown: 3  # Show more payments
+- assertVisible: "Payment #12"
+- tapOn: "Back"
+
+---
+# Flow: Request Loan Modification
+- tapOn: "Loan Options"
+- tapOn: "Modify Loan Terms"
+- runFlow:
+    when:
+      visible: "Loan Modification Request"
+    steps:
+      - tapOn: "Change Repayment Schedule"
+      - tapOn: "Bi-weekly"
+      - tapOn: "Request Modification"
+      - assertVisible: "Modification Request Submitted"
+      - tapOn: "OK"
+
+---
+# Flow: Early Payoff Simulation
+- tapOn: "Early Payoff Calculator"
+- assertVisible: "Remaining Balance"
+- assertVisible: "Interest Saved: ~XXX THB"
+- assertVisible: "Payoff Amount: ~XXX THB"
+- tapOn: "Request Early Payoff"
+- assertVisible: "Early Payoff Request Submitted"
+- tapOn: "OK"

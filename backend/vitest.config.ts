@@ -23,7 +23,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': new URL('./', import.meta.url).pathname
-    }
+      '@': './',
+      '@/services': './services',
+    },
+    extensions: ['.ts', '.js', '.tsx', '.jsx']
   }
 });

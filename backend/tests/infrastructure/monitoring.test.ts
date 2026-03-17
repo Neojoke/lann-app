@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { MonitoringService, getMonitoringService, AlertRule } from '../services/monitoring.service';
+import { MonitoringService, getMonitoringService, AlertRule } from '../../services/monitoring.service';
 
 describe('MonitoringService', () => {
   let monitoringService: MonitoringService;

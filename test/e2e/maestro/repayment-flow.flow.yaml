@@ -1,0 +1,154 @@
+# Repayment Flow
+appId: com.lann.thailand.loan.app
+
+---
+# Flow: View Outstanding Payments
+- launchApp
+- runFlow:
+    when:
+      visible: "Login"
+    steps:
+      - inputText: "{{env.USER_EMAIL}}"
+        into: "Email"
+      - inputText: "{{env.USER_PASSWORD}}"
+        into: "Password"
+      - tapOn: "Login"
+      - assertVisible: "Dashboard"
+
+- tapOn: "My Loans"
+- tapOn: "Active Loans"
+- assertVisible: "Loan #12345"
+- assertVisible: "Outstanding Balance: 30,000 THB"
+- assertVisible: "Next Payment: 2,648 THB"
+- assertVisible: "Due Date: {{date.future}}"
+- tapOn: "View Payment Schedule"
+
+---
+# Flow: Select Payment Method
+- assertVisible: "Payment Methods Available"
+- tapOn: "Mobile Banking"
+- assertVisible: "Link Bank Account"
+- tapOn: "Kasikorn Bank"
+- inputText: "1234567890"
+  into: "Account Number"
+- inputText: "John Doe"
+  into: "Account Holder Name"
+- tapOn: "Verify Account"
+- assertVisible: "Account Verified"
+- tapOn: "OK"
+
+---
+# Flow: Make Single Payment
+- tapOn: "Make Payment"
+- runFlow:
+    when:
+      visible: "Payment Options"
+    steps:
+      - tapOn: "Single Payment"
+      - inputText: "2648"
+        into: "Payment Amount"
+      - tapOn: "From: Kasikorn Bank ****7890"
+      - tapOn: "Schedule Payment"
+      - tapOn: "Now"
+      - tapOn: "Review Payment"
+      - assertVisible: "Payment Amount: 2,648 THB"
+      - assertVisible: "From: Kasikorn Bank"
+      - assertVisible: "To: Loan Account #12345"
+      - tapOn: "Confirm Payment"
+      - assertVisible: "Payment Processing"
+      - wait: 3s
+      - assertVisible: "Payment Successful"
+      - tapOn: "OK"
+
+---
+# Flow: Set Up Auto-Pay
+- tapOn: "Auto-Pay Settings"
+- tapOn: "Enable Auto-Pay"
+- assertVisible: "Auto-Pay Configuration"
+- tapOn: "Payment Source"
+- tapOn: "Kasikorn Bank ****7890"
+- tapOn: "Payment Day"
+- tapOn: "15th of month"
+- tapOn: "Enable Auto-Pay"
+- assertVisible: "Auto-Pay Enabled"
+- assertVisible: "Next auto-payment: {{date.future}}"
+- tapOn: "OK"
+
+---
+# Flow: Make Partial Payment
+- tapOn: "Make Payment"
+- tapOn: "Partial Payment"
+- inputText: "1000"
+  into: "Payment Amount"
+- tapOn: "Review Payment"
+- tapOn: "Confirm Payment"
+- assertVisible: "Partial Payment Successful"
+- tapOn: "OK"
+- assertVisible: "Outstanding Balance: ~29,000 THB"
+
+---
+# Flow: Early Full Payment
+- tapOn: "Early Payment"
+- assertVisible: "Full Payment Option"
+- assertVisible: "Remaining Balance: ~29,000 THB"
+- assertVisible: "Interest Savings: ~XXX THB"
+- tapOn: "Pay Full Amount"
+- tapOn: "Review Early Payment"
+- tapOn: "Confirm Early Payment"
+- assertVisible: "Processing Early Payment"
+- wait: 3s
+- assertVisible: "Early Payment Successful"
+- assertVisible: "Loan Paid Off"
+- tapOn: "OK"
+
+---
+# Flow: View Payment History
+- tapOn: "Payment History"
+- assertVisible: "Payment #1: 2,648 THB"
+- assertVisible: "Payment #2: 1,000 THB"
+- assertVisible: "Payment #3: ~29,000 THB"
+- assertVisible: "All Payments Completed"
+- tapOn: "View Receipt"
+- assertVisible: "Payment Receipt"
+- assertVisible: "Transaction ID"
+- assertVisible: "Paid in Full"
+- tapOn: "Download Receipt"
+
+---
+# Flow: Payment Plan Modification
+- tapOn: "Dashboard"
+- tapOn: "My Loans"
+- tapOn: "Completed Loans"
+- assertVisible: "Loan #12345 - Paid"
+- tapOn: "Loan Details"
+- tapOn: "Payment History"
+- tapOn: "Dispute Payment"
+- runFlow:
+    when:
+      visible: "Payment Dispute"
+    steps:
+      - tapOn: "Issue Type"
+      - tapOn: "Incorrect Amount Charged"
+      - inputText: "The amount charged was different from what was displayed"
+        into: "Dispute Description"
+      - tapOn: "Submit Dispute"
+      - assertVisible: "Dispute Submitted"
+      - tapOn: "OK"
+
+---
+# Flow: Payment Holiday Request
+- tapOn: "Payment Options"
+- tapOn: "Request Payment Holiday"
+- runFlow:
+    when:
+      visible: "Payment Holiday Request"
+    steps:
+      - tapOn: "Start Date"
+      - tapOn: "{{date.future.offset(14, 'days')}}"  # 2 weeks from now
+      - tapOn: "End Date"
+      - tapOn: "{{date.future.offset(42, 'days')}}"  # 6 weeks from now
+      - inputText: "Going through temporary financial hardship"
+        into: "Reason for Holiday"
+      - tapOn: "Submit Request"
+      - assertVisible: "Payment Holiday Request Submitted"
+      - tapOn: "OK"
