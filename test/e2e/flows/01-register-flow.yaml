@@ -1,0 +1,7 @@
+appId: com.lann.app
+name: Register Flow Test
+
+---
+- assertVisible: "ลงทะเบียน"
+- tapOn: "ลงทะเบียน"
+- assertVisible: "ลงทะเบียน"

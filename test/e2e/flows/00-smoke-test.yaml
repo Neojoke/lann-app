@@ -1,9 +1,7 @@
-# Lann App - 冒烟测试
-# 验证应用可以启动并显示主页面
-
 appId: com.lann.app
-env: {}
+name: Smoke Test - Home Page
 
 ---
-- launchApp
-- takeScreenshot: "smoke-test-completed.png"
+- assertVisible: "LANN เงินกู้ไทย"
+- assertVisible: "ยินดีต้อนรับสู่ LANN"
+- assertVisible: "ลงทะเบียน"
