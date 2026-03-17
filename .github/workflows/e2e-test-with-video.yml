@@ -1,0 +1,112 @@
+name: E2E Tests with Video Recording
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  e2e-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+    
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        cmdline-tools-version: 9.0
+        packages: 'platform-tools,platforms;android-33,build-tools;33.0.1'
+    
+    - name: Install Maestro
+      run: |
+        curl -fsSL "https://get.maestro.mobile.dev" | bash
+        echo "$HOME/.maestro/bin" >> $GITHUB_PATH
+    
+    - name: Create Android Emulator
+      run: |
+        avdmanager create avd \
+          -n LannDemo \
+          -k "system-images;android-33;google_apis;x86_64" \
+          -d pixel_6
+    
+    - name: Build APK
+      run: |
+        cd mobile-app
+        npm install
+        npm run build
+        npx cap sync android
+        cd android
+        ./gradlew assembleDebug
+    
+    - name: Start Emulator
+      run: |
+        emulator -avd LannDemo -no-snapshot -no-audio -no-window &
+        adb wait-for-device
+        sleep 30
+    
+    - name: Install APK
+      run: |
+        adb install -r mobile-app/android/app/build/outputs/apk/debug/app-debug.apk
+    
+    - name: Run E2E Tests with Video
+      run: |
+        mkdir -p test/e2e/videos
+        chmod +x scripts/maestro-test-with-video.sh
+        ./scripts/maestro-test-with-video.sh test/e2e/flows/
+    
+    - name: Upload Test Videos
+      uses: actions/upload-artifact@v4
+      with:
+        name: e2e-test-videos
+        path: test/e2e/videos/*.mp4
+        retention-days: 30
+    
+    - name: Upload Test Reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: e2e-test-reports
+        path: test/e2e/videos/*_report.md
+        retention-days: 30
+    
+    - name: Upload to Feishu Drive
+      if: always()
+      env:
+        FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
+        FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
+        FEISHU_FOLDER_TOKEN: ${{ secrets.FEISHU_FOLDER_TOKEN }}
+      run: |
+        python3 scripts/upload-to-feishu-drive.py \
+          test/e2e/videos/*.mp4 \
+          "E2E-Test-${{ github.sha }}" \
+          "${{ job.status }}"
+    
+    - name: Post Results to Feishu
+      if: always()
+      env:
+        FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+      run: |
+        TEST_STATUS="${{ job.status }}"
+        VIDEO_COUNT=$(find test/e2e/videos -name "*.mp4" | wc -l)
+        
+        curl -X POST "$FEISHU_WEBHOOK" \
+          -H "Content-Type: application/json" \
+          -d "{
+            \"msg_type\": \"text\",
+            \"content\": {
+              \"text\": \"🎬 Lann E2E 测试完成\\n\\n状态：${TEST_STATUS}\\n视频数量：${VIDEO_COUNT}\\n提交：${{ github.sha }}\\n\\n视频已上传到飞书云盘\"
+            }
+          }"
