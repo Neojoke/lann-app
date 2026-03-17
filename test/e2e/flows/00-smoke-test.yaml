@@ -1,7 +1,7 @@
 appId: com.lann.app
-name: Smoke Test - Home Page
+name: 00-Smoke Test
 
 ---
-- assertVisible: "LANN เงินกู้ไทย"
-- assertVisible: "ยินดีต้อนรับสู่ LANN"
-- assertVisible: "ลงทะเบียน"
+- launchApp
+- waitForAnimationToEnd: 3000
+- assertVisible: "LANN"

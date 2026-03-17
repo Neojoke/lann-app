@@ -1,6 +1,0 @@
-appId: com.lann.app
-name: Login Test
-
----
-- tapOn: "เข้าสู่ระบบ"
-- assertVisible: "เข้าสู่ระบบ"

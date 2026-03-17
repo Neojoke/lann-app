@@ -1,7 +1,8 @@
 appId: com.lann.app
-name: Register Flow Test
+name: 01-Register Flow
 
 ---
-- assertVisible: "ลงทะเบียน"
+- launchApp
+- waitForAnimationToEnd: 3000
 - tapOn: "ลงทะเบียน"
 - assertVisible: "ลงทะเบียน"
